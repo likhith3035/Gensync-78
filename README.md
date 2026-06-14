@@ -65,7 +65,7 @@
 
 <div align="center">
 
-[![Live Demo](https://img.shields.io/badge/🌐_Visit_StudentHub-Live_App-6366f1?style=for-the-badge)](https://studenthub.lovable.app)
+[![Live Demo](https://img.shields.io/badge/🌐_Visit_StudentHub-Live_App-6366f1?style=for-the-badge)](https://gensync-78.vercel.app/)
 
 </div>
 
