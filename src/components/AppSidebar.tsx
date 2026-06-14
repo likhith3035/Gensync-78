@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, Briefcase, FolderKanban, BookOpen, User, Settings, GraduationCap, Shield, Share2, LogOut, MessageCircle, Calendar, Bookmark, TrendingUp } from "lucide-react";
+import { LayoutDashboard, Briefcase, FolderKanban, BookOpen, User, Settings, GraduationCap, Shield, Share2, LogOut, MessageCircle, Calendar, Bookmark, TrendingUp, Users } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
 
@@ -9,6 +9,7 @@ const navItems = [
   { icon: FolderKanban, label: "Projects", path: "/projects" },
   { icon: BookOpen, label: "Resources", path: "/resources" },
   { icon: Calendar, label: "Events", path: "/events" },
+  { icon: Users, label: "Community", path: "/community" },
   { icon: MessageCircle, label: "Messages", path: "/messages" },
   { icon: Share2, label: "Sharing Hub", path: "/shares" },
   { icon: Bookmark, label: "Bookmarks", path: "/bookmarks" },

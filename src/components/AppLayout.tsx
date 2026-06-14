@@ -74,6 +74,7 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
     { id: "events", title: "Events", type: "page" as const, sub: "Campus events", route: "/events" },
     { id: "messages", title: "Messages", type: "page" as const, sub: "Chat", route: "/messages" },
     { id: "shares", title: "Sharing Hub", type: "page" as const, sub: "Share content", route: "/shares" },
+    { id: "community", title: "Community Discussions", type: "page" as const, sub: "Student Forums & Q&A", route: "/community" },
     { id: "profile", title: "Profile", type: "page" as const, sub: "Your profile", route: "/profile" },
     { id: "about", title: "About", type: "page" as const, sub: "About StudentHub", route: "/about" },
     { id: "developer", title: "Developer", type: "page" as const, sub: "Meet the developer", route: "/developer" },

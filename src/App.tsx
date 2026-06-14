@@ -24,6 +24,7 @@ import Developer from "./pages/Developer";
 import Info from "./pages/Info";
 import Bookmarks from "./pages/Bookmarks";
 import ActivityFeed from "./pages/ActivityFeed";
+import Community from "./pages/Community";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -54,6 +55,7 @@ const App = () => (
               <Route path="/info" element={<ProtectedRoute><Info /></ProtectedRoute>} />
               <Route path="/bookmarks" element={<ProtectedRoute><Bookmarks /></ProtectedRoute>} />
               <Route path="/activity" element={<ProtectedRoute><ActivityFeed /></ProtectedRoute>} />
+              <Route path="/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
               <Route path="/shared/:token" element={<SharedView />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
