@@ -1,7 +1,7 @@
 import SEO from "@/components/SEO";
 import AppLayout from "@/components/AppLayout";
 import { Button } from "@/components/ui/button";
-import { Calendar, Code, Plus, Sparkles, MapPin, Building2, Briefcase, GraduationCap, Zap, Award, Share2, Lock, Globe, X } from "lucide-react";
+import { Calendar, Code, Plus, Sparkles, MapPin, Building2, Briefcase, GraduationCap, Zap, Award, Share2, Lock, Globe, X, ExternalLink, Link2 } from "lucide-react";
 import { useState } from "react";
 import ShareDialog from "@/components/ShareDialog";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -32,7 +32,7 @@ const Opportunities = () => {
   const queryClient = useQueryClient();
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [form, setForm] = useState({ title: "", organization: "", location: "", deadline: "", category: "internship" as string, description: "" });
+  const [form, setForm] = useState({ title: "", organization: "", location: "", deadline: "", category: "internship" as string, description: "", applyLink: "" });
   const [shareTarget, setShareTarget] = useState<{ id: string; title: string } | null>(null);
   const [privacyType, setPrivacyType] = useState<"all" | "college" | "selected">("all");
   const [allowedEmails, setAllowedEmails] = useState<string[]>([]);
@@ -93,6 +93,7 @@ const Opportunities = () => {
         deadline: form.deadline || null,
         category: form.category,
         description: form.description || null,
+        apply_link: form.applyLink || null,
         user_id: user!.id,
         privacy_type: privacyType,
         allowed_emails: allowedEmails,
@@ -104,7 +105,7 @@ const Opportunities = () => {
       queryClient.invalidateQueries({ queryKey: ["dashboard-opportunities"] });
       toast.success("Opportunity posted!");
       setDialogOpen(false);
-      setForm({ title: "", organization: "", location: "", deadline: "", category: "internship", description: "" });
+      setForm({ title: "", organization: "", location: "", deadline: "", category: "internship", description: "", applyLink: "" });
       setPrivacyType("all");
       setAllowedEmails([]);
       setEmailInput("");
@@ -122,15 +123,14 @@ const Opportunities = () => {
     <AppLayout>
       <SEO title="Opportunities" description="Browse and post internships, hackathons, workshops, and scholarships on StudentHub. Find your next career opportunity." canonical="/opportunities" keywords="internships, hackathons, scholarships, student opportunities, studenthub" />
       <div className="max-w-5xl mx-auto">
-        {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 animate-fade-in">
           <div className="page-header mb-0">
-            <h1 className="page-title">Explore Opportunities</h1>
-            <p className="page-subtitle">Discover handpicked programs for your career growth</p>
+            <h1 className="text-3xl sm:text-4xl font-medium text-[#0F172A] tracking-tight font-serif-elegant">Explore Opportunities</h1>
+            <p className="text-sm text-slate-500 mt-1.5">Discover handpicked programs for your career growth</p>
           </div>
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="gap-1.5 font-semibold shadow-md"><Plus className="w-4 h-4" /> Post Opportunity</Button>
+              <Button className="gap-1.5 font-semibold shadow-sm rounded-full bg-slate-900 hover:bg-slate-800 text-white h-10 px-5"><Plus className="w-4 h-4" /> Post Opportunity</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-md">
               <DialogHeader>
@@ -147,6 +147,21 @@ const Opportunities = () => {
                   {categories.map((cat) => <option key={cat} value={cat} className="capitalize">{cat}</option>)}
                 </select>
                 <textarea placeholder="Description (optional)" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={3} className="w-full px-4 py-3 rounded-xl border border-border/60 bg-muted/30 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-all resize-none" />
+
+                {/* Apply / Registration Link */}
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-muted-foreground flex items-center gap-1.5">
+                    <Link2 className="w-3.5 h-3.5" /> Apply / Registration Link
+                  </label>
+                  <input
+                    placeholder="https://forms.google.com/... or website URL"
+                    value={form.applyLink}
+                    onChange={(e) => setForm({ ...form, applyLink: e.target.value })}
+                    type="url"
+                    className="w-full h-11 px-4 rounded-xl border border-border/60 bg-muted/30 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-all"
+                  />
+                  <p className="text-[10px] text-muted-foreground/70">Paste the form or website link where students can apply. Users will be redirected here when they click "Apply Now".</p>
+                </div>
 
                 {/* Privacy visibility settings */}
                 <div className="space-y-2">
@@ -276,7 +291,7 @@ const Opportunities = () => {
             </div>
             <p className="font-bold text-foreground text-lg">No opportunities yet</p>
             <p className="text-sm text-muted-foreground mt-1 mb-6">Be the first to post an opportunity for students!</p>
-            <Button onClick={() => setDialogOpen(true)} className="gap-1.5">
+            <Button onClick={() => setDialogOpen(true)} className="gap-1.5 rounded-full bg-slate-900 hover:bg-slate-800 text-white">
               <Plus className="w-4 h-4" /> Post First Opportunity
             </Button>
           </div>
@@ -286,37 +301,45 @@ const Opportunities = () => {
               const config = categoryConfig[opp.category] || { color: "bg-muted text-muted-foreground", icon: Code, gradient: "from-muted to-muted" };
               const Icon = config.icon;
               return (
-                <div key={opp.id} className="card-campus overflow-hidden animate-fade-in" style={{ animationDelay: `${0.05 * i}s` }}>
-                  <div className={`h-3 bg-gradient-to-r ${config.gradient}`} />
-                  <div className="p-5">
+                <div key={opp.id} className="card-premium-light overflow-hidden animate-fade-in flex flex-col" style={{ animationDelay: `${0.05 * i}s` }}>
+                  <div className={`h-1.5 bg-gradient-to-r ${config.gradient}`} />
+                  <div className="p-5 flex-1 flex flex-col">
                     <div className="flex items-start justify-between gap-3 mb-3">
-                      <div className="w-11 h-11 rounded-xl gradient-card flex items-center justify-center shrink-0">
-                        <Icon className="w-5 h-5 text-primary" />
+                      <div className="w-10 h-10 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
+                        <Icon className="w-4.5 h-4.5 text-slate-700" />
                       </div>
-                      <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full ${config.color}`}>
+                      <span className={`text-[10px] font-bold px-3 py-1 rounded-full ${config.color}`}>
                         {opp.category.toUpperCase()}
                       </span>
                     </div>
-                    <h3 className="font-bold text-foreground mb-1">{opp.title}</h3>
-                    <div className="flex items-center gap-3 text-sm text-muted-foreground mb-2">
+                    <h3 className="text-base font-bold text-[#0F172A] mb-1">{opp.title}</h3>
+                    <div className="flex items-center gap-3 text-xs text-slate-500 mb-3">
                       <span className="flex items-center gap-1"><Building2 className="w-3.5 h-3.5" /> {opp.organization}</span>
                       {opp.location && <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5" /> {opp.location}</span>}
                     </div>
-                    {opp.description && <p className="text-sm text-muted-foreground line-clamp-2 mb-3">{opp.description}</p>}
-                    <div className="flex items-center justify-between mt-auto pt-3 border-t border-border/40">
+                    {opp.description && <p className="text-sm text-slate-600 line-clamp-2 mb-4 flex-1">{opp.description}</p>}
+                    <div className="flex items-center justify-between mt-auto pt-3 border-t border-slate-100">
                       {opp.deadline ? (
-                        <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                        <span className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
                           <Calendar className="w-3.5 h-3.5" /> {new Date(opp.deadline).toLocaleDateString()}
                         </span>
                       ) : <span />}
-                      <div className="flex gap-1.5">
+                      <div className="flex gap-2">
                         <button
                           onClick={() => setShareTarget({ id: opp.id, title: opp.title })}
-                          className="h-8 w-8 rounded-lg border border-border/60 flex items-center justify-center hover:bg-muted transition-all"
+                          className="h-8 w-8 rounded-full border border-slate-200 flex items-center justify-center hover:bg-slate-50 hover:border-slate-300 transition-all"
                         >
-                          <Share2 className="w-3.5 h-3.5 text-muted-foreground" />
+                          <Share2 className="w-3.5 h-3.5 text-slate-500" />
                         </button>
-                        <Button size="sm" className="font-semibold h-8 px-4 text-xs">Apply Now</Button>
+                        {opp.apply_link ? (
+                          <a href={opp.apply_link} target="_blank" rel="noopener noreferrer">
+                            <Button size="sm" className="font-semibold h-8 px-4 text-xs rounded-full bg-slate-900 hover:bg-slate-800 text-white gap-1.5">
+                              Apply Now <ExternalLink className="w-3 h-3" />
+                            </Button>
+                          </a>
+                        ) : (
+                          <Button size="sm" className="font-semibold h-8 px-4 text-xs rounded-full bg-slate-900 hover:bg-slate-800 text-white" onClick={() => toast.info("No apply link provided for this opportunity.")}>Apply Now</Button>
+                        )}
                       </div>
                     </div>
                   </div>

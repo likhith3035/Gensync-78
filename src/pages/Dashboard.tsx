@@ -302,33 +302,33 @@ const Dashboard = () => {
       <SEO title="Dashboard" description="Your StudentHub dashboard — view activity, leaderboard, resources, projects, and opportunities at a glance." canonical="/dashboard" noindex />
       <div className="max-w-6xl mx-auto space-y-6">
         {/* Welcome banner */}
-        <div className="relative overflow-hidden rounded-2xl gradient-primary p-6 sm:p-8 md:p-10 animate-fade-in">
-          <div className="relative z-10">
+        <div className="relative overflow-hidden rounded-3xl border border-slate-100/80 bg-gradient-to-br from-orange-50/60 via-white to-blue-50/50 p-6 sm:p-8 md:p-10 shadow-sm animate-fade-in">
+          <div className="relative z-10 text-left">
             <div className="flex items-center gap-2 mb-1.5">
-              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-primary-foreground/80" />
-              <span className="text-xs sm:text-sm font-medium text-primary-foreground/80">Welcome back</span>
+              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-orange-500" />
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Welcome back</span>
             </div>
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-primary-foreground tracking-tight mb-1.5">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-medium text-[#0F172A] tracking-tight mb-2 font-serif-elegant">
               Hey, {displayName}! 👋
             </h1>
-            <p className="text-xs sm:text-sm text-primary-foreground/70 max-w-md">
+            <p className="text-xs sm:text-sm text-slate-500 max-w-md font-normal">
               Stay updated with campus activities, explore opportunities, and track your progress.
             </p>
-            <div className="flex flex-wrap gap-2 sm:gap-3 mt-4 sm:mt-6">
+            <div className="flex flex-wrap gap-2.5 mt-5 sm:mt-6">
               <Link to="/opportunities">
-                <Button variant="secondary" size="sm" className="gap-1.5 font-semibold shadow-sm text-xs sm:text-sm h-9 sm:h-10">
-                  <Rocket className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Explore Opportunities
+                <Button size="sm" className="gap-1.5 font-bold text-xs bg-[#0F172A] hover:bg-[#1E293B] text-white rounded-full shadow-sm px-5 h-9 sm:h-10 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300">
+                  <Rocket className="w-3.5 h-3.5" /> Explore Opportunities
                 </Button>
               </Link>
               <Link to="/projects">
-                <Button variant="secondary" size="sm" className="gap-1.5 font-semibold shadow-sm bg-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/30 border-0 text-xs sm:text-sm h-9 sm:h-10">
-                  <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Create Project
+                <Button size="sm" className="gap-1.5 font-semibold text-xs border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 rounded-full shadow-sm px-5 h-9 sm:h-10 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300">
+                  <Plus className="w-3.5 h-3.5" /> Create Project
                 </Button>
               </Link>
             </div>
           </div>
-          <div className="absolute top-0 right-0 w-48 sm:w-64 h-48 sm:h-64 rounded-full bg-primary-foreground/5 -translate-y-1/3 translate-x-1/3" />
-          <div className="absolute bottom-0 right-20 w-24 sm:w-32 h-24 sm:h-32 rounded-full bg-primary-foreground/5 translate-y-1/3" />
+          <div className="absolute top-0 right-0 w-48 sm:w-64 h-48 sm:h-64 rounded-full bg-orange-200/10 blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 right-20 w-24 sm:w-32 h-24 sm:h-32 rounded-full bg-blue-200/10 blur-2xl pointer-events-none" />
         </div>
 
         {/* Announcements */}
@@ -338,42 +338,42 @@ const Dashboard = () => {
         <EventReminders compact />
 
         {/* Daily Campus Feed + Your Points */}
-        <div className="grid sm:grid-cols-3 gap-3 sm:gap-4 animate-fade-in" style={{ animationDelay: "0.05s" }}>
-          <div className="sm:col-span-2 card-campus p-4 sm:p-5 flex items-start gap-4">
-            <div className="text-3xl sm:text-4xl shrink-0">{dailyFeed.emoji}</div>
+        <div className="grid sm:grid-cols-3 gap-4 animate-fade-in" style={{ animationDelay: "0.05s" }}>
+          <div className="sm:col-span-2 card-premium-light p-5 flex items-start gap-4 text-left">
+            <div className="text-3xl sm:text-4xl shrink-0 p-2.5 bg-orange-50/50 border border-orange-100/60 rounded-2xl">{dailyFeed.emoji}</div>
             <div>
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-[10px] font-extrabold text-primary bg-primary/8 px-2 py-0.5 rounded-full uppercase tracking-wider">Daily {dailyFeed.category}</span>
-                <span className="text-[10px] text-muted-foreground">• {new Date().toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" })}</span>
+              <div className="flex items-center gap-2 mb-1.5">
+                <span className="text-[9px] font-bold text-orange-600 bg-orange-50 border border-orange-100/40 px-2.5 py-0.5 rounded-full uppercase tracking-wider">Daily {dailyFeed.category}</span>
+                <span className="text-[10px] text-slate-400 font-semibold">• {new Date().toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" })}</span>
               </div>
-              <h3 className="text-sm sm:text-base font-bold text-foreground mb-1">{dailyFeed.title}</h3>
-              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{dailyFeed.text}</p>
+              <h3 className="text-sm sm:text-base font-bold text-slate-800 mb-1">{dailyFeed.title}</h3>
+              <p className="text-xs sm:text-sm text-slate-500 leading-relaxed font-normal">{dailyFeed.text}</p>
             </div>
           </div>
-          <div className="card-campus p-4 sm:p-5 flex flex-col items-center justify-center text-center">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-warning/10 flex items-center justify-center mb-2">
-              <Trophy className="w-5 h-5 sm:w-6 sm:h-6 text-warning" />
+          <div className="card-premium-light p-5 flex flex-col items-center justify-center text-center">
+            <div className="w-11 h-11 rounded-full bg-orange-50 border border-orange-100 flex items-center justify-center mb-2.5">
+              <Trophy className="w-5 h-5 text-orange-500" />
             </div>
-            <p className="text-xl sm:text-2xl font-extrabold text-foreground">{myPoints}</p>
-            <p className="text-[10px] sm:text-xs text-muted-foreground font-medium">Your Points</p>
-            <p className="text-[9px] text-muted-foreground mt-1">+{getPoints.resource} per resource • +{getPoints.project} per project</p>
+            <p className="text-2xl sm:text-3xl font-medium text-[#0F172A] font-serif-elegant">{myPoints}</p>
+            <p className="text-[10px] sm:text-xs text-slate-400 font-semibold tracking-wider uppercase mt-0.5">Your Points</p>
+            <p className="text-[9px] text-slate-400 mt-1 font-normal">+{getPoints.resource} per resource • +{getPoints.project} per project</p>
           </div>
         </div>
 
         {/* Stats row */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 animate-fade-in" style={{ animationDelay: "0.1s" }}>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 animate-fade-in" style={{ animationDelay: "0.1s" }}>
           {[
-            { label: "Opportunities", value: allOpportunities.length, icon: Briefcase, color: "text-primary", bg: "bg-primary/10" },
-            { label: "Projects", value: allProjects.length, icon: FolderKanban, color: "text-accent-foreground", bg: "bg-accent" },
-            { label: "Resources", value: allResources.length, icon: BookOpen, color: "text-success", bg: "bg-success/10" },
-            { label: "My Contributions", value: myProjectCount + myResourceCount, icon: Award, color: "text-warning", bg: "bg-warning/10" },
+            { label: "Opportunities", value: allOpportunities.length, icon: Briefcase, color: "text-blue-500", bg: "bg-blue-50/60 border-blue-100/80" },
+            { label: "Projects", value: allProjects.length, icon: FolderKanban, color: "text-purple-500", bg: "bg-purple-50/60 border-purple-100/80" },
+            { label: "Resources", value: allResources.length, icon: BookOpen, color: "text-emerald-500", bg: "bg-emerald-50/60 border-emerald-100/80" },
+            { label: "My Contributions", value: myProjectCount + myResourceCount, icon: Award, color: "text-orange-500", bg: "bg-orange-50/60 border-orange-100/80" },
           ].map(({ label, value, icon: Icon, color, bg }) => (
-            <div key={label} className="stat-card p-3 sm:p-5">
-              <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl ${bg} flex items-center justify-center mb-2 sm:mb-3`}>
-                <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${color}`} />
+            <div key={label} className="card-premium-light p-5 flex flex-col items-start text-left relative overflow-hidden">
+              <div className={`w-9 h-9 rounded-full ${bg} border flex items-center justify-center mb-3.5`}>
+                <Icon className={`w-4 h-4 ${color}`} />
               </div>
-              <p className="text-lg sm:text-2xl font-extrabold text-foreground">{value}</p>
-              <p className="text-[10px] sm:text-xs text-muted-foreground font-medium mt-0.5 truncate">{label}</p>
+              <p className="text-2xl font-bold text-slate-800 leading-tight">{value}</p>
+              <p className="text-[10px] sm:text-xs text-slate-400 font-semibold mt-1 truncate uppercase tracking-wider">{label}</p>
             </div>
           ))}
         </div>
@@ -381,67 +381,68 @@ const Dashboard = () => {
         {/* Charts Row */}
         <div className="grid md:grid-cols-2 gap-4 sm:gap-6 animate-fade-in" style={{ animationDelay: "0.15s" }}>
           {/* Weekly Activity Chart */}
-          <div className="card-campus p-4 sm:p-6">
+          <div className="card-premium-light p-4 sm:p-6 text-left">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm sm:text-base font-bold text-foreground flex items-center gap-2">
-                <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5 text-primary" /> Weekly Activity
+              <h3 className="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-2">
+                <BarChart3 className="w-4.5 h-4.5 text-slate-600" /> Weekly Activity
               </h3>
-              <span className="text-[10px] sm:text-xs text-muted-foreground font-medium">Last 7 days</span>
+              <span className="text-[10px] sm:text-xs text-slate-400 font-semibold">Last 7 days</span>
             </div>
             <div className="h-48 sm:h-56">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={weeklyData}>
                   <defs>
                     <linearGradient id="colorOpps" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="hsl(234, 89%, 64%)" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="hsl(234, 89%, 64%)" stopOpacity={0} />
+                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.2} />
+                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
                     </linearGradient>
                     <linearGradient id="colorProjects" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="hsl(160, 60%, 45%)" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="hsl(160, 60%, 45%)" stopOpacity={0} />
+                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.2} />
+                      <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
                     </linearGradient>
                     <linearGradient id="colorResources" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="hsl(35, 80%, 55%)" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="hsl(35, 80%, 55%)" stopOpacity={0} />
+                      <stop offset="5%" stopColor="#f97316" stopOpacity={0.2} />
+                      <stop offset="95%" stopColor="#f97316" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(220, 13%, 91%)" />
-                  <XAxis dataKey="name" tick={{ fontSize: 11, fill: "hsl(220, 9%, 46%)" }} axisLine={false} tickLine={false} />
-                  <YAxis tick={{ fontSize: 11, fill: "hsl(220, 9%, 46%)" }} axisLine={false} tickLine={false} allowDecimals={false} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(241, 245, 249, 0.8)" />
+                  <XAxis dataKey="name" tick={{ fontSize: 10, fill: "#64748b", fontWeight: 500 }} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fontSize: 10, fill: "#64748b", fontWeight: 500 }} axisLine={false} tickLine={false} allowDecimals={false} />
                   <Tooltip
                     contentStyle={{
-                      background: "hsl(0, 0%, 100%)",
-                      border: "1px solid hsl(220, 13%, 91%)",
-                      borderRadius: "12px",
-                      fontSize: "12px",
-                      boxShadow: "0 10px 25px -5px hsl(222, 47%, 11%, 0.1)",
+                      background: "rgba(255, 255, 255, 0.95)",
+                      border: "1px solid #f1f5f9",
+                      borderRadius: "16px",
+                      fontSize: "11px",
+                      boxShadow: "0 10px 30px -5px rgba(15, 23, 42, 0.04)",
+                      color: "#1e293b",
                     }}
                   />
-                  <Area type="monotone" dataKey="opportunities" stroke="hsl(234, 89%, 64%)" fillOpacity={1} fill="url(#colorOpps)" strokeWidth={2} />
-                  <Area type="monotone" dataKey="projects" stroke="hsl(160, 60%, 45%)" fillOpacity={1} fill="url(#colorProjects)" strokeWidth={2} />
-                  <Area type="monotone" dataKey="resources" stroke="hsl(35, 80%, 55%)" fillOpacity={1} fill="url(#colorResources)" strokeWidth={2} />
+                  <Area type="monotone" dataKey="opportunities" stroke="#3b82f6" fillOpacity={1} fill="url(#colorOpps)" strokeWidth={1.5} />
+                  <Area type="monotone" dataKey="projects" stroke="#10b981" fillOpacity={1} fill="url(#colorProjects)" strokeWidth={1.5} />
+                  <Area type="monotone" dataKey="resources" stroke="#f97316" fillOpacity={1} fill="url(#colorResources)" strokeWidth={1.5} />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
             <div className="flex items-center justify-center gap-4 sm:gap-6 mt-3">
-              <span className="flex items-center gap-1.5 text-[10px] sm:text-xs text-muted-foreground">
-                <span className="w-2.5 h-2.5 rounded-full bg-primary" /> Opportunities
+              <span className="flex items-center gap-1.5 text-[10px] sm:text-xs text-slate-500 font-semibold">
+                <span className="w-2.5 h-2.5 rounded-full bg-blue-500" /> Opportunities
               </span>
-              <span className="flex items-center gap-1.5 text-[10px] sm:text-xs text-muted-foreground">
-                <span className="w-2.5 h-2.5 rounded-full bg-success" /> Projects
+              <span className="flex items-center gap-1.5 text-[10px] sm:text-xs text-slate-500 font-semibold">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> Projects
               </span>
-              <span className="flex items-center gap-1.5 text-[10px] sm:text-xs text-muted-foreground">
-                <span className="w-2.5 h-2.5 rounded-full bg-warning" /> Resources
+              <span className="flex items-center gap-1.5 text-[10px] sm:text-xs text-slate-500 font-semibold">
+                <span className="w-2.5 h-2.5 rounded-full bg-orange-500" /> Resources
               </span>
             </div>
           </div>
 
           {/* Distribution Charts */}
-          <div className="grid grid-cols-2 gap-3 sm:gap-4">
+          <div className="grid grid-cols-2 gap-4">
             {/* Opportunity Categories */}
-            <div className="card-campus p-3 sm:p-5 flex flex-col items-center">
-              <h3 className="text-[11px] sm:text-xs font-bold text-foreground mb-2 sm:mb-3 self-start flex items-center gap-1.5">
-                <Target className="w-3.5 h-3.5 text-primary" /> Categories
+            <div className="card-premium-light p-4 flex flex-col items-center justify-between text-left">
+              <h3 className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 self-start flex items-center gap-1.5">
+                <Target className="w-3.5 h-3.5 text-slate-500" /> Categories
               </h3>
               {categoryData.length > 0 ? (
                 <>
@@ -463,33 +464,33 @@ const Dashboard = () => {
                         </Pie>
                         <Tooltip
                           contentStyle={{
-                            background: "hsl(0, 0%, 100%)",
-                            border: "1px solid hsl(220, 13%, 91%)",
-                            borderRadius: "10px",
-                            fontSize: "11px",
+                            background: "rgba(255, 255, 255, 0.95)",
+                            border: "1px solid #f1f5f9",
+                            borderRadius: "12px",
+                            fontSize: "10px",
                           }}
                         />
                       </PieChart>
                     </ResponsiveContainer>
                   </div>
-                  <div className="flex flex-wrap justify-center gap-x-3 gap-y-1 mt-1">
+                  <div className="flex flex-wrap justify-center gap-x-2 gap-y-1 mt-1">
                     {categoryData.map((d, i) => (
-                      <span key={d.name} className="flex items-center gap-1 text-[9px] sm:text-[10px] text-muted-foreground">
-                        <span className="w-2 h-2 rounded-full shrink-0" style={{ background: CHART_COLORS[i % CHART_COLORS.length] }} />
+                      <span key={d.name} className="flex items-center gap-1 text-[9px] sm:text-[10px] text-slate-500 font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: CHART_COLORS[i % CHART_COLORS.length] }} />
                         {d.name}
                       </span>
                     ))}
                   </div>
                 </>
               ) : (
-                <p className="text-xs text-muted-foreground text-center mt-8">No data yet</p>
+                <p className="text-xs text-slate-400 text-center my-auto">No data yet</p>
               )}
             </div>
 
             {/* Project Status */}
-            <div className="card-campus p-3 sm:p-5">
-              <h3 className="text-[11px] sm:text-xs font-bold text-foreground mb-2 sm:mb-3 flex items-center gap-1.5">
-                <FolderKanban className="w-3.5 h-3.5 text-accent-foreground" /> Project Status
+            <div className="card-premium-light p-4 flex flex-col justify-between text-left">
+              <h3 className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <FolderKanban className="w-3.5 h-3.5 text-slate-500" /> Project Status
               </h3>
               {projectStatusData.length > 0 ? (
                 <div className="h-28 sm:h-32">
@@ -499,20 +500,20 @@ const Dashboard = () => {
                       <YAxis
                         type="category"
                         dataKey="name"
-                        tick={{ fontSize: 10, fill: "hsl(220, 9%, 46%)" }}
+                        tick={{ fontSize: 9, fill: "#64748b", fontWeight: 500 }}
                         axisLine={false}
                         tickLine={false}
                         width={65}
                       />
                       <Tooltip
                         contentStyle={{
-                          background: "hsl(0, 0%, 100%)",
-                          border: "1px solid hsl(220, 13%, 91%)",
-                          borderRadius: "10px",
-                          fontSize: "11px",
+                          background: "rgba(255, 255, 255, 0.95)",
+                          border: "1px solid #f1f5f9",
+                          borderRadius: "12px",
+                          fontSize: "10px",
                         }}
                       />
-                      <Bar dataKey="value" radius={[0, 6, 6, 0]} barSize={14}>
+                      <Bar dataKey="value" radius={[0, 6, 6, 0]} barSize={12}>
                         {projectStatusData.map((_, index) => (
                           <Cell key={index} fill={CHART_COLORS[index % CHART_COLORS.length]} />
                         ))}
@@ -521,7 +522,7 @@ const Dashboard = () => {
                   </ResponsiveContainer>
                 </div>
               ) : (
-                <p className="text-xs text-muted-foreground text-center mt-8">No data yet</p>
+                <p className="text-xs text-slate-400 text-center my-auto">No data yet</p>
               )}
             </div>
           </div>
@@ -533,42 +534,42 @@ const Dashboard = () => {
           <div className="lg:col-span-2 space-y-4 sm:space-y-6">
             {/* Latest Opportunities */}
             <div>
-              <div className="flex items-center justify-between mb-3 sm:mb-4">
-                <h2 className="text-sm sm:text-lg font-bold text-foreground flex items-center gap-2">
-                  <Rocket className="w-4 h-4 sm:w-5 sm:h-5 text-primary" /> Latest Opportunities
+              <div className="flex items-center justify-between mb-3 sm:mb-4 text-left">
+                <h2 className="text-sm sm:text-base font-bold text-slate-800 flex items-center gap-2">
+                  <Rocket className="w-4.5 h-4.5 text-slate-600" /> Latest Opportunities
                 </h2>
-                <Link to="/opportunities" className="text-xs sm:text-sm text-primary font-semibold hover:underline flex items-center gap-1">
-                  View All <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                <Link to="/opportunities" className="text-xs sm:text-sm text-slate-600 hover:text-slate-900 font-semibold flex items-center gap-1">
+                  View All <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
               {opportunities.length === 0 ? (
-                <div className="card-campus p-8 sm:p-10 text-center">
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-muted flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                    <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 text-muted-foreground" />
+                <div className="card-premium-light p-8 sm:p-10 text-center">
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                    <Sparkles className="w-5 h-5 text-slate-400" />
                   </div>
-                  <p className="font-semibold text-foreground text-sm">No opportunities yet</p>
-                  <p className="text-xs sm:text-sm text-muted-foreground mt-1 mb-4">Be the first to post one!</p>
-                  <Link to="/opportunities"><Button size="sm">Browse Opportunities</Button></Link>
+                  <p className="font-semibold text-slate-800 text-sm">No opportunities yet</p>
+                  <p className="text-xs sm:text-sm text-slate-500 mt-1 mb-4">Be the first to post one!</p>
+                  <Link to="/opportunities"><Button size="sm" className="rounded-full bg-[#0F172A] hover:bg-[#1E293B] text-white">Browse Opportunities</Button></Link>
                 </div>
               ) : (
-                <div className="space-y-2 sm:space-y-3">
+                <div className="space-y-3">
                   {opportunities.map((opp) => (
-                    <div key={opp.id} className="card-campus p-3 sm:p-4 flex items-start gap-3 sm:gap-4">
-                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl gradient-card flex items-center justify-center shrink-0">
-                        <Rocket className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+                    <div key={opp.id} className="card-premium-light p-4 flex items-start gap-4 text-left">
+                      <div className="w-10 h-10 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
+                        <Rocket className="w-4.5 h-4.5 text-slate-600" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between gap-2">
                           <div className="min-w-0">
-                            <h3 className="font-semibold text-foreground text-xs sm:text-sm truncate">{opp.title}</h3>
-                            <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 truncate">{opp.organization} {opp.location && `• ${opp.location}`}</p>
+                            <h3 className="font-bold text-slate-800 text-xs sm:text-sm truncate">{opp.title}</h3>
+                            <p className="text-[10px] sm:text-xs text-slate-500 mt-0.5 truncate">{opp.organization} {opp.location && `• ${opp.location}`}</p>
                           </div>
-                          <span className={`text-[9px] sm:text-[10px] font-bold px-2 py-0.5 sm:py-1 rounded-full shrink-0 ${categoryColors[opp.category] || "bg-muted text-muted-foreground"}`}>
-                            {opp.category.toUpperCase()}
+                          <span className="text-[9px] font-bold px-2.5 py-0.5 rounded-full shrink-0 bg-slate-100 text-slate-600 border border-slate-200/50 uppercase tracking-wider">
+                            {opp.category}
                           </span>
                         </div>
                         {opp.deadline && (
-                          <p className="text-[10px] sm:text-xs text-muted-foreground mt-1.5 flex items-center gap-1">
+                          <p className="text-[10px] sm:text-xs text-slate-400 mt-1.5 flex items-center gap-1 font-semibold">
                             <Calendar className="w-3 h-3" /> {new Date(opp.deadline).toLocaleDateString()}
                           </p>
                         )}
@@ -581,26 +582,26 @@ const Dashboard = () => {
 
             {/* Activity Feed */}
             <div>
-              <h2 className="text-sm sm:text-lg font-bold text-foreground flex items-center gap-2 mb-3 sm:mb-4">
-                <Activity className="w-4 h-4 sm:w-5 sm:h-5 text-primary" /> Recent Activity
+              <h2 className="text-sm sm:text-base font-bold text-slate-800 flex items-center gap-2 mb-3 sm:mb-4 text-left">
+                <Activity className="w-4.5 h-4.5 text-slate-600" /> Recent Activity
               </h2>
-              <div className="card-campus overflow-hidden">
+              <div className="card-premium-light overflow-hidden text-left">
                 {activityFeed.length === 0 ? (
                   <div className="p-8 text-center">
-                    <Activity className="w-10 h-10 text-muted-foreground/30 mx-auto mb-3" />
-                    <p className="text-sm text-muted-foreground">No activity yet. Start exploring!</p>
+                    <Activity className="w-10 h-10 text-slate-300 mx-auto mb-3" />
+                    <p className="text-sm text-slate-400">No activity yet. Start exploring!</p>
                   </div>
                 ) : (
-                  <div className="divide-y divide-border/40">
+                  <div className="divide-y divide-slate-100">
                     {activityFeed.map((item) => (
-                      <div key={item.id + item.type} className="flex items-center gap-3 p-3 sm:p-4 hover:bg-muted/30 transition-colors">
-                        <div className={`w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 ${activityColor(item.type)}`}>
+                      <div key={item.id + item.type} className="flex items-center gap-3.5 p-3.5 sm:p-4 hover:bg-slate-50/40 transition-colors">
+                        <div className="w-8 h-8 rounded-full border border-slate-100 bg-slate-50/50 flex items-center justify-center shrink-0">
                           {activityIcon(item.type)}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-xs sm:text-sm font-medium text-foreground truncate">{item.title}</p>
+                          <p className="text-xs sm:text-sm font-semibold text-slate-700 truncate">{item.title}</p>
                         </div>
-                        <span className="text-[10px] sm:text-xs text-muted-foreground shrink-0 flex items-center gap-1">
+                        <span className="text-[10px] sm:text-xs text-slate-400 shrink-0 flex items-center gap-1 font-medium">
                           <Clock className="w-3 h-3" /> {timeAgo(item.time)}
                         </span>
                       </div>
@@ -614,14 +615,14 @@ const Dashboard = () => {
           {/* Right Sidebar */}
           <div className="space-y-4 sm:space-y-6">
             {/* Student Leaderboard */}
-            <div className="card-campus p-4 sm:p-5">
-              <h3 className="font-bold text-foreground flex items-center gap-2 mb-3 sm:mb-4 text-xs sm:text-sm">
-                <Flame className="w-4 h-4 text-warning" /> Top Contributors
+            <div className="card-premium-light p-4 sm:p-5 text-left">
+              <h3 className="font-bold text-slate-800 flex items-center gap-2 mb-3 sm:mb-4 text-xs sm:text-sm">
+                <Flame className="w-4 h-4 text-orange-500" /> Top Contributors
               </h3>
               {leaderboard.length === 0 ? (
                 <div className="text-center py-6">
-                  <Trophy className="w-8 h-8 text-muted-foreground/30 mx-auto mb-2" />
-                  <p className="text-xs text-muted-foreground">No contributors yet. Be the first!</p>
+                  <Trophy className="w-8 h-8 text-slate-300 mx-auto mb-2" />
+                  <p className="text-xs text-slate-400">No contributors yet. Be the first!</p>
                 </div>
               ) : (
                 <div className="space-y-2">
@@ -631,57 +632,57 @@ const Dashboard = () => {
                     return (
                       <div
                         key={entry.userId}
-                        className={`flex items-center gap-2.5 p-2 sm:p-2.5 rounded-xl transition-colors ${
-                          isMe ? "bg-primary/5 border border-primary/20" : "hover:bg-muted/50"
+                        className={`flex items-center gap-2.5 p-2 sm:p-2.5 rounded-2xl transition-colors ${
+                          isMe ? "bg-orange-50/60 border border-orange-100/60" : "hover:bg-slate-50/40"
                         }`}
                       >
-                        <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg border flex items-center justify-center shrink-0 text-xs font-bold ${badge.bg}`}>
-                          {i < 3 ? badge.icon : <span className="text-muted-foreground">{badge.icon}</span>}
+                        <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full border flex items-center justify-center shrink-0 text-xs font-bold ${badge.bg}`}>
+                          {i < 3 ? badge.icon : <span className="text-slate-500">{badge.icon}</span>}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-xs sm:text-sm font-semibold text-foreground truncate">
+                          <p className="text-xs sm:text-sm font-semibold text-slate-700 truncate">
                             {isMe ? "You" : (entry.profile?.department || `Student`)}
-                            {isMe && <span className="text-[10px] text-primary ml-1">⭐</span>}
+                            {isMe && <span className="text-[10px] text-orange-500 ml-1">⭐</span>}
                           </p>
-                          <p className="text-[10px] text-muted-foreground">
+                          <p className="text-[10px] text-slate-400 font-medium">
                             {entry.resources}R • {entry.projects}P • {entry.opportunities}O
                           </p>
                         </div>
-                        <span className="text-xs sm:text-sm font-extrabold text-foreground">{entry.total}</span>
-                        <span className="text-[9px] text-muted-foreground">pts</span>
+                        <span className="text-xs sm:text-sm font-extrabold text-slate-800">{entry.total}</span>
+                        <span className="text-[9px] text-slate-400 font-medium">pts</span>
                       </div>
                     );
                   })}
                 </div>
               )}
-              <div className="mt-3 pt-3 border-t border-border/40 text-center">
-                <p className="text-[10px] text-muted-foreground">
-                  <strong>Earn points:</strong> Upload resources (+10) • Create projects (+15) • Post opportunities (+8)
+              <div className="mt-3 pt-3 border-t border-slate-100 text-center">
+                <p className="text-[9px] text-slate-400 font-medium leading-relaxed">
+                  Earn points: Upload resources (+10) • Create projects (+15) • Post opportunities (+8)
                 </p>
               </div>
             </div>
 
             {/* GenSync Developer Team */}
-            <div className="card-campus p-5 relative overflow-hidden bg-gradient-to-br from-primary/5 via-card to-background border-primary/20 hover:shadow-xl hover:border-primary/30 transition-all duration-300 group">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -translate-y-1/3 translate-x-1/3 group-hover:scale-110 transition-transform duration-500" />
-              <h3 className="font-extrabold text-foreground flex items-center gap-2 mb-1.5 text-xs sm:text-sm tracking-tight">
-                <Code2 className="w-4 h-4 text-primary animate-pulse" /> Developed by GenSync
+            <div className="card-premium-light p-5 relative overflow-hidden bg-gradient-to-br from-orange-50/30 via-white to-blue-50/20 border-slate-100/80 hover:shadow-lg transition-all duration-300 group text-left">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-orange-100/10 rounded-full -translate-y-1/3 translate-x-1/3 group-hover:scale-110 transition-transform duration-500" />
+              <h3 className="font-bold text-slate-800 flex items-center gap-2 mb-1 text-xs sm:text-sm tracking-tight">
+                <Code2 className="w-4 h-4 text-orange-500 animate-pulse" /> Developed by GenSync
               </h3>
-              <p className="text-[10px] text-muted-foreground mb-4">GenSync — Innovating for Campus Life</p>
+              <p className="text-[9px] text-slate-400 mb-4 font-semibold">GenSync — Innovating for Campus Life</p>
               
               <div className="space-y-3">
                 {[
-                  { name: "Likhith.K", role: "Full-Stack Engineer", initial: "LK", color: "bg-blue-500/10 text-blue-500 border-blue-500/20" },
-                  { name: "Manogna.u", role: "UI/UX & Frontend Developer", initial: "MU", color: "bg-rose-500/10 text-rose-500 border-rose-500/20" },
-                  { name: "udaya lakshmi.Z", role: "Database & Backend Engineer", initial: "UL", color: "bg-teal-500/10 text-teal-500 border-teal-500/20" }
+                  { name: "Likhith.K", role: "Full-Stack Engineer", initial: "LK", color: "bg-slate-50 border-slate-200/60 text-[#0F172A]" },
+                  { name: "Manogna.u", role: "UI/UX & Frontend Developer", initial: "MU", color: "bg-slate-50 border-slate-200/60 text-rose-500" },
+                  { name: "udaya lakshmi.Z", role: "Database & Backend Engineer", initial: "UL", color: "bg-slate-50 border-slate-200/60 text-teal-500" }
                 ].map((dev) => (
-                  <div key={dev.name} className="flex items-center gap-3 p-2.5 rounded-2xl hover:bg-muted/40 transition-colors border border-transparent hover:border-border/30 group/item">
-                    <div className={`w-9 h-9 rounded-xl border flex items-center justify-center font-extrabold text-xs shrink-0 group-hover/item:scale-105 transition-transform duration-300 ${dev.color}`}>
+                  <div key={dev.name} className="flex items-center gap-3 p-2.5 rounded-2xl hover:bg-white/80 transition-colors border border-transparent hover:border-slate-100 group/item shadow-sm bg-white/40">
+                    <div className={`w-9 h-9 rounded-full border flex items-center justify-center font-bold text-xs shrink-0 group-hover/item:scale-105 transition-transform duration-300 ${dev.color}`}>
                       {dev.initial}
                     </div>
                     <div className="min-w-0">
-                      <p className="text-xs font-bold text-foreground truncate group-hover/item:text-primary transition-colors">{dev.name}</p>
-                      <p className="text-[10px] text-muted-foreground">{dev.role}</p>
+                      <p className="text-xs font-bold text-slate-700 truncate group-hover/item:text-[#0F172A] transition-colors">{dev.name}</p>
+                      <p className="text-[10px] text-slate-400 font-semibold">{dev.role}</p>
                     </div>
                   </div>
                 ))}
@@ -689,52 +690,52 @@ const Dashboard = () => {
             </div>
 
             {/* Recent Resources */}
-            <div className="card-campus p-4 sm:p-5">
-              <h3 className="font-bold text-foreground flex items-center gap-2 mb-3 sm:mb-4 text-xs sm:text-sm">
-                <FileText className="w-4 h-4 text-primary" /> Recent Resources
+            <div className="card-premium-light p-4 sm:p-5 text-left">
+              <h3 className="font-bold text-slate-800 flex items-center gap-2 mb-3 sm:mb-4 text-xs sm:text-sm">
+                <FileText className="w-4.5 h-4.5 text-slate-600" /> Recent Resources
               </h3>
               {recentResources.length === 0 ? (
-                <p className="text-xs sm:text-sm text-muted-foreground">No resources uploaded yet.</p>
+                <p className="text-xs sm:text-sm text-slate-400">No resources uploaded yet.</p>
               ) : (
                 <div className="space-y-2 sm:space-y-3">
                   {recentResources.map((res) => (
-                    <div key={res.id} className="flex items-start gap-2.5 sm:gap-3 p-2 sm:p-2.5 rounded-xl hover:bg-muted/50 transition-colors">
-                      <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg gradient-card flex items-center justify-center shrink-0">
-                        <FileText className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary" />
+                    <div key={res.id} className="flex items-start gap-2.5 sm:gap-3 p-2 sm:p-2.5 rounded-2xl hover:bg-slate-50/50 transition-colors">
+                      <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-slate-50 border border-slate-100/80 flex items-center justify-center shrink-0">
+                        <FileText className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-500" />
                       </div>
                       <div className="min-w-0">
-                        <p className="text-xs sm:text-sm font-medium text-foreground truncate">{res.file_name}</p>
-                        <p className="text-[10px] sm:text-xs text-muted-foreground">{res.subject} • {new Date(res.created_at).toLocaleDateString()}</p>
+                        <p className="text-xs sm:text-sm font-semibold text-slate-700 truncate">{res.file_name}</p>
+                        <p className="text-[10px] sm:text-xs text-slate-400 font-medium">{res.subject} • {new Date(res.created_at).toLocaleDateString()}</p>
                       </div>
                     </div>
                   ))}
                 </div>
               )}
               <Link to="/resources">
-                <Button variant="outline" className="w-full mt-3 sm:mt-4 gap-1.5 text-xs sm:text-sm" size="sm">
+                <Button variant="outline" className="w-full mt-3 sm:mt-4 gap-1.5 text-xs sm:text-sm rounded-full border-slate-200 hover:bg-slate-50 hover:text-slate-900 transition-all font-semibold" size="sm">
                   <BookOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> View All Resources
                 </Button>
               </Link>
             </div>
 
             {/* Quick Links */}
-            <div className="card-campus p-4 sm:p-5">
-              <h3 className="font-bold text-foreground flex items-center gap-2 mb-3 sm:mb-4 text-xs sm:text-sm">
-                <Zap className="w-4 h-4 text-warning" /> Quick Actions
+            <div className="card-premium-light p-4 sm:p-5 text-left">
+              <h3 className="font-bold text-slate-800 flex items-center gap-2 mb-3 sm:mb-4 text-xs sm:text-sm">
+                <Zap className="w-4 h-4 text-orange-500" /> Quick Actions
               </h3>
               <div className="space-y-1">
                 {[
-                  { label: "Browse Opportunities", path: "/opportunities", icon: Rocket, color: "text-primary" },
-                  { label: "Explore Projects", path: "/projects", icon: FolderKanban, color: "text-accent-foreground" },
-                  { label: "Study Resources", path: "/resources", icon: BookOpen, color: "text-success" },
-                  { label: "Your Profile", path: "/profile", icon: Users, color: "text-warning" },
+                  { label: "Browse Opportunities", path: "/opportunities", icon: Rocket, color: "text-blue-500" },
+                  { label: "Explore Projects", path: "/projects", icon: FolderKanban, color: "text-purple-500" },
+                  { label: "Study Resources", path: "/resources", icon: BookOpen, color: "text-emerald-500" },
+                  { label: "Your Profile", path: "/profile", icon: Users, color: "text-orange-500" },
                 ].map(({ label, path, icon: Icon, color }) => (
                   <Link
                     key={path}
                     to={path}
-                    className="flex items-center gap-2.5 sm:gap-3 text-xs sm:text-sm text-muted-foreground hover:text-foreground p-2 sm:p-2.5 rounded-xl hover:bg-muted/50 transition-all font-medium group"
+                    className="flex items-center gap-2.5 sm:gap-3 text-xs sm:text-sm text-slate-500 hover:text-slate-900 p-2 sm:p-2.5 rounded-full hover:bg-slate-50/50 transition-all font-semibold group"
                   >
-                    <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-muted/60 flex items-center justify-center shrink-0`}>
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
                       <Icon className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${color}`} />
                     </div>
                     {label}
@@ -746,16 +747,16 @@ const Dashboard = () => {
 
             {/* Announcements */}
             {notifications.length > 0 && (
-              <div className="card-campus p-4 sm:p-5">
-                <h3 className="font-bold text-foreground flex items-center gap-2 mb-3 sm:mb-4 text-xs sm:text-sm">
-                  <Sparkles className="w-4 h-4 text-primary" /> Announcements
+              <div className="card-premium-light p-4 sm:p-5 text-left">
+                <h3 className="font-bold text-slate-800 flex items-center gap-2 mb-3 sm:mb-4 text-xs sm:text-sm">
+                  <Sparkles className="w-4 h-4 text-orange-500" /> Announcements
                 </h3>
                 <div className="space-y-3">
                   {notifications.map((n: any) => (
-                    <div key={n.id} className="p-2.5 sm:p-3 rounded-xl bg-muted/30 border border-border/40">
-                      <p className="text-xs sm:text-sm font-semibold text-foreground">{n.title}</p>
-                      <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 line-clamp-2">{n.message}</p>
-                      <p className="text-[9px] sm:text-[10px] text-muted-foreground mt-1.5">{timeAgo(n.created_at)}</p>
+                    <div key={n.id} className="p-3 rounded-2xl bg-slate-50/40 border border-slate-100/60">
+                      <p className="text-xs sm:text-sm font-semibold text-slate-700">{n.title}</p>
+                      <p className="text-[10px] sm:text-xs text-slate-500 mt-0.5 line-clamp-2 font-normal">{n.message}</p>
+                      <p className="text-[9px] sm:text-[10px] text-slate-400 mt-1.5 font-medium">{timeAgo(n.created_at)}</p>
                     </div>
                   ))}
                 </div>

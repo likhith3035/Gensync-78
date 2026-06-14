@@ -84,24 +84,24 @@ const Bookmarks = () => {
       <div className="max-w-4xl mx-auto space-y-4 sm:space-y-6">
         <div className="animate-fade-in">
           <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 rounded-xl bg-warning/10 flex items-center justify-center">
-              <Bookmark className="w-5 h-5 text-warning" />
+            <div className="w-10 h-10 rounded-full bg-amber-50 border border-amber-100 flex items-center justify-center shadow-sm">
+              <Bookmark className="w-5 h-5 text-amber-500" />
             </div>
             <div>
-              <h1 className="text-lg sm:text-2xl font-bold text-foreground">Bookmarks</h1>
-              <p className="text-xs sm:text-sm text-muted-foreground">{bookmarks.length} saved items</p>
+              <h1 className="text-3xl sm:text-4xl font-medium text-[#0F172A] tracking-tight font-serif-elegant">Bookmarks</h1>
+              <p className="text-xs sm:text-sm text-slate-500">{bookmarks.length} saved items</p>
             </div>
           </div>
         </div>
 
         {/* Filter tabs */}
-        <div className="flex gap-1 p-1 bg-muted/50 rounded-xl overflow-x-auto no-scrollbar">
+        <div className="flex gap-1.5 p-1.5 bg-white border border-slate-100 rounded-full overflow-x-auto no-scrollbar shadow-[0_2px_8px_rgba(15,23,42,0.01)] w-fit">
           {filterTabs.map((tab) => (
             <button
               key={tab.value}
               onClick={() => setFilter(tab.value)}
-              className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all whitespace-nowrap shrink-0 ${
-                filter === tab.value ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+              className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap shrink-0 ${
+                filter === tab.value ? "bg-slate-900 text-white shadow-sm" : "text-slate-500 hover:text-slate-900"
               }`}
             >
               {tab.icon && <tab.icon className="w-3.5 h-3.5" />}
@@ -116,29 +116,29 @@ const Bookmarks = () => {
             <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
           </div>
         ) : filtered.length === 0 ? (
-          <div className="card-campus p-10 text-center animate-fade-in">
-            <Bookmark className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
-            <p className="font-semibold text-foreground">No bookmarks yet</p>
-            <p className="text-sm text-muted-foreground mt-1">
+          <div className="card-premium-light p-10 text-center bg-white animate-fade-in">
+            <Bookmark className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+            <p className="font-semibold text-[#0F172A]">No bookmarks yet</p>
+            <p className="text-sm text-slate-500 mt-1">
               Tap the bookmark icon on any opportunity, project, resource, or event to save it here.
             </p>
           </div>
         ) : (
-          <div className="space-y-2 animate-fade-in">
+          <div className="space-y-2.5 animate-fade-in">
             {filtered.map((bookmark: any) => {
               const details = getItemDetails(bookmark);
               if (!details) return (
-                <div key={bookmark.id} className="card-campus p-3 sm:p-4 flex items-center gap-3 opacity-60">
-                  <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center shrink-0">
-                    <Bookmark className="w-4 h-4 text-muted-foreground" />
+                <div key={bookmark.id} className="card-premium-light p-3 sm:p-4 flex items-center gap-3 bg-white opacity-60">
+                  <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center shrink-0">
+                    <Bookmark className="w-4 h-4 text-slate-400" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm text-muted-foreground">Item no longer available</p>
+                    <p className="text-sm text-slate-500">Item no longer available</p>
                   </div>
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="text-destructive h-8"
+                    className="text-destructive h-8 rounded-full"
                     onClick={() => removeBookmark.mutate({ itemType: bookmark.item_type, itemId: bookmark.item_id })}
                   >
                     <Trash2 className="w-3.5 h-3.5" />
@@ -148,24 +148,24 @@ const Bookmarks = () => {
 
               const Icon = details.icon;
               return (
-                <div key={bookmark.id} className="card-campus p-3 sm:p-4 flex items-center gap-3 hover:shadow-md transition-shadow">
-                  <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl ${details.bg} flex items-center justify-center shrink-0`}>
+                <div key={bookmark.id} className="card-premium-light p-3 sm:p-4 flex items-center gap-3 bg-white">
+                  <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full ${details.bg} flex items-center justify-center shrink-0 border border-slate-100`}>
                     <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${details.color}`} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs sm:text-sm font-semibold text-foreground truncate">{details.title}</p>
-                    <p className="text-[10px] sm:text-xs text-muted-foreground truncate">{details.subtitle}</p>
+                    <p className="text-xs sm:text-sm font-semibold text-[#0F172A] truncate">{details.title}</p>
+                    <p className="text-[10px] sm:text-xs text-slate-500 truncate">{details.subtitle}</p>
                   </div>
                   <div className="flex gap-1.5 shrink-0">
                     <Link to={details.link}>
-                      <Button variant="outline" size="sm" className="h-8 px-2 text-xs">
+                      <Button variant="outline" size="sm" className="h-8 px-3 text-xs rounded-full">
                         <ExternalLink className="w-3.5 h-3.5" />
                       </Button>
                     </Link>
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="text-destructive h-8 px-2"
+                      className="text-destructive h-8 px-3 rounded-full hover:bg-destructive/10"
                       onClick={() => removeBookmark.mutate({ itemType: bookmark.item_type, itemId: bookmark.item_id })}
                     >
                       <Trash2 className="w-3.5 h-3.5" />

@@ -197,12 +197,12 @@ const Events = () => {
         {/* Header */}
         <div className="flex items-center justify-between animate-fade-in">
           <div>
-            <h1 className="text-2xl md:text-3xl font-extrabold text-foreground tracking-tight">Events</h1>
-            <p className="text-sm text-muted-foreground mt-1">Discover and join campus events</p>
+            <h1 className="text-3xl sm:text-4xl font-medium text-[#0F172A] tracking-tight font-serif-elegant">Events</h1>
+            <p className="text-sm text-slate-500 mt-1.5">Discover and join campus events</p>
           </div>
           <Dialog open={createOpen} onOpenChange={setCreateOpen}>
             <DialogTrigger asChild>
-              <button className="h-11 px-5 rounded-2xl bg-primary text-primary-foreground font-semibold text-sm flex items-center gap-2 hover:opacity-90 transition-opacity">
+              <button className="h-10 px-5 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm flex items-center gap-2 shadow-sm transition-all">
                 <Plus className="w-4 h-4" /> Create Event
               </button>
             </DialogTrigger>
@@ -232,7 +232,7 @@ const Events = () => {
                 <button
                   onClick={() => createEventMutation.mutate()}
                   disabled={!form.title || !form.event_date || createEventMutation.isPending}
-                  className="w-full py-3 rounded-2xl bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition-opacity disabled:opacity-50"
+                  className="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm transition-all disabled:opacity-50"
                 >
                   {createEventMutation.isPending ? "Creating..." : "Create Event"}
                 </button>
@@ -261,15 +261,14 @@ const Events = () => {
           ))}
         </div>
 
-        {/* Filters */}
         <div className="flex flex-wrap gap-2 animate-fade-in" style={{ animationDelay: "0.05s" }}>
-          <div className="flex gap-1 bg-muted/40 p-1 rounded-2xl">
+          <div className="flex gap-1.5 p-1 bg-white border border-slate-100 rounded-full shadow-[0_2px_8px_rgba(15,23,42,0.01)]">
             {filters.map(({ key, label }) => (
               <button
                 key={key}
                 onClick={() => setFilter(key)}
-                className={`px-3 sm:px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-300 ${
-                  filter === key ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                className={`px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300 ${
+                  filter === key ? "bg-slate-900 text-white shadow-sm" : "text-slate-500 hover:text-slate-900"
                 }`}
               >
                 {label}
@@ -279,7 +278,7 @@ const Events = () => {
           <select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
-            className="h-10 px-3 rounded-xl bg-muted/40 text-xs font-semibold text-muted-foreground border-0 focus:ring-2 focus:ring-primary/25 transition-all"
+            className="h-10 px-4 rounded-full border border-slate-200 bg-white text-xs font-semibold text-slate-500 hover:border-slate-300 focus:outline-none transition-all"
           >
             <option value="all">All Categories</option>
             {EVENT_CATEGORIES.map((c) => (
@@ -290,9 +289,9 @@ const Events = () => {
 
         <div className="grid lg:grid-cols-[1fr_380px] gap-6">
           {/* Calendar */}
-          <div className="card-campus p-5 animate-fade-in" style={{ animationDelay: "0.07s" }}>
+          <div className="card-premium-light bg-white p-5 animate-fade-in" style={{ animationDelay: "0.07s" }}>
             <div className="flex items-center justify-between mb-5">
-              <h2 className="text-lg font-bold text-foreground">{format(currentMonth, "MMMM yyyy")}</h2>
+              <h2 className="text-lg font-bold text-[#0F172A]">{format(currentMonth, "MMMM yyyy")}</h2>
               <div className="flex gap-1">
                 <button onClick={() => setCurrentMonth(subMonths(currentMonth, 1))} className="w-9 h-9 rounded-xl hover:bg-muted/60 flex items-center justify-center transition-colors">
                   <ChevronLeft className="w-4 h-4 text-muted-foreground" />
@@ -316,12 +315,12 @@ const Events = () => {
                   <button
                     key={day.toISOString()}
                     onClick={() => setSelectedDate(isSelected ? null : day)}
-                    className={`relative aspect-square flex flex-col items-center justify-center rounded-2xl text-sm font-medium transition-all duration-200 ${
+                    className={`relative aspect-square flex flex-col items-center justify-center rounded-full text-sm font-medium transition-all duration-200 ${
                       isSelected
-                        ? "bg-primary text-primary-foreground"
+                        ? "bg-slate-900 text-white font-bold"
                         : isToday(day)
-                        ? "bg-primary/10 text-primary font-bold"
-                        : "hover:bg-muted/50 text-foreground"
+                        ? "bg-slate-100 text-slate-950 font-bold border border-slate-200"
+                        : "hover:bg-slate-50 text-slate-700"
                     }`}
                   >
                     {day.getDate()}
@@ -353,16 +352,16 @@ const Events = () => {
             </div>
 
             {filteredEvents.length === 0 ? (
-              <div className="card-campus p-8 text-center">
-                <Calendar className="w-10 h-10 text-muted-foreground/30 mx-auto mb-3" />
-                <p className="text-sm text-muted-foreground">No events {selectedDate ? "on this day" : "match your filters"}</p>
+              <div className="card-premium-light p-8 text-center bg-white">
+                <Calendar className="w-10 h-10 text-slate-300 mx-auto mb-3" />
+                <p className="text-sm font-semibold text-slate-500">No events {selectedDate ? "on this day" : "match your filters"}</p>
               </div>
             ) : (
               filteredEvents.map((event: any) => {
                 const past = isEventPast(event);
                 const isMine = canManageEvent(event);
                 return (
-                  <div key={event.id} className={`card-campus p-4 space-y-3 transition-opacity ${past ? "opacity-70" : ""}`}>
+                  <div key={event.id} className={`card-premium-light bg-white p-5 space-y-3 transition-opacity ${past ? "opacity-70" : ""}`}>
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
@@ -418,18 +417,18 @@ const Events = () => {
                     {!past ? (
                       <button
                         onClick={() => toggleRsvp.mutate(event.id)}
-                        className={`w-full py-2.5 rounded-2xl text-xs font-semibold transition-all ${
+                        className={`w-full py-2.5 rounded-full text-xs font-semibold transition-all ${
                           hasRsvped(event.id)
-                            ? "bg-success/10 text-success"
-                            : "bg-primary/10 text-primary hover:bg-primary/20"
+                            ? "bg-emerald-50 border border-emerald-100 text-emerald-600 font-bold"
+                            : "bg-slate-900 text-white hover:bg-slate-800"
                         }`}
                       >
                         {hasRsvped(event.id) ? (
-                          <span className="flex items-center justify-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5" /> Going</span>
+                          <span className="flex items-center justify-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> Going</span>
                         ) : "RSVP"}
                       </button>
                     ) : (
-                      <div className="w-full py-2.5 rounded-2xl text-xs font-semibold text-center bg-muted/50 text-muted-foreground">
+                      <div className="w-full py-2.5 rounded-full text-xs font-semibold text-center bg-slate-50 border border-slate-100 text-slate-400">
                         Event Ended
                       </div>
                     )}
@@ -470,13 +469,13 @@ const Events = () => {
               <button
                 onClick={() => updateEventMutation.mutate()}
                 disabled={!editForm.title || !editForm.event_date || updateEventMutation.isPending}
-                className="flex-1 py-3 rounded-2xl bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2"
+                className="flex-1 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm transition-all disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 <Save className="w-4 h-4" /> {updateEventMutation.isPending ? "Saving..." : "Save Changes"}
               </button>
               <button
                 onClick={() => setEditEvent(null)}
-                className="px-5 py-3 rounded-2xl bg-muted text-muted-foreground font-semibold text-sm hover:bg-muted/80 transition-opacity"
+                className="px-5 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold text-sm transition-all"
               >
                 Cancel
               </button>

@@ -138,16 +138,16 @@ const Resources = () => {
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 animate-fade-in">
           <div className="page-header mb-0">
-            <h1 className="page-title">Study Resources Library</h1>
-            <p className="page-subtitle">Access collaborative notes, past papers, and video tutorials</p>
+            <h1 className="text-3xl sm:text-4xl font-medium text-[#0F172A] tracking-tight font-serif-elegant">Study Resources Library</h1>
+            <p className="text-sm text-slate-500 mt-1.5">Access collaborative notes, past papers, and video tutorials</p>
           </div>
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="gap-1.5 font-semibold shadow-md"><Plus className="w-4 h-4" /> Upload Resource</Button>
+              <Button className="gap-1.5 font-semibold shadow-sm rounded-full bg-slate-900 hover:bg-slate-800 text-white h-10 px-5"><Plus className="w-4 h-4" /> Upload Resource</Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-md">
+            <DialogContent className="sm:max-w-md rounded-2xl">
               <DialogHeader>
-                <DialogTitle className="text-xl font-bold">Upload Resource</DialogTitle>
+                <DialogTitle className="text-xl font-bold text-[#0F172A]">Upload Resource</DialogTitle>
               </DialogHeader>
               <form onSubmit={(e) => { e.preventDefault(); uploadMutation.mutate(); }} className="space-y-4 mt-2">
                 <input placeholder="Title *" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required className="w-full h-11 px-4 rounded-xl border border-border/60 bg-muted/30 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-all" />
@@ -269,7 +269,7 @@ const Resources = () => {
                   )}
                 </div>
 
-                <Button type="submit" className="w-full h-11 font-semibold" disabled={uploadMutation.isPending || !file}>
+                <Button type="submit" className="w-full h-11 font-semibold rounded-xl bg-slate-900 hover:bg-slate-800 text-white" disabled={uploadMutation.isPending || !file}>
                   {uploadMutation.isPending ? "Uploading..." : "Upload Resource"}
                 </Button>
               </form>
@@ -300,9 +300,9 @@ const Resources = () => {
             <div className="w-16 h-16 rounded-2xl gradient-card flex items-center justify-center mx-auto mb-4">
               <BookOpen className="w-7 h-7 text-primary/40" />
             </div>
-            <p className="font-bold text-foreground text-lg">No resources yet</p>
-            <p className="text-sm text-muted-foreground mt-1 mb-6">Upload the first study resource for your peers!</p>
-            <Button onClick={() => setDialogOpen(true)} className="gap-1.5">
+            <p className="font-bold text-[#0F172A] text-lg">No resources yet</p>
+            <p className="text-sm text-slate-500 mt-1 mb-6">Upload the first study resource for your peers!</p>
+            <Button onClick={() => setDialogOpen(true)} className="gap-1.5 rounded-full bg-slate-900 hover:bg-slate-800 text-white">
               <Plus className="w-4 h-4" /> Upload First Resource
             </Button>
           </div>
@@ -312,36 +312,36 @@ const Resources = () => {
               const config = categoryConfig[res.category] || categoryConfig.notes;
               const Icon = config.icon;
               return (
-                <div key={res.id} className="card-campus overflow-hidden animate-fade-in" style={{ animationDelay: `${0.05 * i}s` }}>
-                  <div className={`h-3 bg-gradient-to-r ${config.gradient}`} />
-                  <div className="p-5">
+                <div key={res.id} className="card-premium-light overflow-hidden animate-fade-in flex flex-col" style={{ animationDelay: `${0.05 * i}s` }}>
+                  <div className={`h-1.5 bg-gradient-to-r ${config.gradient}`} />
+                  <div className="p-5 flex-1 flex flex-col">
                     <div className="flex items-start justify-between gap-3 mb-3">
-                      <div className="w-11 h-11 rounded-xl gradient-card flex items-center justify-center shrink-0">
-                        <Icon className="w-5 h-5 text-primary" />
+                      <div className="w-10 h-10 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
+                        <Icon className="w-4.5 h-4.5 text-slate-700" />
                       </div>
-                      <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full ${config.color}`}>
+                      <span className={`text-[10px] font-bold px-3 py-1 rounded-full ${config.color}`}>
                         {res.category.replace("_", " ").toUpperCase()}
                       </span>
                     </div>
-                    <h3 className="font-bold text-foreground mb-1 line-clamp-2">{res.title}</h3>
-                    <p className="text-sm text-muted-foreground">{res.subject} {res.course_code && `| ${res.course_code}`}</p>
-                    <div className="flex items-center justify-between mt-4 pt-3 border-t border-border/40">
+                    <h3 className="text-base font-bold text-[#0F172A] mb-1 line-clamp-2 leading-snug">{res.title}</h3>
+                    <p className="text-xs text-slate-500 mb-4">{res.subject} {res.course_code && `| ${res.course_code}`}</p>
+                    <div className="flex items-center justify-between mt-auto pt-3 border-t border-slate-100">
                       <div>
-                        <p className="text-xs text-muted-foreground font-medium">{new Date(res.created_at).toLocaleDateString()}</p>
-                        {res.file_size && <p className="text-xs text-muted-foreground">{(res.file_size / 1024 / 1024).toFixed(1)} MB</p>}
+                        <p className="text-[10px] text-slate-400 font-semibold">{new Date(res.created_at).toLocaleDateString()}</p>
+                        {res.file_size && <p className="text-[10px] text-slate-400">{(res.file_size / 1024 / 1024).toFixed(1)} MB</p>}
                       </div>
-                      <div className="flex gap-1.5">
+                      <div className="flex gap-2">
                         <button
                           onClick={() => setShareTarget({ id: res.id, title: res.title, type: "resource" as const })}
-                          className="w-9 h-9 rounded-xl border border-border/60 flex items-center justify-center hover:bg-muted hover:border-primary/30 transition-all"
+                          className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center hover:bg-slate-50 hover:border-slate-300 transition-all"
                         >
-                          <Share2 className="w-4 h-4 text-muted-foreground" />
+                          <Share2 className="w-3.5 h-3.5 text-slate-500" />
                         </button>
                         <button
                           onClick={() => handleDownload(res.file_path, res.file_name)}
-                          className="w-9 h-9 rounded-xl border border-border/60 flex items-center justify-center hover:bg-muted hover:border-primary/30 transition-all"
+                          className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center hover:bg-slate-50 hover:border-slate-300 transition-all"
                         >
-                          <Download className="w-4 h-4 text-muted-foreground" />
+                          <Download className="w-3.5 h-3.5 text-slate-500" />
                         </button>
                       </div>
                     </div>

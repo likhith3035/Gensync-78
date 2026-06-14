@@ -351,14 +351,14 @@ const Profile = () => {
       <SEO title={isOwnProfile ? "My Profile" : `${displayName}'s Profile`} description="StudentHub profile page." canonical="/profile" noindex />
       <div className="max-w-5xl mx-auto animate-fade-in space-y-6">
         {/* Profile header card */}
-        <div className="card-campus overflow-hidden">
-          <div className="h-28 sm:h-36 gradient-primary relative">
-            <div className="absolute top-0 right-0 w-48 h-48 rounded-full bg-primary-foreground/5 -translate-y-1/3 translate-x-1/4" />
-            <div className="absolute bottom-0 left-0 w-32 h-32 rounded-full bg-primary-foreground/5 translate-y-1/2 -translate-x-1/4" />
+        <div className="card-premium-light overflow-hidden text-left">
+          <div className="h-28 sm:h-36 bg-gradient-to-r from-orange-100/30 via-white to-blue-50 relative border-b border-slate-100/60">
+            <div className="absolute top-0 right-0 w-48 h-48 rounded-full bg-orange-200/5 blur-3xl -translate-y-1/3 translate-x-1/4 pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-32 h-32 rounded-full bg-blue-200/5 blur-2xl translate-y-1/2 -translate-x-1/4 pointer-events-none" />
             {/* Points badge */}
-            <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-primary-foreground/15 backdrop-blur-sm px-3 py-1.5 rounded-full">
-              <Trophy className="w-3.5 h-3.5 text-primary-foreground" />
-              <span className="text-xs font-bold text-primary-foreground">{totalPoints} pts</span>
+            <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-white border border-slate-200/60 shadow-sm px-3.5 py-1.5 rounded-full">
+              <Trophy className="w-3.5 h-3.5 text-orange-500" />
+              <span className="text-xs font-bold text-slate-800">{totalPoints} pts</span>
             </div>
           </div>
 
@@ -369,10 +369,10 @@ const Profile = () => {
                   <img
                     src={profile.avatar_url}
                     alt="Avatar"
-                    className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover border-4 border-card shadow-lg"
+                    className="w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover border-4 border-white shadow-md bg-white"
                   />
                 ) : (
-                  <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl gradient-primary flex items-center justify-center text-2xl sm:text-3xl font-extrabold text-primary-foreground border-4 border-card shadow-lg">
+                  <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-tr from-orange-400 to-amber-500 flex items-center justify-center text-2xl sm:text-3xl font-bold text-white border-4 border-white shadow-md">
                     {initials}
                   </div>
                 )}
@@ -380,11 +380,11 @@ const Profile = () => {
                   <>
                     <button
                       onClick={() => fileInputRef.current?.click()}
-                      className="absolute bottom-1 right-1 w-8 h-8 rounded-xl bg-primary text-primary-foreground flex items-center justify-center shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute bottom-1 right-1 w-8 h-8 rounded-full bg-[#0F172A] hover:bg-[#1E293B] text-white flex items-center justify-center shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
                       disabled={avatarUploading}
                     >
                       {avatarUploading ? (
-                        <div className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                       ) : (
                         <Camera className="w-4 h-4" />
                       )}
@@ -394,44 +394,44 @@ const Profile = () => {
                 )}
                 {/* Achievement count badge */}
                 {unlockedAchievements.length > 0 && (
-                  <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-warning text-warning-foreground flex items-center justify-center text-[10px] font-bold shadow-md animate-bounce-in">
+                  <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-orange-500 text-white flex items-center justify-center text-[10px] font-bold shadow-md animate-bounce-in border border-white">
                     {unlockedAchievements.length}
                   </div>
                 )}
               </div>
 
               <div className="flex-1 min-w-0">
-                <h2 className="text-xl sm:text-2xl font-extrabold text-foreground truncate">{displayName}</h2>
+                <h2 className="text-xl sm:text-2xl font-bold text-slate-800 truncate">{displayName}</h2>
                 {profile?.department && (
-                  <p className="text-sm text-primary font-semibold flex items-center gap-1.5 mt-0.5">
+                  <div className="mt-1 inline-flex items-center gap-1.5 text-[10px] font-bold text-orange-600 bg-orange-50 border border-orange-200/40 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
                     <GraduationCap className="w-3.5 h-3.5" />
                     {profile.department}
-                    {profile.year_of_study && ` • ${profile.year_of_study}`}
-                  </p>
+                    {profile.year_of_study && ` • Year ${profile.year_of_study}`}
+                  </div>
                 )}
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1.5">
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2">
                   {displayEmail && (
-                    <span className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground animate-fade-in">
-                      <Mail className="w-3.5 h-3.5" /> {displayEmail}
+                    <span className="flex items-center gap-1.5 text-xs sm:text-sm text-slate-400 font-medium">
+                      <Mail className="w-3.5 h-3.5 text-slate-400" /> {displayEmail}
                     </span>
                   )}
                   {isOwnProfile && user?.created_at && (
-                    <span className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground animate-fade-in">
-                      <Calendar className="w-3.5 h-3.5" /> Joined {new Date(user.created_at).toLocaleDateString()}
+                    <span className="flex items-center gap-1.5 text-xs sm:text-sm text-slate-400 font-medium">
+                      <Calendar className="w-3.5 h-3.5 text-slate-400" /> Joined {new Date(user.created_at).toLocaleDateString()}
                     </span>
                   )}
                 </div>
 
                 {/* Unlocked achievement badges inline */}
                 {unlockedAchievements.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 mt-2.5">
+                  <div className="flex flex-wrap gap-1.5 mt-3">
                     {unlockedAchievements.slice(0, 5).map(a => (
                       <span key={a.id} title={a.title} className="text-base cursor-default hover:scale-125 transition-transform">
                         {a.emoji}
                       </span>
                     ))}
                     {unlockedAchievements.length > 5 && (
-                      <span className="text-xs text-muted-foreground font-semibold self-center">+{unlockedAchievements.length - 5} more</span>
+                      <span className="text-xs text-slate-400 font-semibold self-center">+{unlockedAchievements.length - 5} more</span>
                     )}
                   </div>
                 )}
@@ -444,7 +444,7 @@ const Profile = () => {
                       if (!url) return null;
                       return (
                         <a key={key} href={url} target="_blank" rel="noopener noreferrer" title={label}
-                          className={`w-9 h-9 rounded-xl bg-muted/60 flex items-center justify-center text-muted-foreground transition-all duration-300 hover:scale-110 ${color}`}
+                          className="w-8 h-8 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-800 transition-all duration-300 hover:scale-105"
                         >
                           <Icon className="w-4 h-4" />
                         </a>
@@ -456,12 +456,12 @@ const Profile = () => {
 
               {isOwnProfile && (
                 <div className="flex gap-2 shrink-0 self-start sm:self-end">
-                  <Button variant="outline" className="gap-1.5 font-semibold text-xs sm:text-sm" onClick={openEdit}>
+                  <Button variant="outline" className="gap-1.5 font-bold text-xs border border-slate-200 hover:bg-slate-50 hover:text-slate-900 rounded-full h-9 px-4.5" onClick={openEdit}>
                     <Pencil className="w-3.5 h-3.5" /> Edit Profile
                   </Button>
                   <Button
                     variant="outline"
-                    className="gap-1.5 text-destructive border-destructive/20 hover:bg-destructive/5 font-semibold text-xs sm:text-sm"
+                    className="gap-1.5 text-xs text-rose-600 bg-rose-50 hover:bg-rose-100 border border-rose-200/40 font-bold rounded-full h-9 px-4.5"
                     onClick={handleSignOut}
                   >
                     <LogOut className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Sign Out</span>
@@ -471,16 +471,16 @@ const Profile = () => {
             </div>
 
             {profile?.bio && (
-              <div className="mt-4 p-4 rounded-xl bg-muted/30 border border-border/40">
-                <p className="text-sm text-foreground leading-relaxed">{profile.bio}</p>
+              <div className="mt-4 p-4 rounded-2xl bg-slate-50/50 border border-slate-100/80">
+                <p className="text-sm text-slate-600 leading-relaxed font-normal">{profile.bio}</p>
               </div>
             )}
 
             {profile?.skills && profile.skills.length > 0 && (
               <div className="mt-4 flex flex-wrap gap-2">
-                <Sparkles className="w-4 h-4 text-primary mt-1 shrink-0" />
+                <Sparkles className="w-4 h-4 text-orange-500 mt-1 shrink-0 animate-pulse" />
                 {profile.skills.map((skill: string) => (
-                  <Badge key={skill} variant="secondary" className="rounded-full px-3 py-1 text-xs font-semibold">
+                  <Badge key={skill} variant="secondary" className="rounded-full px-3.5 py-1 text-xs font-semibold bg-slate-100 border border-slate-200/40 text-slate-600">
                     {skill}
                   </Badge>
                 ))}
@@ -490,28 +490,28 @@ const Profile = () => {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {stats.map(({ num, label, icon: Icon, color, bg }, i) => (
-            <div key={label} className="stat-card text-center p-3 sm:p-5 animate-fade-in" style={{ animationDelay: `${i * 0.05}s` }}>
-              <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl ${bg} flex items-center justify-center mx-auto mb-2`}>
-                <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${color}`} />
+            <div key={label} className="card-premium-light text-center p-4 animate-fade-in" style={{ animationDelay: `${i * 0.05}s` }}>
+              <div className={`w-9 h-9 rounded-full ${bg} border flex items-center justify-center mx-auto mb-2`}>
+                <Icon className={`w-4 h-4 sm:w-4.5 sm:h-4.5 ${color}`} />
               </div>
-              <p className="text-lg sm:text-2xl font-extrabold text-foreground animate-count-up">{num}</p>
-              <p className="text-[10px] sm:text-xs text-muted-foreground font-medium">{label}</p>
+              <p className="text-xl sm:text-2xl font-bold text-slate-800 animate-count-up">{num}</p>
+              <p className="text-[9px] sm:text-[10px] text-slate-400 font-bold tracking-wider uppercase mt-0.5">{label}</p>
             </div>
           ))}
         </div>
 
         {/* Tab navigation */}
-        <div className="flex gap-1 bg-muted/40 p-1 rounded-2xl">
+        <div className="flex gap-1.5 bg-slate-100/80 p-1.5 rounded-full border border-slate-200/40">
           {tabs.map(({ key, label, icon: Icon }) => (
             <button
               key={key}
               onClick={() => setActiveTab(key)}
-              className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-sm font-semibold transition-all duration-300 ${
+              className={`flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-full text-xs font-bold transition-all duration-300 ${
                 activeTab === key
-                  ? "bg-card text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
+                  ? "bg-white text-slate-800 shadow-sm border border-slate-100"
+                  : "text-slate-400 hover:text-slate-700"
               }`}
             >
               <Icon className="w-4 h-4" />
@@ -525,32 +525,32 @@ const Profile = () => {
           <div className="grid md:grid-cols-2 gap-6 animate-fade-in">
             {/* My Projects */}
             <div>
-              <h3 className="text-base sm:text-lg font-bold text-foreground mb-3 sm:mb-4 flex items-center gap-2">
-                <FolderKanban className="w-5 h-5 text-primary" /> Your Projects
+              <h3 className="text-sm sm:text-base font-bold text-slate-800 mb-3.5 flex items-center gap-2 text-left">
+                <FolderKanban className="w-4.5 h-4.5 text-slate-600" /> Your Projects
               </h3>
               {myProjects.length === 0 ? (
-                <div className="card-campus p-8 text-center">
-                  <FolderKanban className="w-10 h-10 text-muted-foreground/30 mx-auto mb-3" />
-                  <p className="text-sm text-muted-foreground">No projects yet. Create your first project!</p>
-                  <Link to="/projects"><Button size="sm" className="mt-3 gap-1.5"><Plus className="w-3.5 h-3.5" /> Create Project</Button></Link>
+                <div className="card-premium-light p-8 text-center">
+                  <FolderKanban className="w-10 h-10 text-slate-300 mx-auto mb-3" />
+                  <p className="text-sm text-slate-500">No projects yet. Create your first project!</p>
+                  <Link to="/projects"><Button size="sm" className="mt-3 gap-1.5 rounded-full bg-[#0F172A] hover:bg-[#1E293B] text-white"><Plus className="w-3.5 h-3.5" /> Create Project</Button></Link>
                 </div>
               ) : (
                 <div className="space-y-3">
                   {myProjects.slice(0, 5).map((proj, i) => (
-                    <div key={proj.id} className="card-interactive p-3 sm:p-4 animate-fade-in" style={{ animationDelay: `${i * 0.05}s` }}>
+                    <div key={proj.id} className="card-premium-light p-4 animate-fade-in text-left" style={{ animationDelay: `${i * 0.05}s` }}>
                       <div className="flex items-start gap-3">
-                        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl gradient-card flex items-center justify-center shrink-0">
-                          <FolderKanban className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+                        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
+                          <FolderKanban className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-slate-600" />
                         </div>
                         <div className="min-w-0 flex-1">
-                          <h4 className="font-semibold text-foreground text-sm truncate">{proj.title}</h4>
-                          {proj.description && <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{proj.description}</p>}
-                          <div className="flex items-center gap-2 mt-1.5">
-                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${statusColors[proj.status] || "bg-muted text-muted-foreground"}`}>
-                              {proj.status.toUpperCase()}
+                          <h4 className="font-bold text-slate-800 text-sm truncate">{proj.title}</h4>
+                          {proj.description && <p className="text-xs text-slate-500 mt-0.5 line-clamp-2 font-normal">{proj.description}</p>}
+                          <div className="flex flex-wrap items-center gap-2 mt-2">
+                            <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200/50 uppercase tracking-wider">
+                              {proj.status}
                             </span>
                             {proj.tags?.slice(0, 2).map((tag: string) => (
-                              <span key={tag} className="text-[10px] text-muted-foreground bg-muted px-1.5 py-0.5 rounded-full">{tag}</span>
+                              <span key={tag} className="text-[9px] text-slate-400 bg-slate-50 border border-slate-100 px-2 py-0.5 rounded-full font-semibold">{tag}</span>
                             ))}
                           </div>
                         </div>
@@ -558,7 +558,7 @@ const Profile = () => {
                     </div>
                   ))}
                   {myProjects.length > 5 && (
-                    <Link to="/projects" className="block text-center text-xs text-primary font-semibold hover:underline py-2">
+                    <Link to="/projects" className="block text-center text-xs text-slate-500 font-semibold hover:underline py-2">
                       View all {myProjects.length} projects →
                     </Link>
                   )}
@@ -568,30 +568,30 @@ const Profile = () => {
 
             {/* My Resources */}
             <div>
-              <h3 className="text-base sm:text-lg font-bold text-foreground mb-3 sm:mb-4 flex items-center gap-2">
-                <BookOpen className="w-5 h-5 text-success" /> Uploaded Resources
+              <h3 className="text-sm sm:text-base font-bold text-slate-800 mb-3.5 flex items-center gap-2 text-left">
+                <BookOpen className="w-4.5 h-4.5 text-slate-600" /> Uploaded Resources
               </h3>
               {myResources.length === 0 ? (
-                <div className="card-campus p-8 text-center">
-                  <BookOpen className="w-10 h-10 text-muted-foreground/30 mx-auto mb-3" />
-                  <p className="text-sm text-muted-foreground">No resources uploaded yet.</p>
-                  <Link to="/resources"><Button size="sm" className="mt-3 gap-1.5"><Upload className="w-3.5 h-3.5" /> Upload Resource</Button></Link>
+                <div className="card-premium-light p-8 text-center">
+                  <BookOpen className="w-10 h-10 text-slate-300 mx-auto mb-3" />
+                  <p className="text-sm text-slate-500">No resources uploaded yet.</p>
+                  <Link to="/resources"><Button size="sm" className="mt-3 gap-1.5 rounded-full bg-[#0F172A] hover:bg-[#1E293B] text-white"><Upload className="w-3.5 h-3.5" /> Upload Resource</Button></Link>
                 </div>
               ) : (
                 <div className="space-y-3">
                   {myResources.slice(0, 5).map((res, i) => (
-                    <div key={res.id} className="card-interactive p-3 sm:p-4 flex items-center gap-3 animate-fade-in" style={{ animationDelay: `${i * 0.05}s` }}>
-                      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl gradient-card flex items-center justify-center shrink-0">
-                        <BookOpen className="w-4 h-4 text-primary" />
+                    <div key={res.id} className="card-premium-light p-4 flex items-center gap-3 animate-fade-in text-left" style={{ animationDelay: `${i * 0.05}s` }}>
+                      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
+                        <BookOpen className="w-4 h-4 text-slate-600" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold text-foreground truncate">{res.file_name}</p>
-                        <p className="text-[10px] sm:text-xs text-muted-foreground">{res.subject} • {new Date(res.created_at).toLocaleDateString()}</p>
+                        <p className="text-sm font-bold text-slate-700 truncate">{res.file_name}</p>
+                        <p className="text-[10px] sm:text-xs text-slate-400 font-semibold">{res.subject} • {new Date(res.created_at).toLocaleDateString()}</p>
                       </div>
                     </div>
                   ))}
                   {myResources.length > 5 && (
-                    <Link to="/resources" className="block text-center text-xs text-primary font-semibold hover:underline py-2">
+                    <Link to="/resources" className="block text-center text-xs text-slate-500 font-semibold hover:underline py-2">
                       View all {myResources.length} resources →
                     </Link>
                   )}
@@ -602,22 +602,22 @@ const Profile = () => {
             {/* Opportunities */}
             {myOpportunities.length > 0 && (
               <div className="md:col-span-2">
-                <h3 className="text-base sm:text-lg font-bold text-foreground mb-3 sm:mb-4 flex items-center gap-2">
-                  <Briefcase className="w-5 h-5 text-warning" /> Your Opportunities
+                <h3 className="text-sm sm:text-base font-bold text-slate-800 mb-3.5 flex items-center gap-2 text-left">
+                  <Briefcase className="w-4.5 h-4.5 text-slate-600" /> Your Opportunities
                 </h3>
-                <div className="grid sm:grid-cols-2 gap-3">
+                <div className="grid sm:grid-cols-2 gap-3 text-left">
                   {myOpportunities.slice(0, 4).map((opp, i) => (
-                    <div key={opp.id} className="card-interactive p-3 sm:p-4 animate-fade-in" style={{ animationDelay: `${i * 0.05}s` }}>
+                    <div key={opp.id} className="card-premium-light p-4 animate-fade-in" style={{ animationDelay: `${i * 0.05}s` }}>
                       <div className="flex items-start gap-3">
-                        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-warning/10 flex items-center justify-center shrink-0">
-                          <Briefcase className="w-4 h-4 text-warning" />
+                        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
+                          <Briefcase className="w-4.5 h-4.5 text-slate-600" />
                         </div>
                         <div className="min-w-0 flex-1">
-                          <h4 className="font-semibold text-foreground text-sm truncate">{opp.title}</h4>
-                          <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5">{opp.organization} • {opp.category}</p>
+                          <h4 className="font-bold text-slate-800 text-sm truncate">{opp.title}</h4>
+                          <p className="text-[10px] sm:text-xs text-slate-500 mt-0.5">{opp.organization} • {opp.category}</p>
                           {opp.deadline && (
-                            <p className="text-[10px] text-muted-foreground mt-1 flex items-center gap-1">
-                              <Calendar className="w-3 h-3" /> Deadline: {new Date(opp.deadline).toLocaleDateString()}
+                            <p className="text-[10px] text-slate-400 mt-1.5 flex items-center gap-1 font-semibold">
+                              <Calendar className="w-3.5 h-3.5" /> Deadline: {new Date(opp.deadline).toLocaleDateString()}
                             </p>
                           )}
                         </div>
@@ -631,22 +631,22 @@ const Profile = () => {
         )}
 
         {activeTab === "achievements" && (
-          <div className="animate-fade-in space-y-6">
+          <div className="animate-fade-in space-y-6 text-left">
             {/* Progress bar */}
-            <div className="card-campus p-5 sm:p-6">
+            <div className="card-premium-light p-5 sm:p-6">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-sm sm:text-base font-bold text-foreground flex items-center gap-2">
-                  <Award className="w-5 h-5 text-warning" /> Achievement Progress
+                <h3 className="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-2">
+                  <Award className="w-4.5 h-4.5 text-orange-500" /> Achievement Progress
                 </h3>
-                <span className="text-xs font-bold text-primary">{unlockedAchievements.length}/{ACHIEVEMENTS.length}</span>
+                <span className="text-xs font-bold text-orange-500">{unlockedAchievements.length}/{ACHIEVEMENTS.length}</span>
               </div>
-              <div className="w-full h-3 rounded-full bg-muted overflow-hidden">
+              <div className="w-full h-1.5 rounded-full bg-slate-100 overflow-hidden">
                 <div
-                  className="h-full rounded-full gradient-primary transition-all duration-700 ease-out"
+                  className="h-full rounded-full bg-orange-500 transition-all duration-700 ease-out"
                   style={{ width: `${(unlockedAchievements.length / ACHIEVEMENTS.length) * 100}%` }}
                 />
               </div>
-              <p className="text-xs text-muted-foreground mt-2">
+              <p className="text-xs text-slate-500 mt-2 font-medium">
                 {unlockedAchievements.length === ACHIEVEMENTS.length
                   ? "🎉 You've unlocked all achievements! Amazing!"
                   : `${ACHIEVEMENTS.length - unlockedAchievements.length} more to unlock. Keep contributing!`}
@@ -656,15 +656,15 @@ const Profile = () => {
             {/* Unlocked */}
             {unlockedAchievements.length > 0 && (
               <div>
-                <h4 className="text-sm font-bold text-foreground mb-3 flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-primary" /> Unlocked
+                <h4 className="text-xs sm:text-sm font-bold text-slate-800 mb-3.5 flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-orange-500 animate-pulse" /> Unlocked
                 </h4>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   {unlockedAchievements.map((a, i) => (
-                    <div key={a.id} className="achievement-badge unlocked animate-bounce-in" style={{ animationDelay: `${i * 0.08}s` }}>
+                    <div key={a.id} className="rounded-3xl p-5 bg-white border border-orange-100/60 shadow-[0_8px_30px_rgba(249,115,22,0.03)] flex flex-col items-center justify-center gap-1.5 animate-fade-in" style={{ animationDelay: `${i * 0.05}s` }}>
                       <span className="text-2xl sm:text-3xl">{a.emoji}</span>
-                      <p className="text-xs sm:text-sm font-bold text-foreground text-center">{a.title}</p>
-                      <p className="text-[10px] text-muted-foreground text-center leading-tight">{a.desc}</p>
+                      <p className="text-xs sm:text-sm font-bold text-slate-800 text-center">{a.title}</p>
+                      <p className="text-[10px] text-slate-400 text-center leading-tight font-medium">{a.desc}</p>
                     </div>
                   ))}
                 </div>
@@ -674,15 +674,15 @@ const Profile = () => {
             {/* Locked */}
             {lockedAchievements.length > 0 && (
               <div>
-                <h4 className="text-sm font-bold text-muted-foreground mb-3 flex items-center gap-2">
+                <h4 className="text-xs sm:text-sm font-bold text-slate-400 mb-3.5 flex items-center gap-2">
                   🔒 Locked
                 </h4>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   {lockedAchievements.map(a => (
-                    <div key={a.id} className="achievement-badge locked">
+                    <div key={a.id} className="rounded-3xl p-5 bg-slate-50/50 border border-slate-100/80 opacity-60 flex flex-col items-center justify-center gap-1.5 grayscale">
                       <span className="text-2xl sm:text-3xl">{a.emoji}</span>
-                      <p className="text-xs sm:text-sm font-bold text-foreground text-center">{a.title}</p>
-                      <p className="text-[10px] text-muted-foreground text-center leading-tight">{a.desc}</p>
+                      <p className="text-xs sm:text-sm font-bold text-slate-500 text-center">{a.title}</p>
+                      <p className="text-[10px] text-slate-400 text-center leading-tight font-medium">{a.desc}</p>
                     </div>
                   ))}
                 </div>
@@ -692,34 +692,32 @@ const Profile = () => {
         )}
 
         {activeTab === "activity" && (
-          <div className="animate-fade-in">
-            <div className="card-campus p-5 sm:p-6">
-              <h3 className="text-sm sm:text-base font-bold text-foreground flex items-center gap-2 mb-5">
-                <Clock className="w-5 h-5 text-primary" /> Activity Timeline
+          <div className="animate-fade-in text-left">
+            <div className="card-premium-light p-5 sm:p-6">
+              <h3 className="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-2 mb-5">
+                <Clock className="w-4.5 h-4.5 text-slate-600" /> Activity Timeline
               </h3>
               {activityTimeline.length === 0 ? (
                 <div className="text-center py-10">
-                  <Clock className="w-10 h-10 text-muted-foreground/30 mx-auto mb-3" />
-                  <p className="text-sm text-muted-foreground">No activity yet. Start by uploading a resource or creating a project!</p>
+                  <Clock className="w-10 h-10 text-slate-300 mx-auto mb-3" />
+                  <p className="text-sm text-slate-400">No activity yet. Start by uploading a resource or creating a project!</p>
                 </div>
               ) : (
-                <div>
+                <div className="space-y-4">
                   {activityTimeline.map((item, i) => (
-                    <div key={item.id + item.type} className="timeline-item animate-slide-in-left" style={{ animationDelay: `${i * 0.04}s` }}>
-                      <div className={`timeline-dot ${activityDotColor(item.type)}`}>
+                    <div key={item.id + item.type} className="flex items-center gap-3.5 p-2 rounded-2xl hover:bg-slate-50/50 transition-colors animate-fade-in" style={{ animationDelay: `${i * 0.04}s` }}>
+                      <div className="w-7 h-7 rounded-full border border-slate-100 bg-slate-50 flex items-center justify-center shrink-0">
                         {activityIcon(item.type)}
                       </div>
-                      <div className="flex items-start justify-between gap-2">
-                        <div className="min-w-0">
-                          <p className="text-sm font-medium text-foreground">{item.title}</p>
-                          <p className="text-[10px] text-muted-foreground mt-0.5">
-                            {item.type === "resource" ? `+${getPoints.resource} pts` :
-                             item.type === "project" ? `+${getPoints.project} pts` :
-                             `+${getPoints.opportunity} pts`}
-                          </p>
-                        </div>
-                        <span className="text-[10px] text-muted-foreground shrink-0">{timeAgo(item.time)}</span>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs sm:text-sm font-semibold text-slate-700 truncate">{item.title}</p>
+                        <p className="text-[9px] sm:text-[10px] text-slate-400 font-bold mt-0.5">
+                          {item.type === "resource" ? `+${getPoints.resource} pts` :
+                           item.type === "project" ? `+${getPoints.project} pts` :
+                           `+${getPoints.opportunity} pts`}
+                        </p>
                       </div>
+                      <span className="text-[10px] text-slate-400 shrink-0 font-medium">{timeAgo(item.time)}</span>
                     </div>
                   ))}
                 </div>

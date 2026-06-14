@@ -7,6 +7,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import AIChatbot from "./AIChatbot";
 
 const notifTypeIcons: Record<string, string> = {
   info: "ℹ️",
@@ -174,35 +175,34 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <div className="flex min-h-screen bg-background overflow-x-hidden">
+    <div className="flex min-h-screen bg-sarvam-ambient overflow-x-hidden">
       <AppSidebar />
       <div className="flex-1 flex flex-col min-h-screen min-w-0">
         {/* One UI Header */}
         <header className="sticky top-0 z-40 glass-panel h-16 flex items-center px-4 md:px-8 gap-3">
           <div className="flex-1 max-w-xl" ref={searchRef}>
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/60" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <input
                 type="text"
                 placeholder="Search opportunities, projects, resources..."
-                className="oneui-input pl-11"
+                className="w-full h-10 pl-11 pr-10 rounded-full bg-slate-50/80 border border-slate-100 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/25 focus:bg-white focus:border-slate-200 transition-all duration-200 shadow-sm"
                 value={searchQuery}
                 onChange={(e) => { setSearchQuery(e.target.value); setShowResults(true); }}
                 onFocus={() => { if (searchQuery.trim()) setShowResults(true); }}
               />
               {searchQuery && (
                 <button
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
                   onClick={() => { setSearchQuery(""); setShowResults(false); }}
                 >
                   <X className="w-4 h-4" />
                 </button>
               )}
               {showResults && searchQuery.trim() && (
-                <div className="absolute top-full left-0 right-0 mt-2 bg-card rounded-2xl overflow-hidden z-50 animate-scale-in"
-                  style={{ boxShadow: "0 20px 60px -12px hsl(210 20% 20% / 0.15)" }}>
+                <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl border border-slate-100 shadow-[0_20px_50px_-12px_rgba(15,23,42,0.08)] overflow-hidden z-50 animate-scale-in">
                   {searchResults.length === 0 ? (
-                    <div className="p-6 text-center text-sm text-muted-foreground">
+                    <div className="p-6 text-center text-sm text-slate-500">
                       No results for "{searchQuery}"
                     </div>
                   ) : (
@@ -210,19 +210,19 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
                       {searchResults.map((r) => (
                         <button
                           key={r.id}
-                          className="w-full px-4 py-3 flex items-center gap-3 hover:bg-muted/40 transition-colors text-left"
+                          className="w-full px-4 py-2.5 flex items-center gap-3 hover:bg-slate-50 transition-colors text-left"
                           onClick={() => {
                             navigate(r.route);
                             setSearchQuery("");
                             setShowResults(false);
                           }}
                         >
-                          <div className="w-8 h-8 rounded-xl bg-muted/60 flex items-center justify-center shrink-0">
+                          <div className="w-8 h-8 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0 shadow-sm">
                             {searchIcon(r.type)}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-semibold text-foreground truncate">{r.title}</p>
-                            <p className="text-xs text-muted-foreground capitalize">{r.type} · {r.sub}</p>
+                            <p className="text-xs font-semibold text-slate-800 truncate">{r.title}</p>
+                            <p className="text-[10px] text-slate-400 capitalize">{r.type} · {r.sub}</p>
                           </div>
                         </button>
                       ))}
@@ -236,21 +236,21 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
           <div className="flex items-center gap-1">
             {/* Info */}
             <button
-              className="w-11 h-11 rounded-2xl flex items-center justify-center hover:bg-muted/60 transition-all duration-300"
+              className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-50 border border-transparent hover:border-slate-100 transition-all duration-200"
               onClick={() => navigate("/info")}
               title="How to use StudentHub"
             >
-              <Info className="w-[19px] h-[19px] text-muted-foreground" />
+              <Info className="w-4.5 h-4.5 text-slate-500" />
             </button>
             {/* Bell */}
             <div className="relative">
               <button
-                className="w-11 h-11 rounded-2xl flex items-center justify-center hover:bg-muted/60 transition-all duration-300 relative"
+                className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-50 border border-transparent hover:border-slate-100 transition-all duration-200 relative"
                 onClick={() => setShowNotifs(!showNotifs)}
               >
-                <Bell className="w-[19px] h-[19px] text-muted-foreground" />
+                <Bell className="w-4.5 h-4.5 text-slate-500" />
                 {unreadCount > 0 && (
-                  <span className="absolute top-1.5 right-1.5 min-w-[18px] h-[18px] px-1 rounded-full bg-destructive text-destructive-foreground text-[10px] font-bold flex items-center justify-center animate-scale-in">
+                  <span className="absolute top-1.5 right-1.5 min-w-[16px] h-[16px] px-1 rounded-full bg-rose-500 text-white text-[9px] font-bold flex items-center justify-center animate-scale-in">
                     {unreadCount > 9 ? "9+" : unreadCount}
                   </span>
                 )}
@@ -260,14 +260,13 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
                 <>
                   <div className="fixed inset-0 z-40" onClick={() => setShowNotifs(false)} />
                   <div
-                    className="absolute right-0 top-14 z-50 w-80 md:w-96 bg-card rounded-3xl overflow-hidden animate-scale-in"
-                    style={{ boxShadow: "0 20px 60px -12px hsl(210 20% 20% / 0.15)" }}
+                    className="absolute right-0 top-12 z-50 w-80 md:w-96 bg-white rounded-2xl border border-slate-100 shadow-[0_20px_50px_-12px_rgba(15,23,42,0.08)] overflow-hidden animate-scale-in"
                   >
                     <div className="p-5 pb-3 flex items-center justify-between">
                       <h3 className="font-bold text-foreground text-base">Notifications</h3>
                       <div className="flex items-center gap-3">
                         {unreadCount > 0 && (
-                          <button onClick={markAllRead} className="text-xs text-primary font-semibold hover:underline">
+                          <button onClick={markAllRead} className="text-xs text-indigo-600 font-semibold hover:underline">
                             Read all
                           </button>
                         )}
@@ -286,7 +285,7 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
                         return (
                           <div
                             key={n.id}
-                            className={`px-5 py-3.5 hover:bg-muted/30 transition-colors cursor-pointer ${!isRead ? "bg-primary/3" : ""}`}
+                            className={`px-5 py-3.5 hover:bg-slate-50 transition-colors cursor-pointer ${!isRead ? "bg-indigo-50/20" : ""}`}
                             onClick={() => { if (!isRead) markAsRead.mutate(n.id); }}
                           >
                             <div className="flex items-start gap-3">
@@ -294,7 +293,7 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2">
                                   <h4 className={`text-sm truncate ${!isRead ? "font-bold text-foreground" : "font-medium text-foreground/80"}`}>{n.title}</h4>
-                                  {!isRead && <span className="w-2 h-2 rounded-full bg-primary shrink-0" />}
+                                  {!isRead && <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0" />}
                                 </div>
                                 <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{n.message}</p>
                                 <p className="text-[10px] text-muted-foreground/70 mt-1">{new Date(n.created_at).toLocaleString()}</p>
@@ -317,6 +316,7 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
         </main>
       </div>
       <MobileNav />
+      <AIChatbot />
     </div>
   );
 };

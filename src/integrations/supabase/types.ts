@@ -357,6 +357,7 @@ export type Database = {
       }
       opportunities: {
         Row: {
+          apply_link: string | null
           category: string
           created_at: string
           deadline: string | null
@@ -371,6 +372,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          apply_link?: string | null
           category: string
           created_at?: string
           deadline?: string | null
@@ -385,6 +387,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          apply_link?: string | null
           category?: string
           created_at?: string
           deadline?: string | null
@@ -448,6 +451,11 @@ export type Database = {
           updated_at: string
           user_id: string
           year_of_study: string | null
+          is_open_to_build: boolean
+          open_to_build_bio: string | null
+          open_to_build_roles: string[] | null
+          full_name: string | null
+          email: string | null
         }
         Insert: {
           avatar_url?: string | null
@@ -463,6 +471,11 @@ export type Database = {
           updated_at?: string
           user_id: string
           year_of_study?: string | null
+          is_open_to_build?: boolean
+          open_to_build_bio?: string | null
+          open_to_build_roles?: string[] | null
+          full_name?: string | null
+          email?: string | null
         }
         Update: {
           avatar_url?: string | null
@@ -478,6 +491,11 @@ export type Database = {
           updated_at?: string
           user_id?: string
           year_of_study?: string | null
+          is_open_to_build?: boolean
+          open_to_build_bio?: string | null
+          open_to_build_roles?: string[] | null
+          full_name?: string | null
+          email?: string | null
         }
         Relationships: []
       }
@@ -508,6 +526,44 @@ export type Database = {
             referencedRelation: "projects"
             referencedColumns: ["id"]
           },
+        ]
+      }
+      project_join_requests: {
+        Row: {
+          id: string
+          project_id: string
+          user_id: string
+          status: string
+          message: string | null
+          preferred_role: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          project_id: string
+          user_id: string
+          status?: string
+          message?: string | null
+          preferred_role?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          project_id?: string
+          user_id?: string
+          status?: string
+          message?: string | null
+          preferred_role?: string | null
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_join_requests_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          }
         ]
       }
       projects: {

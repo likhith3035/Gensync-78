@@ -70,7 +70,7 @@ const fadeUp = {
 const Developer = () => {
   const { user } = useAuth();
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-sarvam-ambient">
       <SEO
         title="GenSync — Developer & Creator"
         description="Meet GenSync — B.Tech AI & Data Science student, creator of StudentHub. Passionate vibe coder building real-world apps for students. View projects, skills, and journey."
@@ -94,24 +94,14 @@ const Developer = () => {
       {/* Floating Back Button */}
       <button
         onClick={() => window.history.back()}
-        className="fixed top-5 left-5 z-50 group inline-flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-primary px-4 py-2.5 rounded-2xl bg-card/90 backdrop-blur-xl border border-border/60 hover:border-primary/30 shadow-lg hover:shadow-xl transition-all duration-300"
+        className="fixed top-5 left-5 z-50 group inline-flex items-center gap-2 text-sm font-semibold text-slate-700 px-4 py-2.5 rounded-full bg-white/90 backdrop-blur-md border border-slate-100 hover:border-slate-200 shadow-sm transition-all duration-300"
       >
         <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
         Back
       </button>
 
       {/* Hero */}
-      <section className="relative overflow-hidden min-h-[90vh] flex items-center">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/6 via-transparent to-background" />
-        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full bg-primary/4 blur-[100px] animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full bg-accent/6 blur-[80px]" />
-
-        {/* Grid pattern */}
-        <div className="absolute inset-0 opacity-[0.02]" style={{
-          backgroundImage: 'radial-gradient(circle, hsl(var(--foreground)) 1px, transparent 1px)',
-          backgroundSize: '32px 32px',
-        }} />
-
+      <section className="relative overflow-hidden min-h-[85vh] flex items-center">
         <div className="container mx-auto px-4 py-24 relative z-10">
           <div className="max-w-4xl mx-auto">
             <div className="flex flex-col md:flex-row items-center gap-10 md:gap-16">
@@ -122,10 +112,10 @@ const Developer = () => {
                 transition={{ duration: 0.6, ease: "easeOut" }}
                 className="relative shrink-0"
               >
-                <div className="w-36 h-36 md:w-44 md:h-44 rounded-[2rem] gradient-primary flex items-center justify-center shadow-2xl ring-4 ring-primary/10">
-                  <span className="text-5xl md:text-6xl font-extrabold text-primary-foreground">GS</span>
+                <div className="w-36 h-36 md:w-44 md:h-44 rounded-3xl gradient-primary flex items-center justify-center shadow-md">
+                  <span className="text-5xl md:text-6xl font-extrabold text-primary-foreground font-serif-elegant">GS</span>
                 </div>
-                <div className="absolute -bottom-2 -right-2 w-10 h-10 rounded-xl bg-success flex items-center justify-center shadow-lg">
+                <div className="absolute -bottom-2 -right-2 w-10 h-10 rounded-full bg-emerald-500 border border-white flex items-center justify-center shadow-md">
                   <span className="text-lg">✨</span>
                 </div>
               </motion.div>
@@ -137,43 +127,43 @@ const Developer = () => {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="text-center md:text-left"
               >
-                <span className="inline-flex items-center gap-2 text-[11px] font-extrabold text-primary bg-primary/8 px-4 py-2 rounded-full mb-4 tracking-widest uppercase">
-                  <Code2 className="w-3.5 h-3.5" /> Developer Team
+                <span className="inline-flex items-center gap-2 text-[11px] font-bold text-slate-800 bg-orange-50 border border-orange-100/80 px-4 py-2 rounded-full mb-4 tracking-widest uppercase shadow-sm">
+                  <Code2 className="w-3.5 h-3.5 text-orange-500" /> Developer Team
                 </span>
-                <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-foreground leading-[1.05] mb-4 tracking-tight">
+                <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold font-serif-elegant text-slate-900 leading-[1.1] mb-4 tracking-tight">
                   GenSync <span className="gradient-text">Team</span>
                 </h1>
-                <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-2">
-                  Student <strong className="text-foreground">Innovators & Engineers</strong>
+                <p className="text-lg md:text-xl text-slate-600 leading-relaxed mb-2">
+                  Student <strong className="text-slate-800">Innovators & Engineers</strong>
                 </p>
-                <p className="text-base text-muted-foreground leading-relaxed mb-6 max-w-md">
+                <p className="text-sm text-slate-500 leading-relaxed mb-6 max-w-md">
                   A dynamic team composed of Likhith.K, Manogna.u, and udaya lakshmi.Z, building high-impact platforms at lightning speed ⚡
                 </p>
 
                 <div className="flex items-center gap-3 justify-center md:justify-start mb-6">
-                  <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <span className="inline-flex items-center gap-1.5 text-xs text-slate-500">
                     <MapPin className="w-3.5 h-3.5" /> India
                   </span>
-                  <span className="w-1 h-1 rounded-full bg-border" />
-                  <span className="inline-flex items-center gap-1.5 text-xs text-success font-semibold">
-                    <span className="w-2 h-2 rounded-full bg-success animate-pulse" /> Ready for Collaboration
+                  <span className="w-1 h-1 rounded-full bg-slate-200" />
+                  <span className="inline-flex items-center gap-1.5 text-xs text-emerald-600 font-semibold">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" /> Ready for Collaboration
                   </span>
                 </div>
 
                 {/* Social Links */}
                 <div className="flex flex-wrap gap-2.5 justify-center md:justify-start">
                   <a href="https://github.com" target="_blank" rel="noopener noreferrer">
-                    <Button variant="outline" className="h-11 px-5 font-bold rounded-2xl gap-2 hover:bg-foreground hover:text-background transition-all">
+                    <Button variant="outline" className="h-11 px-5 font-semibold rounded-full gap-2 border-slate-200 hover:bg-slate-900 hover:text-white bg-white/50 transition-all shadow-sm">
                       <Github className="w-4 h-4" /> GitHub
                     </Button>
                   </a>
                   <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
-                    <Button variant="outline" className="h-11 px-5 font-bold rounded-2xl gap-2 hover:bg-primary hover:text-primary-foreground transition-all">
+                    <Button variant="outline" className="h-11 px-5 font-semibold rounded-full gap-2 border-slate-200 hover:bg-slate-900 hover:text-white bg-white/50 transition-all shadow-sm">
                       <Linkedin className="w-4 h-4" /> LinkedIn
                     </Button>
                   </a>
                   <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
-                    <Button variant="outline" className="h-11 px-5 font-bold rounded-2xl gap-2 hover:bg-destructive hover:text-destructive-foreground hover:border-destructive transition-all">
+                    <Button variant="outline" className="h-11 px-5 font-semibold rounded-full gap-2 border-slate-200 hover:bg-slate-900 hover:text-white bg-white/50 transition-all shadow-sm">
                       <Instagram className="w-4 h-4" /> Instagram
                     </Button>
                   </a>
@@ -185,9 +175,9 @@ const Developer = () => {
       </section>
 
       {/* Stats Bar */}
-      <section className="border-y border-border/40 bg-card/50 backdrop-blur">
+      <section className="border-y border-slate-100 bg-white/60 backdrop-blur-md">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-border/40">
+          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-slate-100">
             {stats.map(({ num, label, icon: Icon }, i) => (
               <motion.div
                 key={label}
@@ -198,9 +188,9 @@ const Developer = () => {
                 variants={fadeUp}
                 className="py-8 md:py-10 text-center"
               >
-                <Icon className="w-5 h-5 text-primary mx-auto mb-2" />
-                <p className="text-2xl md:text-3xl font-extrabold text-foreground">{num}</p>
-                <p className="text-xs text-muted-foreground font-medium mt-1">{label}</p>
+                <Icon className="w-5 h-5 text-slate-500 mx-auto mb-2" />
+                <p className="text-3xl font-bold font-serif-elegant text-slate-900">{num}</p>
+                <p className="text-xs text-slate-500 font-medium mt-1">{label}</p>
               </motion.div>
             ))}
           </div>
@@ -208,7 +198,7 @@ const Developer = () => {
       </section>
 
       {/* About Section */}
-      <section className="container mx-auto px-4 py-20 md:py-28">
+      <section className="container mx-auto px-4 py-16 md:py-24">
         <div className="max-w-4xl mx-auto">
           <motion.div
             initial="hidden"
@@ -219,44 +209,44 @@ const Developer = () => {
           >
             <div className="grid md:grid-cols-5 gap-8">
               <div className="md:col-span-3">
-                <h2 className="text-3xl md:text-4xl font-extrabold text-foreground mb-6 tracking-tight">
+                <h2 className="text-3xl md:text-4xl font-bold font-serif-elegant text-slate-900 mb-6 tracking-tight">
                   About <span className="gradient-text">GenSync</span>
                 </h2>
-                <div className="space-y-6 text-muted-foreground leading-relaxed text-[15px]">
+                <div className="space-y-6 text-slate-600 leading-relaxed text-[14px]">
                   <p>
-                    Hey! 👋 We are <strong className="text-foreground">GenSync</strong> — a dedicated developer team combining engineering, interface design, and database planning to build powerful college collaboration tools.
+                    Hey! 👋 We are <strong className="text-slate-800">GenSync</strong> — a dedicated developer team combining engineering, interface design, and database planning to build powerful college collaboration tools.
                   </p>
                   
                   <div className="space-y-4 mt-6">
                     {/* Likhith.K */}
-                    <div className="p-4 rounded-2xl border border-primary/20 bg-primary/3 hover:bg-primary/5 transition-all duration-300">
-                      <div className="flex items-center gap-2 mb-1.5">
-                        <span className="text-sm font-extrabold text-foreground">Likhith.K</span>
-                        <span className="text-[9px] font-extrabold text-primary-foreground bg-primary px-2.5 py-0.5 rounded-full uppercase tracking-wider">Lead Builder</span>
+                    <div className="p-5 rounded-3xl border border-blue-100 bg-blue-50/10 hover:bg-blue-50/30 transition-all duration-300 shadow-sm">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-sm font-bold text-slate-850">Likhith.K</span>
+                        <span className="text-[9px] font-bold text-blue-600 bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-full uppercase tracking-wider">Lead Builder</span>
                       </div>
-                      <p className="text-xs text-muted-foreground">
-                        The core architect and overall killer website builder behind the platform. Orchestrated the repository setup, integrated state flows, and built the overall website with unmatched speed and engineering execution.
+                      <p className="text-xs text-slate-500 leading-relaxed">
+                        The core architect and overall website builder behind the platform. Orchestrated the repository setup, integrated state flows, and built the overall website with execution and speed.
                       </p>
                     </div>
 
                     {/* Manogna.u */}
-                    <div className="p-4 rounded-2xl border border-rose-500/20 bg-rose-500/3 hover:bg-rose-500/5 transition-all duration-300">
-                      <div className="flex items-center gap-2 mb-1.5">
-                        <span className="text-sm font-extrabold text-foreground">Manogna.u</span>
-                        <span className="text-[9px] font-extrabold text-rose-500 bg-rose-500/10 px-2.5 py-0.5 rounded-full uppercase tracking-wider">UI/UX & Frontend</span>
+                    <div className="p-5 rounded-3xl border border-rose-100 bg-rose-50/10 hover:bg-rose-50/30 transition-all duration-300 shadow-sm">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-sm font-bold text-slate-850">Manogna.u</span>
+                        <span className="text-[9px] font-bold text-rose-600 bg-rose-50 border border-rose-100/50 px-2.5 py-0.5 rounded-full uppercase tracking-wider">UI/UX & Frontend</span>
                       </div>
-                      <p className="text-xs text-muted-foreground">
-                        The visual mastermind who crafted the gorgeous interface aesthetics. Hyped up the visual elements, custom glassmorphism panels, and smooth mobile-first layout flows.
+                      <p className="text-xs text-slate-500 leading-relaxed">
+                        The visual mastermind who crafted the interface aesthetics. Hyped up the visual elements, custom glassmorphism panels, and smooth mobile-first layout flows.
                       </p>
                     </div>
 
                     {/* udaya lakshmi.Z */}
-                    <div className="p-4 rounded-2xl border border-teal-500/20 bg-teal-500/3 hover:bg-teal-500/5 transition-all duration-300">
-                      <div className="flex items-center gap-2 mb-1.5">
-                        <span className="text-sm font-extrabold text-foreground">udaya lakshmi.Z</span>
-                        <span className="text-[9px] font-extrabold text-teal-500 bg-teal-500/10 px-2.5 py-0.5 rounded-full uppercase tracking-wider">Database & Backend</span>
+                    <div className="p-5 rounded-3xl border border-emerald-100 bg-emerald-50/10 hover:bg-emerald-50/30 transition-all duration-300 shadow-sm">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-sm font-bold text-slate-850">udaya lakshmi.Z</span>
+                        <span className="text-[9px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-100/50 px-2.5 py-0.5 rounded-full uppercase tracking-wider">Database & Backend</span>
                       </div>
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-xs text-slate-500 leading-relaxed">
                         The backend powerhouse. Designed the high-performance PostgreSQL tables, triggers, and secure database Row-Level Security policies to keep user data safe.
                       </p>
                     </div>
@@ -264,19 +254,19 @@ const Developer = () => {
                 </div>
               </div>
               <div className="md:col-span-2 space-y-3">
-                <div className="card-campus p-4">
-                  <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider mb-2">Focus Areas</p>
-                  <div className="space-y-2">
+                <div className="card-premium-light p-5">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-4 border-b border-slate-50 pb-2">Focus Areas</p>
+                  <div className="space-y-3">
                     {[
-                      { icon: Brain, label: "AI & Data Science", color: "text-primary" },
-                      { icon: Rocket, label: "Vibe Coding", color: "text-success" },
-                      { icon: Globe, label: "Full-Stack Web", color: "text-warning" },
-                      { icon: Heart, label: "Student Tools", color: "text-destructive" },
-                      { icon: MessageCircle, label: "Open Source", color: "text-info" },
+                      { icon: Brain, label: "AI & Data Science", color: "text-blue-500" },
+                      { icon: Rocket, label: "Vibe Coding", color: "text-emerald-500" },
+                      { icon: Globe, label: "Full-Stack Web", color: "text-amber-500" },
+                      { icon: Heart, label: "Student Tools", color: "text-rose-500" },
+                      { icon: MessageCircle, label: "Open Source", color: "text-violet-500" },
                     ].map(({ icon: Icon, label, color }) => (
-                      <div key={label} className="flex items-center gap-3 py-1.5">
+                      <div key={label} className="flex items-center gap-3 py-1">
                         <Icon className={`w-4 h-4 ${color}`} />
-                        <span className="text-sm font-semibold text-foreground">{label}</span>
+                        <span className="text-xs font-semibold text-slate-700">{label}</span>
                       </div>
                     ))}
                   </div>
@@ -288,15 +278,15 @@ const Developer = () => {
       </section>
 
       {/* Skills */}
-      <section className="bg-muted/30 py-20 md:py-28">
+      <section className="py-16 md:py-24 relative overflow-hidden">
         <div className="container mx-auto px-4">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0} className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-foreground mb-3 tracking-tight">
+            <h2 className="text-3xl md:text-4xl font-bold font-serif-elegant text-slate-900 mb-3 tracking-tight">
               Skills & <span className="gradient-text">Technologies</span>
             </h2>
-            <p className="text-muted-foreground max-w-lg mx-auto">Tools and domains we work with every day.</p>
+            <p className="text-slate-600 max-w-lg mx-auto">Tools and domains we work with every day.</p>
           </motion.div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 max-w-4xl mx-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 max-w-4xl mx-auto">
             {skills.map(({ name, icon: Icon, level }, i) => (
               <motion.div
                 key={name}
@@ -305,16 +295,16 @@ const Developer = () => {
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeUp}
-                className="card-campus p-4 text-center hover:border-primary/30 hover:bg-primary/5 transition-all duration-300 group cursor-default"
+                className="card-premium-light p-5 text-center hover:border-slate-350 hover:bg-slate-50/20 transition-all duration-300 group cursor-default"
               >
-                <div className="w-10 h-10 rounded-xl bg-primary/8 flex items-center justify-center mx-auto mb-3 group-hover:bg-primary/15 transition-colors">
-                  <Icon className="w-5 h-5 text-primary group-hover:scale-110 transition-transform" />
+                <div className="w-10 h-10 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center mx-auto mb-3 group-hover:bg-white transition-colors shadow-sm">
+                  <Icon className="w-5 h-5 text-slate-600 group-hover:scale-110 transition-transform" />
                 </div>
-                <span className="text-xs font-bold text-foreground block mb-2">{name}</span>
+                <span className="text-xs font-bold text-slate-800 block mb-2">{name}</span>
                 {/* Skill bar */}
-                <div className="h-1 rounded-full bg-border/60 overflow-hidden">
+                <div className="h-1 rounded-full bg-slate-100 overflow-hidden">
                   <div
-                    className="h-full rounded-full bg-primary/60 group-hover:bg-primary transition-all duration-500"
+                    className="h-full rounded-full bg-slate-700 group-hover:bg-slate-900 transition-all duration-500"
                     style={{ width: `${level}%` }}
                   />
                 </div>
@@ -325,12 +315,12 @@ const Developer = () => {
       </section>
 
       {/* Projects */}
-      <section className="container mx-auto px-4 py-20 md:py-28">
+      <section className="container mx-auto px-4 py-16 md:py-24">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0} className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-foreground mb-3 tracking-tight">
+          <h2 className="text-3xl md:text-4xl font-bold font-serif-elegant text-slate-900 mb-3 tracking-tight">
             Featured <span className="gradient-text">Projects</span>
           </h2>
-          <p className="text-muted-foreground max-w-lg mx-auto">Real projects solving real problems for real people.</p>
+          <p className="text-slate-600 max-w-lg mx-auto">Real projects solving real problems for real people.</p>
         </motion.div>
         <div className="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
           {projects.map(({ title, desc, url, tags, emoji, highlight }, i) => (
@@ -344,25 +334,25 @@ const Developer = () => {
               whileInView="visible"
               viewport={{ once: true }}
               variants={fadeUp}
-              className={`card-campus p-6 group hover:shadow-xl transition-all duration-300 relative overflow-hidden ${
-                highlight ? "border-primary/20 ring-1 ring-primary/10" : "hover:border-primary/30"
+              className={`card-premium-light p-6 group transition-all duration-300 relative overflow-hidden ${
+                highlight ? "border-orange-200 bg-orange-50/15" : "hover:border-slate-200/80"
               }`}
             >
               {highlight && (
                 <div className="absolute top-3 right-3">
-                  <span className="text-[10px] font-extrabold text-primary-foreground bg-primary px-2.5 py-1 rounded-full">FEATURED</span>
+                  <span className="text-[10px] font-semibold text-orange-700 bg-orange-50 border border-orange-100 px-2.5 py-1 rounded-full uppercase shadow-sm">FEATURED</span>
                 </div>
               )}
               <span className="text-3xl mb-3 block">{emoji}</span>
-              <h3 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors mb-2">{title}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed mb-4">{desc}</p>
+              <h3 className="text-lg font-bold text-slate-800 group-hover:text-slate-900 transition-colors mb-2">{title}</h3>
+              <p className="text-xs text-slate-500 leading-relaxed mb-4">{desc}</p>
               <div className="flex flex-wrap gap-2 mb-4">
                 {tags.map(tag => (
-                  <span key={tag} className="text-[11px] font-semibold text-primary bg-primary/8 px-2.5 py-1 rounded-full">{tag}</span>
+                  <span key={tag} className="text-[10px] font-semibold text-slate-600 bg-slate-100 border border-slate-200/50 px-2.5 py-1 rounded-full">{tag}</span>
                 ))}
               </div>
-              <span className="inline-flex items-center gap-1.5 text-xs font-bold text-primary group-hover:gap-2.5 transition-all">
-                Visit Project <ChevronRight className="w-3.5 h-3.5" />
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 group-hover:gap-2.5 transition-all">
+                Visit Project <ChevronRight className="w-3.5 h-3.5 text-slate-500" />
               </span>
             </motion.a>
           ))}
@@ -370,13 +360,13 @@ const Developer = () => {
       </section>
 
       {/* Journey Timeline */}
-      <section className="bg-muted/30 py-20 md:py-28">
+      <section className="py-16 md:py-24 relative overflow-hidden">
         <div className="container mx-auto px-4">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0} className="text-center mb-14">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-foreground mb-3 tracking-tight">
+            <h2 className="text-3xl md:text-4xl font-bold font-serif-elegant text-slate-900 mb-3 tracking-tight">
               Our <span className="gradient-text">Journey</span>
             </h2>
-            <p className="text-muted-foreground max-w-lg mx-auto">Key milestones in our developer journey so far.</p>
+            <p className="text-slate-600 max-w-lg mx-auto">Key milestones in our developer journey so far.</p>
           </motion.div>
           <div className="max-w-2xl mx-auto">
             {timeline.map(({ year, title, desc, icon: Icon, color }, i) => (
@@ -391,16 +381,16 @@ const Developer = () => {
               >
                 {/* Timeline line */}
                 <div className="flex flex-col items-center">
-                  <div className={`w-10 h-10 rounded-xl ${color} flex items-center justify-center shadow-md shrink-0`}>
-                    <Icon className="w-4 h-4 text-primary-foreground" />
+                  <div className={`w-10 h-10 rounded-full border border-slate-100 bg-white flex items-center justify-center shadow-sm shrink-0`}>
+                    <Icon className="w-4 h-4 text-slate-600" />
                   </div>
-                  {i < timeline.length - 1 && <div className="w-0.5 flex-1 bg-border my-1" />}
+                  {i < timeline.length - 1 && <div className="w-0.5 flex-1 bg-slate-200 my-1" />}
                 </div>
                 {/* Content */}
-                <div className="pb-10">
-                  <span className="text-[11px] font-extrabold text-primary bg-primary/8 px-2.5 py-1 rounded-full">{year}</span>
-                  <h3 className="text-base font-bold text-foreground mt-2.5">{title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed mt-1.5">{desc}</p>
+                <div className="pb-10 pt-1">
+                  <span className="text-[10px] font-semibold text-slate-600 bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-full">{year}</span>
+                  <h3 className="text-sm font-bold text-slate-800 mt-3">{title}</h3>
+                  <p className="text-xs text-slate-500 leading-relaxed mt-1">{desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -408,18 +398,18 @@ const Developer = () => {
         </div>
       </section>
 
-      {/* What Drives Me */}
-      <section className="container mx-auto px-4 py-20 md:py-28">
+      {/* What Drives Us */}
+      <section className="container mx-auto px-4 py-16 md:py-24">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0} className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-foreground mb-3 tracking-tight">
+          <h2 className="text-3xl md:text-4xl font-bold font-serif-elegant text-slate-900 mb-3 tracking-tight">
             What <span className="gradient-text">Drives</span> Us
           </h2>
         </motion.div>
         <div className="grid sm:grid-cols-3 gap-5 max-w-3xl mx-auto">
           {[
-            { icon: Lightbulb, title: "Solve Real Problems", desc: "We build tools that students actually use daily — not just toy projects or assignments.", color: "bg-warning/10", iconColor: "text-warning" },
-            { icon: Zap, title: "Vibe Coding", desc: "Fast iteration, creative energy, and AI-assisted development to ship products quickly.", color: "bg-primary/8", iconColor: "text-primary" },
-            { icon: Heart, title: "Help Others Succeed", desc: "Making education and campus life better, one tool at a time. Free, for everyone.", color: "bg-destructive/10", iconColor: "text-destructive" },
+            { icon: Lightbulb, title: "Solve Real Problems", desc: "We build tools that students actually use daily — not just toy projects or assignments.", color: "bg-amber-50 border-amber-100/50", iconColor: "text-amber-500" },
+            { icon: Zap, title: "Vibe Coding", desc: "Fast iteration, creative energy, and AI-assisted development to ship products quickly.", color: "bg-blue-50 border-blue-100/50", iconColor: "text-blue-500" },
+            { icon: Heart, title: "Help Others Succeed", desc: "Making education and campus life better, one tool at a time. Free, for everyone.", color: "bg-rose-50 border-rose-100/50", iconColor: "text-rose-500" },
           ].map(({ icon: Icon, title, desc, color, iconColor }, i) => (
             <motion.div
               key={title}
@@ -428,13 +418,13 @@ const Developer = () => {
               whileInView="visible"
               viewport={{ once: true }}
               variants={fadeUp}
-              className="card-campus p-7 text-center hover:shadow-lg transition-all duration-300 group"
+              className="card-premium-light p-7 text-center group"
             >
-              <div className={`w-14 h-14 rounded-2xl ${color} flex items-center justify-center mx-auto mb-5 group-hover:scale-105 transition-transform`}>
+              <div className={`w-14 h-14 rounded-full border ${color} flex items-center justify-center mx-auto mb-5 shadow-sm group-hover:scale-105 transition-transform`}>
                 <Icon className={`w-6 h-6 ${iconColor}`} />
               </div>
-              <h3 className="text-sm font-bold text-foreground mb-2">{title}</h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">{desc}</p>
+              <h3 className="text-sm font-bold text-slate-800 mb-2">{title}</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">{desc}</p>
             </motion.div>
           ))}
         </div>
@@ -448,29 +438,29 @@ const Developer = () => {
           viewport={{ once: true }}
           variants={fadeUp}
           custom={0}
-          className="rounded-3xl gradient-primary p-10 md:p-16 text-center relative overflow-hidden"
+          className="rounded-3xl card-premium-light p-10 md:p-16 text-center relative overflow-hidden bg-sarvam-card-glow border-orange-100/60 shadow-[0_20px_50px_-12px_rgba(251,146,60,0.08)]"
         >
-          <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-primary-foreground/5 -translate-y-1/3 translate-x-1/3" />
-          <div className="absolute bottom-0 left-0 w-56 h-56 rounded-full bg-primary-foreground/5 translate-y-1/3 -translate-x-1/3" />
+          <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-white/40 -translate-y-1/3 translate-x-1/3 blur-2xl" />
+          <div className="absolute bottom-0 left-0 w-56 h-56 rounded-full bg-white/40 translate-y-1/3 -translate-x-1/3 blur-2xl" />
           <div className="relative z-10">
-            <div className="w-16 h-16 rounded-2xl bg-primary-foreground/10 flex items-center justify-center mx-auto mb-6">
-              <Mail className="w-7 h-7 text-primary-foreground" />
+            <div className="w-14 h-14 rounded-full bg-white border border-slate-100 flex items-center justify-center mx-auto mb-6 shadow-sm">
+              <Mail className="w-6 h-6 text-slate-700" />
             </div>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-primary-foreground mb-4">Let's Build Together 🤝</h2>
-            <p className="text-primary-foreground/70 mb-8 max-w-md mx-auto text-lg">Got an idea? Want to collaborate on something cool? We're always excited to connect with fellow builders.</p>
+            <h2 className="text-3xl md:text-4xl font-bold font-serif-elegant text-slate-900 mb-4">Let's Build Together 🤝</h2>
+            <p className="text-slate-655 mb-8 max-w-md mx-auto text-sm">Got an idea? Want to collaborate on something cool? We're always excited to connect with fellow builders.</p>
             <div className="flex flex-wrap gap-3 justify-center">
               <a href="https://github.com" target="_blank" rel="noopener noreferrer">
-                <Button variant="secondary" size="lg" className="h-12 px-6 font-bold rounded-2xl gap-2 shadow-lg">
+                <Button size="lg" className="h-12 px-6 font-semibold rounded-full bg-slate-900 text-white hover:bg-slate-800 gap-2 shadow-md">
                   <Github className="w-4 h-4" /> GitHub
                 </Button>
               </a>
               <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
-                <Button variant="secondary" size="lg" className="h-12 px-6 font-bold rounded-2xl gap-2 shadow-lg">
+                <Button size="lg" className="h-12 px-6 font-semibold rounded-full bg-slate-900 text-white hover:bg-slate-800 gap-2 shadow-md">
                   <Linkedin className="w-4 h-4" /> LinkedIn
                 </Button>
               </a>
               <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
-                <Button variant="secondary" size="lg" className="h-12 px-6 font-bold rounded-2xl gap-2 shadow-lg">
+                <Button size="lg" className="h-12 px-6 font-semibold rounded-full bg-slate-900 text-white hover:bg-slate-800 gap-2 shadow-md">
                   <Instagram className="w-4 h-4" /> Instagram
                 </Button>
               </a>

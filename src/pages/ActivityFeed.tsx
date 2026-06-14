@@ -151,24 +151,24 @@ const ActivityFeed = () => {
       <div className="max-w-4xl mx-auto space-y-4 sm:space-y-6">
         <div className="animate-fade-in">
           <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-              <TrendingUp className="w-5 h-5 text-primary" />
+            <div className="w-10 h-10 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center shadow-sm">
+              <TrendingUp className="w-5 h-5 text-blue-500" />
             </div>
             <div>
-              <h1 className="text-lg sm:text-2xl font-bold text-foreground">Activity Feed</h1>
-              <p className="text-xs sm:text-sm text-muted-foreground">Everything happening on campus</p>
+              <h1 className="text-3xl sm:text-4xl font-medium text-[#0F172A] tracking-tight font-serif-elegant">Activity Feed</h1>
+              <p className="text-xs sm:text-sm text-slate-500">Everything happening on campus</p>
             </div>
           </div>
         </div>
 
         {/* Filters */}
-        <div className="flex gap-1 p-1 bg-muted/50 rounded-xl overflow-x-auto no-scrollbar">
+        <div className="flex gap-1.5 p-1.5 bg-white border border-slate-100 rounded-full overflow-x-auto no-scrollbar shadow-[0_2px_8px_rgba(15,23,42,0.01)] w-fit">
           {filters.map((f) => (
             <button
               key={f.value}
               onClick={() => setFilter(f.value)}
-              className={`px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all whitespace-nowrap shrink-0 ${
-                filter === f.value ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+              className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap shrink-0 ${
+                filter === f.value ? "bg-slate-900 text-white shadow-sm" : "text-slate-500 hover:text-slate-900"
               }`}
             >
               {f.label}
@@ -178,33 +178,33 @@ const ActivityFeed = () => {
 
         {/* Feed */}
         {feed.length === 0 ? (
-          <div className="card-campus p-10 text-center animate-fade-in">
-            <Activity className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
-            <p className="font-semibold text-foreground">No activity yet</p>
-            <p className="text-sm text-muted-foreground mt-1">New content will appear here as it's added.</p>
+          <div className="card-premium-light p-10 text-center bg-white animate-fade-in">
+            <Activity className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+            <p className="font-semibold text-[#0F172A]">No activity yet</p>
+            <p className="text-sm text-slate-500 mt-1">New content will appear here as it's added.</p>
           </div>
         ) : (
           <div className="space-y-6 animate-fade-in">
             {Object.entries(grouped).map(([date, items]) => (
               <div key={date}>
                 <div className="flex items-center gap-3 mb-3">
-                  <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{date}</span>
-                  <div className="flex-1 h-px bg-border/50" />
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{date}</span>
+                  <div className="flex-1 h-px bg-slate-100" />
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-2.5">
                   {items.map((item: any) => {
                     const Icon = item.icon;
                     return (
-                      <div key={item.id + item.type} className="card-campus p-3 sm:p-4 flex items-start gap-3 hover:shadow-md transition-shadow">
-                        <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl ${item.bg} flex items-center justify-center shrink-0`}>
+                      <div key={item.id + item.type} className="card-premium-light bg-white p-3.5 sm:p-4 flex items-start gap-3">
+                        <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full ${item.bg} flex items-center justify-center shrink-0 border border-slate-50`}>
                           <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${item.color}`} />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-xs sm:text-sm font-semibold text-foreground truncate">{item.title}</p>
-                          <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 truncate">{item.subtitle}</p>
+                          <p className="text-xs sm:text-sm font-semibold text-[#0F172A] truncate">{item.title}</p>
+                          <p className="text-[10px] sm:text-xs text-slate-400 mt-0.5 truncate">{item.subtitle}</p>
                         </div>
-                        <span className="text-[10px] sm:text-xs text-muted-foreground shrink-0 flex items-center gap-1">
-                          <Clock className="w-3 h-3" /> {timeAgo(item.time)}
+                        <span className="text-[10px] sm:text-xs text-slate-400 shrink-0 flex items-center gap-1.5 font-medium">
+                          <Clock className="w-3.5 h-3.5" /> {timeAgo(item.time)}
                         </span>
                       </div>
                     );

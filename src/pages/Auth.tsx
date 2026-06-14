@@ -175,7 +175,7 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-5 bg-background">
+    <div className="min-h-screen flex items-center justify-center px-5 bg-sarvam-ambient">
       <SEO
         title="Sign Up & Log In"
         description="Join StudentHub for free — sign up or log in to access resource sharing, internship discovery, project collaboration, messaging, and campus events. Created by GenSync."
@@ -184,14 +184,14 @@ const Auth = () => {
       />
       <div className="w-full max-w-md animate-fade-in">
         {/* Logo */}
-        <div className="text-center mb-10">
-          <div className="w-16 h-16 rounded-3xl gradient-primary flex items-center justify-center mx-auto mb-6 shadow-lg">
-            <GraduationCap className="w-8 h-8 text-primary-foreground" />
+        <div className="text-center mb-8">
+          <div className="w-16 h-16 rounded-3xl gradient-primary flex items-center justify-center mx-auto mb-6 shadow-md">
+            <GraduationCap className="w-8 h-8 text-primary-foreground font-serif-elegant" />
           </div>
-          <h1 className="text-[1.75rem] font-extrabold text-foreground tracking-tight">
+          <h1 className="text-3xl font-bold font-serif-elegant text-slate-900 tracking-tight">
             {isRecovery ? "Reset Password" : isLogin ? "Welcome back" : "Join StudentHub"}
           </h1>
-          <p className="text-muted-foreground mt-2 text-[0.9rem]">
+          <p className="text-slate-500 mt-2 text-[13px]">
             {isRecovery 
               ? "You've successfully signed in via recovery link. Would you like to change your password now?" 
               : isLogin 
@@ -201,7 +201,7 @@ const Auth = () => {
         </div>
 
         {/* Card */}
-        <div className="card-campus p-7 sm:p-8" style={{ boxShadow: "0 20px 60px -12px hsl(210 20% 20% / 0.08)" }}>
+        <div className="card-premium-light p-7 sm:p-8">
           <form onSubmit={isRecovery ? handleUpdatePassword : handleEmailAuth} className="space-y-3.5">
             {!isRecovery && !isLogin && (
               <div className="relative">
@@ -261,14 +261,14 @@ const Auth = () => {
                 <button
                   type="button"
                   onClick={handleForgotPassword}
-                  className="text-xs font-semibold text-primary hover:underline"
+                  className="text-xs font-semibold text-slate-700 hover:text-slate-900 hover:underline"
                 >
                   Forgot password?
                 </button>
               </div>
             )}
 
-            <Button type="submit" className="w-full h-13 gap-1.5 font-semibold text-sm rounded-2xl mt-2" disabled={loading}>
+            <Button type="submit" className="w-full h-12 gap-1.5 font-semibold text-sm rounded-full bg-slate-900 text-white hover:bg-slate-800 mt-2 shadow-sm" disabled={loading}>
               {loading 
                 ? "Loading..." 
                 : isRecovery 
@@ -283,17 +283,17 @@ const Auth = () => {
               <>
                 <div className="relative my-4">
                   <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t border-border" />
+                    <span className="w-full border-t border-slate-100" />
                   </div>
                   <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+                    <span className="bg-white px-3 text-slate-400 text-[11px] font-semibold">Or continue with</span>
                   </div>
                 </div>
 
                 <Button
                   type="button"
                   variant="outline"
-                  className="w-full h-13 gap-2.5 font-semibold text-sm rounded-2xl border-border/60 hover:bg-muted/40 transition-colors"
+                  className="w-full h-12 gap-2.5 font-semibold text-sm rounded-full border-slate-200 hover:bg-slate-50 transition-colors bg-white/80 shadow-sm"
                   onClick={handleGoogleSignIn}
                   disabled={loading}
                 >
@@ -322,11 +322,11 @@ const Auth = () => {
           </form>
 
           {!isRecovery ? (
-            <p className="text-center text-sm text-muted-foreground mt-6">
+            <p className="text-center text-xs text-muted-foreground mt-6">
               {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
               <button
                 onClick={() => setIsLogin(!isLogin)}
-                className="text-primary font-semibold hover:underline"
+                className="text-slate-900 font-bold hover:underline"
               >
                 {isLogin ? "Sign up" : "Sign in"}
               </button>
@@ -339,14 +339,14 @@ const Auth = () => {
                   setIsRecovery(false);
                   navigate(fromPath);
                 }}
-                className="text-primary font-semibold hover:underline text-sm w-full text-center"
+                className="text-slate-900 font-semibold hover:underline text-xs w-full text-center"
               >
                 Skip for now
               </button>
               <button
                 type="button"
                 onClick={() => setIsRecovery(false)}
-                className="text-muted-foreground hover:text-foreground text-xs w-full text-center"
+                className="text-muted-foreground hover:text-foreground text-[10px] w-full text-center"
               >
                 Back to sign in
               </button>
@@ -354,7 +354,7 @@ const Auth = () => {
           )}
         </div>
 
-        <p className="text-center text-xs text-muted-foreground mt-8">
+        <p className="text-center text-[10px] text-slate-400 mt-8">
           Free to join for all college students
         </p>
       </div>

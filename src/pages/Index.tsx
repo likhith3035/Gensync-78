@@ -533,7 +533,7 @@ const Index = () => {
   const translateX = useTransform(springScroll, [0, 1], [0, -scrollRange]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-tr from-blue-50/30 via-background to-indigo-50/20 font-sans">
+    <div className="min-h-screen bg-sarvam-ambient font-sans">
       <SEO
         canonical="/"
         title="Free Student Sharing & Campus Collaboration Platform"
@@ -543,46 +543,45 @@ const Index = () => {
       <Navbar />
 
       {/* Hero */}
-      <section className="relative overflow-hidden min-h-[90vh] flex items-center">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/10" />
-        <div className="absolute top-20 right-10 w-[500px] h-[500px] rounded-full bg-primary/3 blur-[120px] animate-pulse" />
-        <div className="absolute bottom-10 left-10 w-[400px] h-[400px] rounded-full bg-accent/5 blur-[100px]" />
+      <section className="relative overflow-hidden min-h-[95vh] flex items-center pt-24">
+        {/* Soft atmospheric radial glows to reinforce background */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[400px] bg-[radial-gradient(ellipse_at_top,rgba(251,146,60,0.08)_0%,transparent_70%)] pointer-events-none" />
 
         <div className="container mx-auto px-5 py-16 md:py-24 relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             {/* Left Column: Heading */}
             <motion.div 
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               className="text-left"
             >
               <motion.span 
-                initial={{ opacity: 0, scale: 0.9 }}
+                initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
-                className="inline-flex items-center gap-2 text-[10px] font-extrabold text-primary bg-primary/8 px-4.5 py-2 rounded-full mb-6 tracking-widest uppercase border border-primary/10 shadow-sm"
+                className="inline-flex items-center gap-2 text-[10px] font-extrabold text-[#0F172A] bg-orange-100/50 border border-orange-200/40 px-4 py-1.5 rounded-full mb-6 tracking-widest uppercase shadow-sm"
               >
-                <Sparkles className="w-3.5 h-3.5" /> StudentHub by GenSync
+                <Sparkles className="w-3.5 h-3.5 text-orange-500" /> StudentHub by GenSync
               </motion.span>
-              <h1 className="text-4xl sm:text-5xl lg:text-[3.75rem] font-extrabold text-foreground leading-[1.05] mb-6 tracking-tighter">
+              <h1 className="text-5xl sm:text-6xl lg:text-[4.25rem] font-medium text-[#0F172A] leading-[1.05] mb-6 tracking-tight font-serif-elegant">
                 Your All-in-One
                 <br />
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-blue-500 to-indigo-600">Campus Hub</span>
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-orange-500 via-slate-700 to-blue-500 font-serif-elegant italic">Campus Hub</span>
               </h1>
-              <p className="text-base sm:text-lg text-muted-foreground mb-8 max-w-lg leading-relaxed">
+              <p className="text-base sm:text-lg text-slate-500 mb-8 max-w-lg leading-relaxed font-normal">
                 Share resources, discover opportunities, collaborate on projects, chat with classmates, attend events, and share content securely — all in one free platform.
               </p>
               <div className="flex flex-wrap gap-4 mb-10">
                 <Link to="/auth">
-                  <Button size="lg" className="h-14 px-10 font-extrabold shadow-2xl gap-3 text-base rounded-3xl bg-gradient-to-r from-primary via-primary to-primary/80 hover:scale-105 hover:shadow-primary/30 transition-all duration-300 animate-pulse-subtle">
-                    <Sparkles className="w-5 h-5" />
+                  <Button size="lg" className="h-14 px-10 font-semibold shadow-md gap-3 text-base rounded-full bg-[#0F172A] text-white hover:bg-[#1E293B] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300">
+                    <Sparkles className="w-5 h-5 text-orange-400" />
                     Get Started Free
                     <ArrowRight className="w-5 h-5" />
                   </Button>
                 </Link>
                 <Link to="/about">
-                  <Button variant="outline" size="lg" className="h-14 px-8 font-bold text-base rounded-3xl border-2 hover:scale-105 transition-all duration-300 hover:bg-muted/30">
+                  <Button variant="outline" size="lg" className="h-14 px-8 font-semibold text-base rounded-full border border-slate-200 bg-white hover:bg-slate-50 hover:scale-[1.02] active:scale-[0.98] text-slate-700 hover:border-slate-300 transition-all duration-300">
                     Learn More
                   </Button>
                 </Link>
@@ -593,12 +592,9 @@ const Index = () => {
                 {["100% Free", "No Ads", "PWA App", "Secure"].map((tag, i) => (
                   <motion.span 
                     key={tag}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 + i * 0.1, duration: 0.4 }}
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-muted-foreground bg-muted/60 px-3.5 py-1.5 rounded-full border border-border/50 shadow-sm"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 bg-slate-50 border border-slate-200/50 px-3.5 py-1.5 rounded-full shadow-[0_1px_2px_rgba(15,23,42,0.02)]"
                   >
-                    <CheckCircle2 className="w-3.5 h-3.5 text-success" /> {tag}
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> {tag}
                   </motion.span>
                 ))}
               </div>
@@ -606,49 +602,51 @@ const Index = () => {
 
             {/* Right Column: Hero Image (Smooth Parallax Zoom) */}
             <motion.div 
-              initial={{ opacity: 0, y: 60, scale: 0.96 }}
+              initial={{ opacity: 0, y: 40, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
               className="hidden lg:block relative"
             >
               <motion.div 
-                whileHover={{ scale: 1.015, y: -4 }}
+                whileHover={{ scale: 1.01, y: -2 }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
-                className="rounded-3xl overflow-hidden shadow-2xl border border-border/20 bg-card"
+                className="rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(15,23,42,0.04)] border border-slate-100 bg-white p-2.5"
               >
-                <img src={heroImg} alt="StudentHub campus collaboration platform" className="w-full object-cover" />
+                <img src={heroImg} alt="StudentHub campus collaboration platform" className="w-full object-cover rounded-2.5xl" />
               </motion.div>
 
               {/* Floating card - Resources (independent delay animation) */}
               <motion.div 
-                initial={{ x: -40, opacity: 0 }}
+                initial={{ x: -20, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: 0.7, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                whileHover={{ y: -4 }}
-                className="absolute -bottom-5 -left-5 bg-card rounded-2xl p-4 shadow-xl border border-border/30"
+                whileHover={{ y: -3 }}
+                className="absolute -bottom-5 -left-5 bg-white rounded-2xl p-4 shadow-[0_12px_40px_rgba(15,23,42,0.08)] border border-slate-100/80"
               >
-                <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-xl bg-success/10 flex items-center justify-center">
-                    <BookOpen className="w-5 h-5 text-success" />
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-full bg-emerald-50 flex items-center justify-center">
+                    <BookOpen className="w-4.5 h-4.5 text-emerald-600" />
                   </div>
-                  <div>
-                    <p className="text-xs font-bold text-foreground">Resource Uploaded!</p>
-                    <p className="text-[10px] text-muted-foreground">Data Structures Notes.pdf</p>
+                  <div className="text-left">
+                    <p className="text-xs font-bold text-slate-800">Resource Uploaded!</p>
+                    <p className="text-[10px] text-slate-400 font-medium">DBMS mid-sem notes.pdf</p>
                   </div>
                 </div>
               </motion.div>
 
               {/* Floating card - Events (independent delay animation) */}
               <motion.div 
-                initial={{ x: 40, opacity: 0 }}
+                initial={{ x: 20, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: 0.9, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                whileHover={{ y: -4 }}
-                className="absolute -top-4 -right-4 bg-card rounded-2xl p-3.5 shadow-xl border border-border/30"
+                whileHover={{ y: -3 }}
+                className="absolute -top-4 -right-4 bg-white rounded-2xl p-4 shadow-[0_12px_40px_rgba(15,23,42,0.08)] border border-slate-100/80"
               >
-                <p className="text-[9px] text-muted-foreground font-bold tracking-wider mb-1.5">CAMPUS EVENT</p>
-                <p className="text-xs font-bold text-foreground">Tech Workshop 🚀</p>
-                <p className="text-[10px] text-primary font-semibold mt-1">RSVP now</p>
+                <div className="text-left">
+                  <p className="text-[8px] text-orange-500 font-extrabold tracking-wider mb-1 uppercase bg-orange-50 px-2 py-0.5 rounded-full inline-block">CAMPUS EVENT</p>
+                  <p className="text-xs font-bold text-slate-800 mt-1">Tech Workshop 🚀</p>
+                  <p className="text-[10px] text-slate-400 font-semibold mt-1">2 PM • Seminar Hall</p>
+                </div>
               </motion.div>
             </motion.div>
           </div>
@@ -656,9 +654,9 @@ const Index = () => {
       </section>
 
       {/* What StudentHub Offers — quick bar */}
-      <section className="border-y border-border/30 bg-card/50">
+      <section className="border-y border-slate-100 bg-white/40 backdrop-blur-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.6)]">
         <div className="container mx-auto px-4 py-6">
-          <div className="flex flex-wrap justify-center gap-x-8 gap-y-3">
+          <div className="flex flex-wrap justify-center gap-x-10 gap-y-3">
             {[
               { icon: BookOpen, label: "Resources" },
               { icon: Briefcase, label: "Opportunities" },
@@ -678,19 +676,19 @@ const Index = () => {
 
       {/* Core Features Section (Scroll-Linked Horizontal Slider on Desktop, Stack on Mobile) */}
       <section id="features" ref={featuresSectionRef} className="relative w-full h-[180vh] md:block hidden">
-        <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center bg-gradient-to-b from-blue-50/10 via-background to-indigo-50/5">
+        <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center bg-sarvam-ambient">
           {/* Section Header */}
           <div className="container mx-auto px-5 mb-10 text-center relative z-10">
-            <p className="text-[10px] font-extrabold text-primary tracking-[0.25em] uppercase mb-3">Platform Features</p>
-            <h2 className="text-3xl md:text-5xl font-extrabold text-foreground mb-4 tracking-tighter">6 Powerful Tools, One Free Platform</h2>
-            <p className="text-muted-foreground max-w-lg mx-auto text-sm">
+            <span className="text-[10px] font-bold text-orange-500 bg-orange-100/50 border border-orange-200/30 px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">Platform Features</span>
+            <h2 className="text-3xl md:text-5xl font-medium text-[#0F172A] mb-4 tracking-tight font-serif-elegant">6 Powerful Tools, One Free Platform</h2>
+            <p className="text-slate-500 max-w-lg mx-auto text-sm">
               Everything a student needs to share, collaborate, and grow — built by GenSync. Scroll down to see it move.
             </p>
             
             {/* Scroll progress bar indicator */}
-            <div className="w-48 h-1.5 bg-muted rounded-full mx-auto mt-6 overflow-hidden">
+            <div className="w-48 h-1 bg-slate-100 rounded-full mx-auto mt-6 overflow-hidden">
               <motion.div 
-                className="h-full bg-primary rounded-full"
+                className="h-full bg-orange-400 rounded-full"
                 style={{ width: useTransform(springScroll, [0, 1], ["0%", "100%"]) }}
               />
             </div>
@@ -706,30 +704,32 @@ const Index = () => {
               {features.map((feat) => (
                 <div 
                   key={feat.title}
-                  className={`w-[580px] h-[340px] md:w-[620px] md:h-[350px] shrink-0 rounded-[2.5rem] p-8 border ${feat.border} hover:shadow-xl ${feat.glow} bg-gradient-to-br ${feat.gradient} flex items-center gap-8 relative overflow-hidden transition-all duration-300 group bg-card`}
+                  className="w-[580px] h-[340px] md:w-[620px] md:h-[350px] shrink-0 rounded-3xl p-8 border border-slate-100/80 hover:shadow-[0_15px_45px_rgba(15,23,42,0.04)] bg-white flex items-center gap-8 relative overflow-hidden transition-all duration-300 group"
                 >
                   {/* Left Column: Details */}
                   <div className="flex-1 flex flex-col justify-between h-full text-left">
                     <div>
-                      <div className={`w-12 h-12 rounded-2xl ${feat.bg} flex items-center justify-center mb-5 group-hover:scale-105 transition-transform duration-300`}>
-                        <feat.icon className={`w-5 h-5 ${feat.color}`} />
+                      <div className="w-12 h-12 rounded-full bg-orange-50 flex items-center justify-center mb-5 group-hover:scale-105 transition-transform duration-300">
+                        <feat.icon className="w-5 h-5 text-orange-500" />
                       </div>
-                      <h3 className="text-lg font-extrabold text-foreground mb-2">{feat.title}</h3>
-                      <p className="text-xs text-muted-foreground leading-relaxed mb-4">{feat.desc}</p>
+                      <h3 className="text-lg font-bold text-slate-800 mb-2">{feat.title}</h3>
+                      <p className="text-xs text-slate-500 leading-relaxed mb-4">{feat.desc}</p>
                     </div>
                     
                     <ul className="space-y-1.5">
                       {feat.details.map((d) => (
-                        <li key={d} className="flex items-center gap-2 text-xs text-muted-foreground font-semibold">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-success shrink-0" /> {d}
+                        <li key={d} className="flex items-center gap-2 text-xs text-slate-500 font-semibold">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" /> {d}
                         </li>
                       ))}
                     </ul>
                   </div>
 
                   {/* Right Column: Visual Mockup */}
-                  <div className="w-[260px] shrink-0 flex items-center justify-center select-none group-hover:scale-[1.02] transition-transform duration-300">
-                    {feat.mockUI}
+                  <div className="w-[260px] shrink-0 flex items-center justify-center select-none group-hover:scale-[1.01] transition-transform duration-300">
+                    <div className="bg-slate-50/50 p-3 rounded-2.5xl border border-slate-100">
+                      {feat.mockUI}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -739,40 +739,40 @@ const Index = () => {
       </section>
 
       {/* Mobile-Only Features List (Staggered Fade-Up Stack) */}
-      <section className="md:hidden py-16 px-5 relative z-10 bg-gradient-to-b from-blue-50/10 via-background to-indigo-50/5">
+      <section className="md:hidden py-16 px-5 relative z-10 bg-sarvam-ambient">
         <div className="text-center mb-10">
-          <p className="text-[10px] font-extrabold text-primary tracking-[0.25em] uppercase mb-2">Platform Features</p>
-          <h2 className="text-3xl font-extrabold text-foreground tracking-tighter mb-3">6 Powerful Tools, One Free Platform</h2>
-          <p className="text-muted-foreground text-xs px-2">Everything you need to share, collaborate, and grow — built by GenSync.</p>
+          <span className="text-[10px] font-bold text-orange-500 bg-orange-100/50 border border-orange-200/30 px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block">Platform Features</span>
+          <h2 className="text-3xl font-medium text-[#0F172A] tracking-tight mb-3 font-serif-elegant">6 Powerful Tools, One Free Platform</h2>
+          <p className="text-slate-500 text-xs px-2 font-normal">Everything you need to share, collaborate, and grow — built by GenSync.</p>
         </div>
         
         <div className="space-y-6">
           {features.map((feat, idx) => (
             <motion.div 
               key={feat.title}
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
               transition={{ duration: 0.5, delay: idx * 0.05 }}
-              className={`rounded-[2rem] p-6 border ${feat.border} bg-gradient-to-br ${feat.gradient} space-y-5 bg-card`}
+              className="rounded-3xl p-6 border border-slate-100/80 bg-white shadow-sm space-y-5"
             >
               <div className="flex items-center gap-3">
-                <div className={`w-10 h-10 rounded-xl ${feat.bg} flex items-center justify-center`}>
-                  <feat.icon className={`w-4 h-4 ${feat.color}`} />
+                <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center">
+                  <feat.icon className="w-4.5 h-4.5 text-orange-500" />
                 </div>
-                <h3 className="text-base font-extrabold text-foreground">{feat.title}</h3>
+                <h3 className="text-base font-bold text-slate-800">{feat.title}</h3>
               </div>
               
-              <p className="text-xs text-muted-foreground leading-relaxed">{feat.desc}</p>
+              <p className="text-xs text-slate-500 leading-relaxed">{feat.desc}</p>
               
-              <div className="w-full flex justify-center py-2">
+              <div className="w-full flex justify-center py-2 bg-slate-50/50 rounded-2xl border border-slate-100/50">
                 {feat.mockUI}
               </div>
 
-              <ul className="grid grid-cols-2 gap-2 pt-3 border-t border-border/30">
+              <ul className="grid grid-cols-2 gap-2 pt-3 border-t border-slate-100">
                 {feat.details.map((d) => (
-                  <li key={d} className="flex items-center gap-1.5 text-[10px] text-muted-foreground font-semibold">
-                    <CheckCircle2 className="w-3 h-3 text-success shrink-0" /> {d}
+                  <li key={d} className="flex items-center gap-1.5 text-[10px] text-slate-500 font-semibold">
+                    <CheckCircle2 className="w-3 h-3 text-emerald-500 shrink-0" /> {d}
                   </li>
                 ))}
               </ul>
@@ -782,44 +782,45 @@ const Index = () => {
       </section>
 
       {/* More Features Grid */}
-      <section className="bg-muted/30 py-20 md:py-28">
+      <section className="bg-slate-50/40 border-y border-slate-200/40 py-20 md:py-28">
         <div className="container mx-auto px-5">
           <motion.div 
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <p className="text-[10px] font-extrabold text-primary tracking-[0.25em] uppercase mb-3">And More</p>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-foreground mb-4 tracking-tighter">Built with everything you need</h2>
-            <p className="text-muted-foreground max-w-lg mx-auto text-sm">Security, accessibility, and smart features baked into every corner.</p>
+            <span className="text-[10px] font-bold text-orange-500 bg-orange-100/50 border border-orange-200/30 px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">And More</span>
+            <h2 className="text-3xl md:text-4xl font-medium text-[#0F172A] mb-4 tracking-tight font-serif-elegant">Built with everything you need</h2>
+            <p className="text-slate-500 max-w-lg mx-auto text-sm font-normal">Security, accessibility, and smart features baked into every corner.</p>
           </motion.div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {moreFeatures.map(({ icon: Icon, title, desc, colSpan, color, bg, gradient, border, mockUI }, i) => (
+            {moreFeatures.map(({ icon: Icon, title, desc, colSpan, mockUI }, i) => (
               <motion.div 
                 key={title}
-                initial={{ opacity: 0, y: 24 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.5, delay: i * 0.05 }}
-                whileHover={{ y: -4 }}
-                className={`card-campus p-6 md:p-8 bg-gradient-to-br ${gradient} border ${border} transition-all duration-300 shadow-md flex flex-col justify-between overflow-hidden relative group min-h-[270px] md:min-h-[290px] ${colSpan} bg-card`}
+                className={`card-premium-light p-6 md:p-8 flex flex-col justify-between overflow-hidden relative group min-h-[270px] md:min-h-[290px] ${colSpan}`}
               >
                 <div>
                   <div className="flex items-center gap-3 mb-4">
-                    <div className={`w-10 h-10 rounded-xl ${bg} flex items-center justify-center shrink-0`}>
-                      <Icon className={`w-4 h-4 ${color}`} />
+                    <div className="w-9 h-9 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
+                      <Icon className="w-4.5 h-4.5 text-slate-700" />
                     </div>
-                    <h3 className="text-sm font-extrabold text-foreground">{title}</h3>
+                    <h3 className="text-sm font-bold text-slate-800">{title}</h3>
                   </div>
-                  <p className="text-[11px] text-muted-foreground leading-relaxed mb-6 text-left">{desc}</p>
+                  <p className="text-xs text-slate-500 leading-relaxed mb-6 text-left font-normal">{desc}</p>
                 </div>
                 
                 {/* Embedded Visual Mockup */}
                 <div className="w-full mt-auto flex items-center justify-center select-none group-hover:scale-[1.01] transition-transform duration-300">
-                  {mockUI}
+                  <div className="w-full bg-slate-50/30 p-2.5 rounded-2xl border border-slate-100/60">
+                    {mockUI}
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -828,56 +829,56 @@ const Index = () => {
       </section>
 
       {/* How it Works */}
-      <section id="how-it-works" className="py-20 md:py-28">
+      <section id="how-it-works" className="py-20 md:py-28 bg-white/30">
         <div className="container mx-auto px-5">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Image (Smooth scroll reveal & scale) */}
             <motion.div 
-              initial={{ opacity: 0, x: -50 }}
+              initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               className="relative"
             >
               <motion.div 
-                whileHover={{ scale: 1.015 }}
+                whileHover={{ scale: 1.01 }}
                 transition={{ duration: 0.5 }}
-                className="rounded-3xl overflow-hidden shadow-xl max-w-md mx-auto bg-card border border-border/30"
+                className="rounded-3xl overflow-hidden shadow-[0_15px_45px_rgba(15,23,42,0.03)] max-w-md mx-auto bg-white p-2.5 border border-slate-100"
               >
-                <img src={studentImg} alt="Student using StudentHub" className="w-full object-cover" />
+                <img src={studentImg} alt="Student using StudentHub" className="w-full object-cover rounded-2.5xl" />
               </motion.div>
               <motion.div 
-                initial={{ y: 20, opacity: 0 }}
+                initial={{ y: 10, opacity: 0 }}
                 whileInView={{ y: 0, opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.3, duration: 0.6 }}
-                className="absolute bottom-6 left-6 gradient-primary rounded-2xl p-4 shadow-lg"
+                className="absolute bottom-6 left-6 bg-[#0F172A] rounded-2xl py-2.5 px-4.5 shadow-md border border-slate-800"
               >
-                <p className="text-sm font-bold text-primary-foreground flex items-center gap-2">
-                  <Zap className="w-4 h-4 animate-bounce" /> Start sharing today
+                <p className="text-xs font-bold text-white flex items-center gap-2">
+                  <Zap className="w-3.5 h-3.5 text-orange-400 animate-bounce" /> Start sharing today
                 </p>
               </motion.div>
             </motion.div>
 
             {/* Steps text */}
             <motion.div 
-              initial={{ opacity: 0, x: 50 }}
+              initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             >
-              <p className="text-[10px] font-extrabold text-primary tracking-[0.25em] uppercase mb-3">Getting Started</p>
-              <h2 className="text-3xl md:text-4xl font-extrabold text-foreground mb-4 tracking-tighter">Three simple steps</h2>
-              <p className="text-muted-foreground mb-10 text-sm">It takes less than a minute to get started. Completely free.</p>
+              <span className="text-[10px] font-bold text-orange-500 bg-orange-100/50 border border-orange-200/30 px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">Getting Started</span>
+              <h2 className="text-3xl md:text-4xl font-medium text-[#0F172A] mb-4 tracking-tight font-serif-elegant">Three simple steps</h2>
+              <p className="text-slate-500 mb-10 text-sm font-normal">It takes less than a minute to get started. Completely free.</p>
               <div className="space-y-8">
                 {steps.map(({ num, title, desc }) => (
                   <div key={num} className="flex gap-5">
-                    <div className="w-12 h-12 rounded-2xl gradient-primary flex items-center justify-center text-primary-foreground font-extrabold text-sm shrink-0 shadow-md">
+                    <div className="w-10 h-10 rounded-full bg-orange-50 border border-orange-200/40 flex items-center justify-center text-orange-500 font-bold text-sm shrink-0 shadow-sm">
                       {num}
                     </div>
-                    <div>
-                      <h4 className="font-bold text-foreground mb-1">{title}</h4>
-                      <p className="text-sm text-muted-foreground leading-relaxed">{desc}</p>
+                    <div className="text-left">
+                      <h4 className="font-bold text-slate-800 mb-1">{title}</h4>
+                      <p className="text-sm text-slate-500 leading-relaxed font-normal">{desc}</p>
                     </div>
                   </div>
                 ))}
@@ -888,101 +889,104 @@ const Index = () => {
       </section>
 
       {/* Built By Section (GenSync Premium Profiles) */}
-      <section id="testimonials" className="bg-muted/30 py-20 md:py-28">
+      <section id="testimonials" className="bg-white/40 py-20 md:py-28 border-b border-slate-200/40">
         <div className="container mx-auto px-5">
           <div className="max-w-4xl mx-auto">
             <motion.div 
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
               className="text-center mb-14"
             >
-              <p className="text-[10px] font-extrabold text-primary tracking-[0.25em] uppercase mb-3">Meet The Team</p>
-              <h2 className="text-3xl md:text-4xl font-extrabold text-foreground mb-4 tracking-tighter">The Minds Behind StudentHub</h2>
-              <p className="text-muted-foreground max-w-lg mx-auto text-sm">GenSync — a dynamic developer team passionate about building tools that help students succeed.</p>
+              <span className="text-[10px] font-bold text-orange-500 bg-orange-100/50 border border-orange-200/30 px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">Meet The Team</span>
+              <h2 className="text-3xl md:text-4xl font-medium text-[#0F172A] mb-4 tracking-tight font-serif-elegant">The Minds Behind StudentHub</h2>
+              <p className="text-slate-500 max-w-lg mx-auto text-sm font-normal">GenSync — a dynamic developer team passionate about building tools that help students succeed.</p>
             </motion.div>
             
             <div className="grid md:grid-cols-3 gap-6">
               {/* Likhith.K */}
               <motion.div 
-                initial={{ opacity: 0, y: 40 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.6, delay: 0.1 }}
-                whileHover={{ y: -6, boxShadow: "var(--card-shadow-hover)" }}
-                className="card-campus p-6 md:col-span-1 border border-primary/20 ring-1 ring-primary/10 relative overflow-hidden bg-gradient-to-b from-primary/5 to-transparent flex flex-col justify-between bg-card transition-all duration-300"
+                className="card-premium-light p-6 md:col-span-1 flex flex-col justify-between relative overflow-hidden"
               >
                 <div className="absolute top-3 right-3">
-                  <span className="text-[9px] font-extrabold text-primary-foreground bg-primary px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm">Lead Builder</span>
+                  <span className="text-[8px] font-bold text-orange-600 bg-orange-50 border border-orange-100 px-2 py-0.5 rounded-full uppercase tracking-wider">Lead Builder</span>
                 </div>
                 <div>
-                  <div className="w-14 h-14 rounded-2xl gradient-primary flex items-center justify-center shadow-lg mb-4 text-primary-foreground font-extrabold text-lg">
+                  <div className="w-12 h-12 rounded-full bg-slate-50 border border-slate-200/60 flex items-center justify-center shadow-sm mb-4 text-[#0F172A] font-bold text-md">
                     LK
                   </div>
-                  <h3 className="text-base font-bold text-foreground mb-1">Likhith.K</h3>
-                  <p className="text-xs text-primary font-bold mb-3">Overall Killer Website Builder</p>
-                  <p className="text-xs text-muted-foreground leading-relaxed">
+                  <h3 className="text-sm font-bold text-slate-800 mb-1">Likhith.K</h3>
+                  <p className="text-xs text-orange-500 font-bold mb-3">Overall Killer Website Builder</p>
+                  <p className="text-xs text-slate-500 leading-relaxed font-normal">
                     The absolute programming beast who orchestrated the architecture, brought the entire vision to life, and built the overall website with unmatched speed and precision.
                   </p>
                 </div>
-                <div className="mt-5 pt-3 border-t border-border/40">
-                  <span className="text-[10px] font-bold text-primary bg-primary/8 px-2 py-1 rounded-md">⚡ Vibe Coder Beast</span>
+                <div className="mt-5 pt-3 border-t border-slate-100">
+                  <span className="text-[10px] font-semibold text-slate-600 bg-slate-50 border border-slate-200/40 px-2.5 py-1 rounded-full">⚡ Vibe Coder Beast</span>
                 </div>
               </motion.div>
 
               {/* Manogna.u */}
               <motion.div 
-                initial={{ opacity: 0, y: 40 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                whileHover={{ y: -6, boxShadow: "var(--card-shadow-hover)" }}
-                className="card-campus p-6 flex flex-col justify-between bg-card transition-all duration-300 border border-transparent hover:border-rose-500/20"
+                className="card-premium-light p-6 flex flex-col justify-between relative overflow-hidden"
               >
+                <div className="absolute top-3 right-3">
+                  <span className="text-[8px] font-bold text-rose-600 bg-rose-50 border border-rose-100 px-2 py-0.5 rounded-full uppercase tracking-wider">Designer</span>
+                </div>
                 <div>
-                  <div className="w-14 h-14 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center shadow-md mb-4 text-rose-500 font-extrabold text-lg">
+                  <div className="w-12 h-12 rounded-full bg-slate-50 border border-slate-200/60 flex items-center justify-center shadow-sm mb-4 text-[#0F172A] font-bold text-md">
                     MU
                   </div>
-                  <h3 className="text-base font-bold text-foreground mb-1">Manogna.u</h3>
+                  <h3 className="text-sm font-bold text-slate-800 mb-1">Manogna.u</h3>
                   <p className="text-xs text-rose-500 font-bold mb-3">UI/UX & Frontend Wizard</p>
-                  <p className="text-xs text-muted-foreground leading-relaxed">
+                  <p className="text-xs text-slate-500 leading-relaxed font-normal">
                     The creative genius behind the gorgeous, pixel-perfect user interface. Crafted the premium visual elements, layout flow, and stunning aesthetic appeal of the platform.
                   </p>
                 </div>
-                <div className="mt-5 pt-3 border-t border-border/40">
-                  <span className="text-[10px] font-bold text-rose-500 bg-rose-500/10 px-2 py-1 rounded-md">🎨 Creative Master</span>
+                <div className="mt-5 pt-3 border-t border-slate-100">
+                  <span className="text-[10px] font-semibold text-rose-600 bg-rose-50 border border-rose-100/50 px-2.5 py-1 rounded-full">🎨 Creative Master</span>
                 </div>
               </motion.div>
 
               {/* udaya lakshmi.Z */}
               <motion.div 
-                initial={{ opacity: 0, y: 40 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.6, delay: 0.3 }}
-                whileHover={{ y: -6, boxShadow: "var(--card-shadow-hover)" }}
-                className="card-campus p-6 flex flex-col justify-between bg-card transition-all duration-300 border border-transparent hover:border-teal-500/20"
+                className="card-premium-light p-6 flex flex-col justify-between relative overflow-hidden"
               >
+                <div className="absolute top-3 right-3">
+                  <span className="text-[8px] font-bold text-teal-600 bg-teal-50 border border-teal-100 px-2 py-0.5 rounded-full uppercase tracking-wider">Architect</span>
+                </div>
                 <div>
-                  <div className="w-14 h-14 rounded-2xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center shadow-md mb-4 text-teal-500 font-extrabold text-lg">
+                  <div className="w-12 h-12 rounded-full bg-slate-50 border border-slate-200/60 flex items-center justify-center shadow-sm mb-4 text-[#0F172A] font-bold text-md">
                     UL
                   </div>
-                  <h3 className="text-base font-bold text-foreground mb-1">udaya lakshmi.Z</h3>
+                  <h3 className="text-sm font-bold text-slate-800 mb-1">udaya lakshmi.Z</h3>
                   <p className="text-xs text-teal-500 font-bold mb-3">Database & Backend Mastermind</p>
-                  <p className="text-xs text-muted-foreground leading-relaxed">
+                  <p className="text-xs text-slate-500 leading-relaxed font-normal">
                     The structural core of the platform. Designed the database architecture, set up security triggers, and engineered the high-performance backend pipelines.
                   </p>
                 </div>
-                <div className="mt-5 pt-3 border-t border-border/40">
-                  <span className="text-[10px] font-bold text-teal-500 bg-teal-500/10 px-2 py-1 rounded-md">⚙️ Backend Architect</span>
+                <div className="mt-5 pt-3 border-t border-slate-100">
+                  <span className="text-[10px] font-semibold text-teal-600 bg-teal-50 border border-teal-100/50 px-2.5 py-1 rounded-full">⚙️ Backend Architect</span>
                 </div>
               </motion.div>
             </div>
             
             <div className="text-center mt-8">
-              <Link to="/developer" className="inline-flex items-center gap-1.5 text-sm font-bold text-primary hover:gap-2.5 transition-all">
-                Learn more about GenSync team <ArrowRight className="w-4 h-4" />
+              <Link to="/developer" className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0F172A] hover:gap-2.5 transition-all bg-white border border-slate-200 px-4 py-2 rounded-full shadow-sm">
+                Learn more about GenSync team <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
           </div>
@@ -992,30 +996,31 @@ const Index = () => {
       {/* CTA */}
       <section className="container mx-auto px-5 py-16">
         <motion.div 
-          initial={{ opacity: 0, scale: 0.98 }}
+          initial={{ opacity: 0, scale: 0.99 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="rounded-3xl gradient-primary p-10 md:p-16 text-center relative overflow-hidden shadow-xl"
+          className="rounded-3xl bg-gradient-to-br from-orange-50/60 via-white to-blue-50/50 border border-slate-100/80 p-10 md:p-16 text-center relative overflow-hidden shadow-sm"
         >
-          <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-primary-foreground/5 -translate-y-1/3 translate-x-1/3" />
-          <div className="absolute bottom-0 left-0 w-56 h-56 rounded-full bg-primary-foreground/5 translate-y-1/3 -translate-x-1/3" />
+          {/* Ambient glowing dots for premium feel */}
+          <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-orange-400/5 blur-[80px] -translate-y-1/3 translate-x-1/3" />
+          <div className="absolute bottom-0 left-0 w-56 h-56 rounded-full bg-blue-400/5 blur-[60px] translate-y-1/3 -translate-x-1/3" />
           <div className="relative z-10">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-primary-foreground mb-4 tracking-tighter">Ready to get started?</h2>
-            <p className="text-primary-foreground/70 mb-8 max-w-lg mx-auto text-sm">Join StudentHub — the free platform built by GenSync to help every student share, collaborate, and grow.</p>
+            <h2 className="text-3xl md:text-4xl font-medium text-[#0F172A] mb-4 tracking-tight font-serif-elegant">Ready to get started?</h2>
+            <p className="text-slate-500 mb-8 max-w-lg mx-auto text-sm font-normal">Join StudentHub — the free platform built by GenSync to help every student share, collaborate, and grow.</p>
             <div className="flex flex-wrap gap-3 justify-center">
               <Link to="/auth">
-                <Button variant="secondary" size="lg" className="h-12 px-8 font-bold shadow-sm rounded-2xl hover:scale-105 transition-all duration-300">
-                  Sign Up Free <ArrowRight className="w-4 h-4 ml-1" />
+                <Button size="lg" className="h-12 px-8 font-bold rounded-full bg-[#0F172A] hover:bg-[#1E293B] text-white shadow-sm transition-all duration-300">
+                  Sign Up Free <ArrowRight className="w-3.5 h-3.5 ml-1" />
                 </Button>
               </Link>
               <Link to="/about">
-                <Button variant="ghost" size="lg" className="h-12 px-8 font-bold rounded-2xl text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10 hover:scale-105 transition-all duration-300">
+                <Button variant="outline" size="lg" className="h-12 px-8 font-semibold text-slate-700 bg-white hover:bg-slate-50 border-slate-200 hover:border-slate-300 rounded-full transition-all duration-300">
                   About StudentHub
                 </Button>
               </Link>
             </div>
-            <p className="text-[10px] text-primary-foreground/40 mt-5">Free for all students. No credit card. No ads. Ever.</p>
+            <p className="text-[10px] text-slate-400 mt-5 font-medium">Free for all students. No credit card. No ads. Ever.</p>
           </div>
         </motion.div>
       </section>

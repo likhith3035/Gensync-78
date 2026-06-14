@@ -772,16 +772,15 @@ const Community = () => {
       <div className="max-w-6xl mx-auto flex gap-6">
         {/* Main Content Area */}
         <div className="flex-1 min-w-0">
-          {/* Header */}
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 animate-fade-in">
             <div className="page-header mb-0">
-              <h1 className="page-title">Student Forums & Q&A</h1>
-              <p className="page-subtitle">Ask questions, share student life updates, and help peers in real-time</p>
+              <h1 className="text-3xl sm:text-4xl font-medium text-[#0F172A] tracking-tight font-serif-elegant">Student Forums & Q&A</h1>
+              <p className="text-sm text-slate-500 mt-1.5">Ask questions, share student life updates, and help peers in real-time</p>
             </div>
             
             <Dialog open={newPostOpen} onOpenChange={setNewPostOpen}>
               <DialogTrigger asChild>
-                <Button className="gap-1.5 font-semibold shadow-md shrink-0">
+                <Button className="gap-1.5 font-semibold shadow-sm rounded-full bg-slate-900 hover:bg-slate-800 text-white h-10 px-5 shrink-0">
                   <Plus className="w-4 h-4" /> Start Discussion
                 </Button>
               </DialogTrigger>
@@ -952,7 +951,7 @@ const Community = () => {
                       className="w-full px-4 py-3 rounded-xl border border-border/60 bg-muted/30 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-all resize-none" 
                     />
                   </div>
-                  <Button type="submit" className="w-full h-11 font-semibold" disabled={submitting}>
+                  <Button type="submit" className="w-full h-11 font-semibold rounded-xl bg-slate-900 hover:bg-slate-800 text-white" disabled={submitting}>
                     {submitting ? "Posting..." : "Create Post"}
                   </Button>
                 </form>
@@ -1025,7 +1024,7 @@ const Community = () => {
                   <div 
                     key={post.id} 
                     onClick={() => setSelectedPost(post)}
-                    className="card-campus p-5 cursor-pointer hover:border-primary/25 hover:shadow-md transition-all duration-300 flex gap-4 group"
+                    className="card-premium-light bg-white p-5 cursor-pointer flex gap-4 group"
                   >
                     {/* Voting Column */}
                     <div className="flex flex-col items-center gap-1 shrink-0 bg-muted/40 rounded-xl px-2.5 py-2 h-fit border border-border/20">
@@ -1131,7 +1130,7 @@ const Community = () => {
 
         {/* Side Panel: Selected Post Q&A Detail */}
         {selectedPost && (
-          <div className={isMaximized ? "fixed inset-0 z-50 flex flex-col bg-card overflow-hidden animate-fade-in" : "w-[22rem] shrink-0 hidden lg:flex flex-col bg-card border border-border/40 rounded-2xl h-[calc(100vh-8.5rem)] sticky top-20 overflow-hidden shadow-sm animate-fade-in"}>
+          <div className={isMaximized ? "fixed inset-0 z-50 flex flex-col bg-white overflow-hidden animate-fade-in" : "w-[22rem] shrink-0 hidden lg:flex flex-col bg-white border border-slate-100/80 rounded-3xl h-[calc(100vh-8.5rem)] sticky top-20 overflow-hidden shadow-sm animate-fade-in"}>
             {/* Post details header */}
             <div className="p-4 border-b border-border/40 flex items-start gap-3 bg-muted/30">
               <div className="flex-1 min-w-0">

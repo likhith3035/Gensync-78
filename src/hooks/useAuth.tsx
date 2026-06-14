@@ -41,6 +41,40 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         };
         setUser(mappedUser);
         setSession({ user: mappedUser, access_token: "dummy" }); // Mock session
+
+        // Sync user profile name and email to public profiles table
+        const userUuid = getDeterministicUuid(fbUser.uid);
+        const fullName = fbUser.displayName || fbUser.email?.split("@")[0] || "Student";
+        const email = fbUser.email || "";
+
+        supabase
+          .from("profiles")
+          .select("id")
+          .eq("user_id", userUuid)
+          .maybeSingle()
+          .then(({ data, error }) => {
+            if (!error) {
+              if (!data) {
+                supabase
+                  .from("profiles")
+                  .insert({
+                    user_id: userUuid,
+                    full_name: fullName,
+                    email: email
+                  })
+                  .then(() => {});
+              } else {
+                supabase
+                  .from("profiles")
+                  .update({
+                    full_name: fullName,
+                    email: email
+                  })
+                  .eq("user_id", userUuid)
+                  .then(() => {});
+              }
+            }
+          });
       } else {
         setUser(null);
         setSession(null);
