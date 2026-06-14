@@ -1,0 +1,273 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+
+@keyframes pulse-subtle {
+  0%, 100% {
+    box-shadow: 0 0 0 0 hsl(var(--primary) / 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 12px hsl(var(--primary) / 0);
+  }
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 2s ease-in-out infinite;
+}
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* One UI 8.5 Light — Samsung-inspired palette */
+    --background: 210 20% 98%;
+    --foreground: 210 11% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 210 11% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 11% 15%;
+
+    --primary: 210 98% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 15% 95%;
+    --secondary-foreground: 210 11% 25%;
+
+    --muted: 210 14% 95%;
+    --muted-foreground: 210 8% 50%;
+
+    --accent: 210 60% 96%;
+    --accent-foreground: 210 98% 50%;
+
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 210 14% 92%;
+    --input: 210 14% 92%;
+    --ring: 210 98% 50%;
+
+    --radius: 1.5rem;
+
+    /* One UI custom tokens */
+    --oneui-surface: 210 20% 98%;
+    --oneui-elevated: 0 0% 100%;
+    --oneui-divider: 210 14% 93%;
+    --card-shadow: 0 1px 4px 0 hsl(210 20% 20% / 0.03);
+    --card-shadow-hover: 0 8px 32px -4px hsl(210 20% 20% / 0.08);
+    --card-shadow-lg: 0 20px 48px -8px hsl(210 20% 20% / 0.12);
+
+    /* Status colors */
+    --success: 145 63% 42%;
+    --success-foreground: 0 0% 100%;
+    --warning: 36 90% 55%;
+    --warning-foreground: 0 0% 100%;
+    --info: 210 80% 55%;
+    --info-foreground: 0 0% 100%;
+
+    /* Badge tokens */
+    --badge-internship: 210 98% 50%;
+    --badge-event: 25 95% 53%;
+    --badge-hackathon: 280 60% 55%;
+    --badge-scholarship: 145 63% 42%;
+    --badge-workshop: 36 90% 55%;
+    --badge-recruiting: 210 98% 50%;
+    --badge-planning: 280 60% 55%;
+    --badge-urgent: 0 72% 55%;
+    --badge-notes: 210 98% 50%;
+    --badge-past-paper: 145 63% 42%;
+    --badge-tutorial: 36 90% 55%;
+
+    /* Achievement badge colors */
+    --achievement-bronze: 30 60% 50%;
+    --achievement-silver: 210 8% 65%;
+    --achievement-gold: 45 93% 47%;
+    --achievement-platinum: 210 50% 60%;
+
+    /* Sidebar */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 210 11% 15%;
+    --sidebar-primary: 210 98% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 60% 96%;
+    --sidebar-accent-foreground: 210 98% 50%;
+    --sidebar-border: 210 14% 94%;
+    --sidebar-ring: 210 98% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased overflow-x-hidden;
+    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer components {
+  /* ── One UI Card ── */
+  .card-campus {
+    @apply bg-card rounded-3xl;
+    box-shadow: var(--card-shadow);
+    transition: box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .card-campus:hover {
+    box-shadow: var(--card-shadow-hover);
+    transform: translateY(-1px);
+  }
+
+  /* ── Interactive card ── */
+  .card-interactive {
+    @apply bg-card rounded-3xl cursor-pointer;
+    box-shadow: var(--card-shadow);
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .card-interactive:hover {
+    box-shadow: var(--card-shadow-hover);
+    transform: translateY(-2px) scale(1.005);
+  }
+  .card-interactive:active {
+    transform: translateY(0) scale(0.99);
+  }
+
+  /* ── Glass panel ── */
+  .glass-panel {
+    @apply bg-card/85 backdrop-blur-2xl;
+  }
+
+  /* ── Gradients ── */
+  .gradient-text {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(210 98% 50%), hsl(210 80% 62%));
+  }
+
+  .gradient-primary {
+    background: linear-gradient(135deg, hsl(210 98% 50%), hsl(210 80% 60%));
+  }
+
+  .gradient-card {
+    background: linear-gradient(145deg, hsl(210 60% 97%), hsl(210 40% 99%));
+  }
+
+  .gradient-warm {
+    background: linear-gradient(135deg, hsl(36 90% 55%), hsl(25 95% 53%));
+  }
+
+  .gradient-success {
+    background: linear-gradient(135deg, hsl(145 63% 42%), hsl(160 60% 45%));
+  }
+
+  /* ── Stat card ── */
+  .stat-card {
+    @apply relative overflow-hidden rounded-3xl p-5;
+    background: hsl(var(--card));
+    box-shadow: var(--card-shadow);
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .stat-card:hover {
+    box-shadow: var(--card-shadow-hover);
+    transform: translateY(-2px);
+  }
+
+  .stat-card::before {
+    content: '';
+    @apply absolute top-0 right-0 w-28 h-28 rounded-full;
+    background: hsl(var(--primary) / 0.06);
+    transform: translate(30%, -30%);
+  }
+
+  /* ── Achievement badge ── */
+  .achievement-badge {
+    @apply relative flex flex-col items-center gap-1.5 p-3 rounded-2xl border transition-all duration-300;
+  }
+  .achievement-badge.unlocked {
+    @apply bg-card border-primary/20;
+    box-shadow: 0 0 16px -4px hsl(var(--primary) / 0.15);
+  }
+  .achievement-badge.unlocked:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 8px 24px -4px hsl(var(--primary) / 0.2);
+  }
+  .achievement-badge.locked {
+    @apply bg-muted/40 border-border/30 opacity-50 grayscale;
+  }
+
+  /* ── Page typography ── */
+  .page-header {
+    @apply mb-6;
+  }
+
+  .page-title {
+    @apply text-[1.65rem] md:text-3xl font-extrabold text-foreground tracking-tight leading-tight;
+  }
+
+  .page-subtitle {
+    @apply text-muted-foreground mt-1 text-[0.9rem] leading-relaxed;
+  }
+
+  .empty-state {
+    @apply text-center py-20 px-6;
+  }
+
+  /* ── Filter pills (One UI segmented style) ── */
+  .filter-pill {
+    @apply flex items-center gap-1.5 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300;
+  }
+
+  .filter-pill-active {
+    @apply bg-primary text-primary-foreground;
+    box-shadow: 0 4px 16px -2px hsl(210 98% 50% / 0.35);
+  }
+
+  .filter-pill-inactive {
+    @apply bg-card text-muted-foreground hover:text-foreground;
+    box-shadow: var(--card-shadow);
+  }
+
+  /* ── One UI input style ── */
+  .oneui-input {
+    @apply w-full h-12 px-5 rounded-2xl bg-muted/60 text-sm placeholder:text-muted-foreground/70 focus:outline-none focus:ring-2 focus:ring-primary/25 focus:bg-card transition-all duration-300;
+  }
+
+  /* ── Activity timeline ── */
+  .timeline-item {
+    @apply relative pl-8 pb-4;
+  }
+  .timeline-item::before {
+    content: '';
+    @apply absolute left-[11px] top-8 bottom-0 w-px bg-border/50;
+  }
+  .timeline-item:last-child::before {
+    display: none;
+  }
+  .timeline-dot {
+    @apply absolute left-0 top-1 w-6 h-6 rounded-full border-2 border-card flex items-center justify-center;
+  }
+}
+
+@layer utilities {
+  .animate-in-view {
+    animation: fade-in 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .stagger-1 { animation-delay: 0.05s; }
+  .stagger-2 { animation-delay: 0.1s; }
+  .stagger-3 { animation-delay: 0.15s; }
+  .stagger-4 { animation-delay: 0.2s; }
+  .stagger-5 { animation-delay: 0.25s; }
+}
