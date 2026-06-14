@@ -106,7 +106,7 @@ const Community = () => {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const media = window.matchMedia("(max-w: 1023px)");
+    const media = window.matchMedia("(max-width: 1023px)");
     setIsMobile(media.matches);
     const listener = (e: MediaQueryListEvent) => {
       setIsMobile(e.matches);
