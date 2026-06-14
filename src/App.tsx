@@ -17,7 +17,6 @@ import Profile from "./pages/Profile";
 import Admin from "./pages/Admin";
 import Shares from "./pages/Shares";
 import SharedView from "./pages/SharedView";
-import Messages from "./pages/Messages";
 import Events from "./pages/Events";
 import About from "./pages/About";
 import Developer from "./pages/Developer";
@@ -50,7 +49,6 @@ const App = () => (
               <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
               <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
               <Route path="/shares" element={<ProtectedRoute><Shares /></ProtectedRoute>} />
-              <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
               <Route path="/events" element={<ProtectedRoute><Events /></ProtectedRoute>} />
               <Route path="/info" element={<ProtectedRoute><Info /></ProtectedRoute>} />
               <Route path="/bookmarks" element={<ProtectedRoute><Bookmarks /></ProtectedRoute>} />

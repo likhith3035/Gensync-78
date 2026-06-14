@@ -2,7 +2,7 @@ import { ReactNode, useState, useRef, useEffect, useMemo } from "react";
 import AppSidebar from "./AppSidebar";
 import MobileNav from "./MobileNav";
 import Breadcrumbs from "./Breadcrumbs";
-import { Search, Bell, X, Briefcase, FolderKanban, BookOpen, Calendar, FileText, LayoutDashboard, User, Share2, MessageCircle, Shield, Info, Code2 } from "lucide-react";
+import { Search, Bell, X, Briefcase, FolderKanban, BookOpen, Calendar, FileText, LayoutDashboard, User, Share2, Shield, Info, Code2 } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -72,7 +72,6 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
     { id: "projects", title: "Projects", type: "page" as const, sub: "Collaborate", route: "/projects" },
     { id: "resources", title: "Resources", type: "page" as const, sub: "Study materials", route: "/resources" },
     { id: "events", title: "Events", type: "page" as const, sub: "Campus events", route: "/events" },
-    { id: "messages", title: "Messages", type: "page" as const, sub: "Chat", route: "/messages" },
     { id: "shares", title: "Sharing Hub", type: "page" as const, sub: "Share content", route: "/shares" },
     { id: "community", title: "Community Discussions", type: "page" as const, sub: "Student Forums & Q&A", route: "/community" },
     { id: "profile", title: "Profile", type: "page" as const, sub: "Your profile", route: "/profile" },
