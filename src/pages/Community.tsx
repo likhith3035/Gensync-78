@@ -3,6 +3,7 @@ import AppLayout from "@/components/AppLayout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useAuth } from "@/hooks/useAuth";
 import { rtdb } from "@/lib/firebase";
 import { supabase } from "@/integrations/supabase/client";
@@ -12,13 +13,14 @@ import {
   set, 
   onValue, 
   remove, 
-  update 
+  update,
+  onDisconnect
 } from "firebase/database";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { 
   MessageSquare, ThumbsUp, Plus, Search, X, Users, MessageCircle, Clock, Send, ChevronRight, Lock, Globe, Building, CalendarDays,
-  Trash2, Share2, UserPlus, ExternalLink, Paperclip
+  Trash2, Share2, UserPlus, ExternalLink, Paperclip, Maximize2, Minimize2, Eye, EyeOff, GraduationCap
 } from "lucide-react";
 
 const categories = [
@@ -57,6 +59,7 @@ interface Discussion {
   allowed_emails?: string[];
   event_id?: string;
   event_title?: string;
+  room_password?: string;
 }
 
 interface Comment {
@@ -68,7 +71,116 @@ interface Comment {
   created_at: any;
   resource_title?: string;
   resource_url?: string;
+  is_system?: boolean;
 }
+
+
+const ProfilePopover = ({ userId, userName, userEmail, children }: { userId: string, userName: string, userEmail: string, children: React.ReactNode }) => {
+  const [profile, setProfile] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  const fetchProfile = async () => {
+    if (profile || loading) return;
+    setLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("user_id", userId)
+        .maybeSingle();
+      if (error) throw error;
+      setProfile(data || {});
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const popoverInitials = userName.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2);
+
+  return (
+    <Popover open={open} onOpenChange={(val) => {
+      setOpen(val);
+      if (val) fetchProfile();
+    }}>
+      <PopoverTrigger asChild>
+        <span className="cursor-pointer hover:underline inline-flex items-center gap-1">
+          {children}
+        </span>
+      </PopoverTrigger>
+      <PopoverContent className="w-64 p-4 rounded-2xl bg-card border border-border/40 shadow-xl animate-fade-in z-50">
+        <div className="flex flex-col items-center text-center space-y-3">
+          {profile?.avatar_url ? (
+            <img src={profile.avatar_url} alt="Avatar" className="w-14 h-14 rounded-full object-cover border border-border/40" />
+          ) : (
+            <div className="w-14 h-14 rounded-full gradient-primary flex items-center justify-center text-lg font-bold text-primary-foreground">
+              {popoverInitials}
+            </div>
+          )}
+          
+          <div className="space-y-0.5">
+            <h5 className="font-extrabold text-sm text-foreground leading-none">{userName}</h5>
+            <p className="text-[10px] text-muted-foreground">{userEmail}</p>
+          </div>
+
+          {loading ? (
+            <div className="py-2 flex items-center justify-center">
+              <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+            </div>
+          ) : profile ? (
+            <>
+              {(profile.department || profile.year_of_study) && (
+                <div className="bg-muted/40 border border-border/20 rounded-xl p-2 w-full text-left space-y-1">
+                  {profile.department && (
+                    <p className="text-[10px] font-semibold text-foreground flex items-center gap-1 leading-normal">
+                      <GraduationCap className="w-3 h-3 text-primary shrink-0" />
+                      {profile.department}
+                    </p>
+                  )}
+                  {profile.year_of_study && (
+                    <p className="text-[9px] text-muted-foreground font-medium pl-4">
+                      {profile.year_of_study}
+                    </p>
+                  )}
+                </div>
+              )}
+              {profile.bio && (
+                <p className="text-[10px] text-muted-foreground leading-normal line-clamp-3 italic">
+                  "{profile.bio}"
+                </p>
+              )}
+              {profile.skills && profile.skills.length > 0 && (
+                <div className="flex flex-wrap gap-1 justify-center w-full">
+                  {profile.skills.slice(0, 3).map((s: string) => (
+                    <Badge key={s} variant="secondary" className="text-[8px] py-0 px-1.5 rounded-full">
+                      {s}
+                    </Badge>
+                  ))}
+                  {profile.skills.length > 3 && (
+                    <span className="text-[8px] text-muted-foreground font-semibold">+{profile.skills.length - 3}</span>
+                  )}
+                </div>
+              )}
+            </>
+          ) : (
+            <p className="text-[10px] text-muted-foreground italic">No profile details set yet.</p>
+          )}
+
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="w-full h-8 text-[10px] font-bold mt-2"
+            onClick={() => window.open(`/profile?user=${userId}&name=${encodeURIComponent(userName)}&email=${encodeURIComponent(userEmail)}`, "_blank")}
+          >
+            View Full Profile
+          </Button>
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+};
 
 
 const Community = () => {
@@ -89,6 +201,18 @@ const Community = () => {
   const [events, setEvents] = useState<{ id: string; title: string }[]>([]);
   const [userRsvps, setUserRsvps] = useState<string[]>([]);
 
+  // Passcode Gating States
+  const [roomPassword, setRoomPassword] = useState("");
+  const [enteredPassword, setEnteredPassword] = useState("");
+  const [unlockedRooms, setUnlockedRooms] = useState<Record<string, boolean>>({});
+  const [showPasswordInput, setShowPasswordInput] = useState(false);
+
+  // Maximized / Fullscreen Chat State
+  const [isMaximized, setIsMaximized] = useState(false);
+
+  // Presence / Active Members State
+  const [onlineMembers, setOnlineMembers] = useState<{ id: string; name: string; email: string }[]>([]);
+
   // Resource Attachment States
   const [attachResource, setAttachResource] = useState(false);
   const [resourceTitle, setResourceTitle] = useState("");
@@ -104,6 +228,55 @@ const Community = () => {
   const [newComment, setNewComment] = useState("");
   const [submittingComment, setSubmittingComment] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+
+  const getEmailDomain = (emailStr: string) => {
+    return emailStr.split("@")[1]?.toLowerCase() || "";
+  };
+
+  const getCollegeName = (emailStr: string) => {
+    const domain = getEmailDomain(emailStr);
+    if (domain === "nbkrist.org") return "NBKRIST";
+    if (domain === "srmap.edu.in") return "SRMAP";
+    if (domain.endsWith(".edu") || domain.endsWith(".edu.in")) {
+      const parts = domain.split(".");
+      return parts[parts.length - 3]?.toUpperCase() || "College Partner";
+    }
+    return "Campus";
+  };
+
+  const hasAccess = (post: Discussion) => {
+    if (!user) return false;
+    const lowerUserEmail = user.email?.toLowerCase().trim() || "";
+    
+    // Admins always have access
+    if (admins.includes(lowerUserEmail)) return true;
+
+    // Creator always has access
+    if (post.user_id === user.id) return true;
+
+    const vis = post.visibility || "all";
+    if (vis === "all") return true;
+
+    if (vis === "college") {
+      const creatorDomain = post.college_domain || getEmailDomain(post.user_email);
+      const userDomain = getEmailDomain(lowerUserEmail);
+      return creatorDomain === userDomain;
+    }
+
+    if (vis === "selected") {
+      const allowed = post.allowed_emails || [];
+      const lowerAllowed = allowed.map(e => e.toLowerCase().trim());
+      return lowerAllowed.includes(lowerUserEmail);
+    }
+
+    if (vis === "event") {
+      if (!post.event_id) return true; // fallback
+      return userRsvps.includes(post.event_id);
+    }
+
+    return false;
+  };
+
 
   useEffect(() => {
     const media = window.matchMedia("(max-width: 1023px)");
@@ -172,6 +345,7 @@ const Community = () => {
             allowed_emails: item.allowed_emails ? Object.values(item.allowed_emails) : [],
             event_id: item.event_id || "",
             event_title: item.event_title || "",
+            room_password: item.room_password || "",
           });
         });
         // Sort by created_at desc
@@ -185,9 +359,16 @@ const Community = () => {
     return () => unsubscribe();
   }, []);
 
+  const accessAllowed = selectedPost ? hasAccess(selectedPost) : false;
+
+  const isLockedByPassword = selectedPost?.room_password &&
+                              selectedPost.user_id !== user?.id &&
+                              !admins.includes(user?.email?.toLowerCase().trim() || "") &&
+                              !unlockedRooms[selectedPost.id];
+
   // Subscribe to comments in real-time when a post is selected
   useEffect(() => {
-    if (!selectedPost) {
+    if (!selectedPost || isLockedByPassword) {
       setComments([]);
       return;
     }
@@ -208,6 +389,7 @@ const Community = () => {
             created_at: item.created_at,
             resource_title: item.resource_title || "",
             resource_url: item.resource_url || "",
+            is_system: item.is_system || false,
           });
         });
         // Sort by created_at asc
@@ -217,7 +399,89 @@ const Community = () => {
     });
 
     return () => unsubscribe();
-  }, [selectedPost]);
+  }, [selectedPost?.id, isLockedByPassword]);
+
+  // Online presence list & join/leave notifications
+  useEffect(() => {
+    if (!selectedPost || !user || !accessAllowed || isLockedByPassword) {
+      setOnlineMembers([]);
+      return;
+    }
+
+    const displayName = user.user_metadata?.full_name || user.email?.split("@")[0] || "Student";
+    const postId = selectedPost.id;
+    
+    // 1. Set presence ref
+    const userPresenceRef = ref(rtdb, `presence/${postId}/${user.id}`);
+    set(userPresenceRef, {
+      id: user.id,
+      name: displayName,
+      email: user.email || "",
+      joinedAt: Date.now()
+    });
+
+    // Remove presence on disconnect
+    onDisconnect(userPresenceRef).remove();
+
+    // 2. Set up leave message on disconnect
+    const leaveMessageRef = push(ref(rtdb, `comments/${postId}`));
+    onDisconnect(leaveMessageRef).set({
+      user_id: 'system',
+      user_name: 'System',
+      content: `🔴 ${displayName} left the chat`,
+      created_at: Date.now(),
+      is_system: true
+    });
+
+    // 3. Write join message immediately
+    const joinMessageRef = push(ref(rtdb, `comments/${postId}`));
+    set(joinMessageRef, {
+      user_id: 'system',
+      user_name: 'System',
+      content: `🟢 ${displayName} joined the chat`,
+      created_at: Date.now(),
+      is_system: true
+    });
+
+    // 4. Listen to active members online
+    const presenceRef = ref(rtdb, `presence/${postId}`);
+    const unsubscribePresence = onValue(presenceRef, (snapshot) => {
+      const data = snapshot.val();
+      const list: any[] = [];
+      if (data) {
+        Object.keys(data).forEach((key) => {
+          list.push({
+            id: key,
+            name: data[key].name || "Anonymous",
+            email: data[key].email || ""
+          });
+        });
+      }
+      setOnlineMembers(list);
+    });
+
+    // 5. Cleanup on selection change or unmount
+    return () => {
+      // Cancel onDisconnect triggers to avoid duplicate messages on clean quit
+      onDisconnect(userPresenceRef).cancel();
+      onDisconnect(leaveMessageRef).cancel();
+
+      // Write left message explicitly immediately
+      set(leaveMessageRef, {
+        user_id: 'system',
+        user_name: 'System',
+        content: `🔴 ${displayName} left the chat`,
+        created_at: Date.now(),
+        is_system: true
+      });
+
+      // Remove presence record
+      remove(userPresenceRef);
+
+      // Unsubscribe presence listener
+      unsubscribePresence();
+    };
+  }, [selectedPost?.id, user?.id, accessAllowed, isLockedByPassword]);
 
   // Synchronize URL query parameter with selected post
   useEffect(() => {
@@ -240,55 +504,7 @@ const Community = () => {
     }
     const newPath = window.location.pathname + (params.toString() ? "?" + params.toString() : "");
     window.history.pushState(null, "", newPath);
-  }, [selectedPost]);
-
-  const getEmailDomain = (emailStr: string) => {
-    return emailStr.split("@")[1]?.toLowerCase() || "";
-  };
-
-  const getCollegeName = (emailStr: string) => {
-    const domain = getEmailDomain(emailStr);
-    if (domain === "nbkrist.org") return "NBKRIST";
-    if (domain === "srmap.edu.in") return "SRMAP";
-    if (domain.endsWith(".edu") || domain.endsWith(".edu.in")) {
-      const parts = domain.split(".");
-      return parts[parts.length - 3]?.toUpperCase() || "College Partner";
-    }
-    return "Campus";
-  };
-
-  const hasAccess = (post: Discussion) => {
-    if (!user) return false;
-    const lowerUserEmail = user.email?.toLowerCase().trim() || "";
-    
-    // Admins always have access
-    if (admins.includes(lowerUserEmail)) return true;
-
-    // Creator always has access
-    if (post.user_id === user.id) return true;
-
-    const vis = post.visibility || "all";
-    if (vis === "all") return true;
-
-    if (vis === "college") {
-      const creatorDomain = post.college_domain || getEmailDomain(post.user_email);
-      const userDomain = getEmailDomain(lowerUserEmail);
-      return creatorDomain === userDomain;
-    }
-
-    if (vis === "selected") {
-      const allowed = post.allowed_emails || [];
-      const lowerAllowed = allowed.map(e => e.toLowerCase().trim());
-      return lowerAllowed.includes(lowerUserEmail);
-    }
-
-    if (vis === "event") {
-      if (!post.event_id) return true; // fallback
-      return userRsvps.includes(post.event_id);
-    }
-
-    return false;
-  };
+  }, [selectedPost?.id]);
 
   const handleRsvpToEvent = async (eventId: string) => {
     if (!user) return;
@@ -351,6 +567,7 @@ const Community = () => {
         allowed_emails: visibility === "selected" ? parsedAllowedEmails : [],
         event_id: visibility === "event" ? linkedEventId : "",
         event_title: visibility === "event" ? (selectedEventObj?.title || "Event Chat") : "",
+        room_password: roomPassword.trim(),
       });
 
       toast.success("Discussion started!");
@@ -361,6 +578,7 @@ const Community = () => {
       setVisibility("all");
       setInvitedEmailsStr("");
       setLinkedEventId("");
+      setRoomPassword("");
     } catch (error: any) {
       toast.error(error.message || "Failed to create discussion.");
     } finally {
@@ -488,6 +706,17 @@ const Community = () => {
     }
   };
 
+  const handlePasswordUnlock = (postId: string) => {
+    if (!selectedPost) return;
+    if (enteredPassword === selectedPost.room_password) {
+      setUnlockedRooms(prev => ({ ...prev, [postId]: true }));
+      setEnteredPassword("");
+      toast.success("Room unlocked! Welcome to the chat.");
+    } else {
+      toast.error("Incorrect passcode. Please try again.");
+    }
+  };
+
   const renderTextWithLinks = (text: string) => {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     return text.split(urlRegex).map((part, index) => {
@@ -529,7 +758,7 @@ const Community = () => {
     return name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2);
   };
 
-  const accessAllowed = selectedPost ? hasAccess(selectedPost) : false;
+
 
   return (
     <AppLayout>
@@ -688,6 +917,29 @@ const Community = () => {
                       )}
                     </div>
                   )}
+
+                  <div>
+                    <label className="text-xs font-semibold text-muted-foreground mb-1 block">Passcode Lock (Optional)</label>
+                    <div className="relative">
+                      <input 
+                        type={showPasswordInput ? "text" : "password"}
+                        placeholder="Set password passcode to lock room" 
+                        value={roomPassword} 
+                        onChange={(e) => setRoomPassword(e.target.value)} 
+                        className="w-full h-11 pl-4 pr-10 rounded-xl border border-border/60 bg-muted/30 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-all font-mono" 
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPasswordInput(!showPasswordInput)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                      >
+                        {showPasswordInput ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                    <span className="text-[10px] text-muted-foreground mt-0.5 block leading-normal">
+                      Only students who enter this passcode can join the discussion and chat. Leave blank for no passcode.
+                    </span>
+                  </div>
 
                   <div>
                     <label className="text-xs font-semibold text-muted-foreground mb-1 block">Content *</label>
@@ -879,7 +1131,7 @@ const Community = () => {
 
         {/* Side Panel: Selected Post Q&A Detail */}
         {selectedPost && (
-          <div className="w-[22rem] shrink-0 hidden lg:flex flex-col bg-card border border-border/40 rounded-2xl h-[calc(100vh-8.5rem)] sticky top-20 overflow-hidden shadow-sm animate-fade-in">
+          <div className={isMaximized ? "fixed inset-0 z-50 flex flex-col bg-card overflow-hidden animate-fade-in" : "w-[22rem] shrink-0 hidden lg:flex flex-col bg-card border border-border/40 rounded-2xl h-[calc(100vh-8.5rem)] sticky top-20 overflow-hidden shadow-sm animate-fade-in"}>
             {/* Post details header */}
             <div className="p-4 border-b border-border/40 flex items-start gap-3 bg-muted/30">
               <div className="flex-1 min-w-0">
@@ -940,12 +1192,49 @@ const Community = () => {
                   )}
                 </div>
               </div>
-              <button 
-                onClick={() => setSelectedPost(null)}
-                className="w-7 h-7 rounded-lg hover:bg-muted flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors shrink-0"
-              >
-                <X className="w-4 h-4" />
-              </button>
+              <div className="flex flex-col items-end gap-1.5 shrink-0">
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => setIsMaximized(!isMaximized)}
+                    className="w-7 h-7 rounded-lg hover:bg-muted flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+                    title={isMaximized ? "Minimize" : "Maximize"}
+                  >
+                    {isMaximized ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+                  </button>
+                  <button 
+                    onClick={() => { setSelectedPost(null); setIsMaximized(false); }}
+                    className="w-7 h-7 rounded-lg hover:bg-muted flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+                {accessAllowed && !isLockedByPassword && onlineMembers.length > 0 && (
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <button className="flex items-center gap-1 text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-full hover:bg-emerald-500/20 transition-colors">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        {onlineMembers.length} online
+                      </button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-56 p-3 rounded-xl bg-card border border-border/40 shadow-xl z-[60]" align="end">
+                      <h6 className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-2">Online Members</h6>
+                      <div className="space-y-1.5 max-h-40 overflow-y-auto">
+                        {onlineMembers.map((m) => (
+                          <ProfilePopover key={m.id} userId={m.id} userName={m.name} userEmail={m.email}>
+                            <div className="flex items-center gap-2 p-1.5 rounded-lg hover:bg-muted/50 transition-colors">
+                              <div className="w-5 h-5 rounded-full gradient-primary flex items-center justify-center text-[8px] font-bold text-primary-foreground">
+                                {m.name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2)}
+                              </div>
+                              <span className="text-xs font-semibold text-foreground truncate">{m.name}</span>
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 ml-auto shrink-0" />
+                            </div>
+                          </ProfilePopover>
+                        ))}
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                )}
+              </div>
             </div>
 
             {!accessAllowed ? (
@@ -966,6 +1255,32 @@ const Community = () => {
                   <Plus className="w-4 h-4" /> RSVP to Unlock Chat
                 </Button>
               </div>
+            ) : isLockedByPassword ? (
+              <div className="flex-1 flex flex-col items-center justify-center p-6 text-center space-y-4 bg-muted/5">
+                <div className="w-14 h-14 rounded-2xl bg-orange-500/10 flex items-center justify-center">
+                  <Lock className="w-6 h-6 text-orange-500" />
+                </div>
+                <div>
+                  <h5 className="font-bold text-sm text-foreground">Passcode Required</h5>
+                  <p className="text-xs text-muted-foreground leading-relaxed mt-1.5">
+                    This room is protected with a passcode. Enter the code to join.
+                  </p>
+                </div>
+                <form onSubmit={(e) => { e.preventDefault(); handlePasswordUnlock(selectedPost.id); }} className="w-full space-y-3">
+                  <input
+                    type="password"
+                    placeholder="Enter room passcode..."
+                    value={enteredPassword}
+                    onChange={(e) => setEnteredPassword(e.target.value)}
+                    required
+                    className="w-full h-11 px-4 rounded-xl border border-border/60 bg-muted/30 text-sm text-center font-mono tracking-widest focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-all"
+                    autoFocus
+                  />
+                  <Button type="submit" className="w-full gap-1.5 font-semibold">
+                    <Lock className="w-4 h-4" /> Unlock Room
+                  </Button>
+                </form>
+              </div>
             ) : (
               <>
                 {/* Post Body & Comments Scroll Area */}
@@ -985,20 +1300,32 @@ const Community = () => {
                   {/* Comments list */}
                   <div className="space-y-3">
                     {comments.map((comment) => {
+                      if (comment.is_system) {
+                        return (
+                          <div key={comment.id} className="flex items-center justify-center py-1.5 animate-fade-in">
+                            <span className="text-[10px] text-muted-foreground/70 font-medium bg-muted/30 px-3 py-1 rounded-full">
+                              {comment.content}
+                            </span>
+                          </div>
+                        );
+                      }
                       const commInitials = getInitials(comment.user_name);
                       const dateVal = comment.created_at 
                         ? new Date(comment.created_at).toLocaleDateString() 
                         : "Just now";
+                      const isOwnMessage = comment.user_id === user?.id;
                       
                       return (
-                        <div key={comment.id} className="p-3 bg-muted/20 border border-border/10 rounded-xl space-y-2 animate-fade-in">
+                        <div key={comment.id} className={`p-3 rounded-xl space-y-2 animate-fade-in ${isOwnMessage ? "bg-primary/10 border border-primary/15 ml-4" : "bg-muted/20 border border-border/10 mr-4"}`}>
                           <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-1.5">
-                              <div className="w-5 h-5 rounded-full gradient-primary flex items-center justify-center text-[8px] font-bold text-primary-foreground">
-                                {commInitials}
+                            <ProfilePopover userId={comment.user_id} userName={comment.user_name} userEmail={comment.user_email}>
+                              <div className="flex items-center gap-1.5">
+                                <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[8px] font-bold text-primary-foreground ${isOwnMessage ? "bg-primary" : "gradient-primary"}`}>
+                                  {commInitials}
+                                </div>
+                                <span className="text-[11px] font-semibold text-foreground truncate max-w-[110px]">{comment.user_name}</span>
                               </div>
-                              <span className="text-[11px] font-semibold text-foreground truncate max-w-[110px]">{comment.user_name}</span>
-                            </div>
+                            </ProfilePopover>
                             
                             <div className="flex items-center gap-1.5">
                               <span className="text-[9px] text-muted-foreground">{dateVal}</span>
@@ -1114,8 +1441,8 @@ const Community = () => {
       </div>
 
       {/* Mobile Drawer view for comments when screen is small */}
-      {selectedPost && isMobile && (
-        <Dialog open={!!selectedPost && isMobile} onOpenChange={(open) => !open && setSelectedPost(null)}>
+      {selectedPost && isMobile && !isMaximized && (
+        <Dialog open={!!selectedPost && isMobile && !isMaximized} onOpenChange={(open) => !open && setSelectedPost(null)}>
           <DialogContent className="sm:max-w-md max-h-[85vh] overflow-y-auto">
             <DialogHeader className="border-b border-border/40 pb-3">
               <DialogTitle className="text-base font-bold flex flex-col gap-1 text-left">
@@ -1155,6 +1482,31 @@ const Community = () => {
                 >
                   <Plus className="w-4 h-4" /> RSVP to Unlock Chat
                 </Button>
+              </div>
+            ) : isLockedByPassword ? (
+              <div className="flex flex-col items-center justify-center py-10 px-4 text-center space-y-4">
+                <div className="w-14 h-14 rounded-2xl bg-orange-500/10 flex items-center justify-center">
+                  <Lock className="w-6 h-6 text-orange-500" />
+                </div>
+                <div>
+                  <h5 className="font-bold text-sm text-foreground">Passcode Required</h5>
+                  <p className="text-xs text-muted-foreground leading-relaxed mt-1.5">
+                    Enter the room passcode to join this discussion.
+                  </p>
+                </div>
+                <form onSubmit={(e) => { e.preventDefault(); handlePasswordUnlock(selectedPost.id); }} className="w-full space-y-3">
+                  <input
+                    type="password"
+                    placeholder="Enter passcode..."
+                    value={enteredPassword}
+                    onChange={(e) => setEnteredPassword(e.target.value)}
+                    required
+                    className="w-full h-11 px-4 rounded-xl border border-border/60 bg-muted/30 text-sm text-center font-mono tracking-widest focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  />
+                  <Button type="submit" className="w-full gap-1.5 font-semibold">
+                    <Lock className="w-4 h-4" /> Unlock Room
+                  </Button>
+                </form>
               </div>
             ) : (
               <div className="space-y-4 py-2">

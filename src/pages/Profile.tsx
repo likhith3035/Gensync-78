@@ -36,7 +36,22 @@ const Profile = () => {
   const queryClient = useQueryClient();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const displayName = user?.user_metadata?.full_name || user?.email?.split("@")[0] || "Student";
+  const params = new URLSearchParams(window.location.search);
+  const paramUserId = params.get("user");
+  const targetUserId = paramUserId || user?.id;
+  const isOwnProfile = !paramUserId || paramUserId === user?.id;
+
+  const urlName = params.get("name");
+  const urlEmail = params.get("email");
+
+  const displayName = isOwnProfile 
+    ? (user?.user_metadata?.full_name || user?.email?.split("@")[0] || "Student")
+    : (urlName || "Student");
+
+  const displayEmail = isOwnProfile
+    ? user?.email
+    : (urlEmail || "");
+
   const initials = displayName.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2);
 
   const [editMode, setEditMode] = useState(false);
@@ -52,56 +67,63 @@ const Profile = () => {
 
   // Fetch profile
   const { data: profile } = useQuery({
-    queryKey: ["profile", user?.id],
+    queryKey: ["profile", targetUserId],
     queryFn: async () => {
+      if (!targetUserId) return null;
       const { data, error } = await supabase
         .from("profiles")
         .select("*")
-        .eq("user_id", user!.id)
+        .eq("user_id", targetUserId)
         .maybeSingle();
       if (error) throw error;
       if (!data) {
-        const { data: newProfile, error: insertError } = await supabase
-          .from("profiles")
-          .insert({ user_id: user!.id })
-          .select()
-          .single();
-        if (insertError) throw insertError;
-        return newProfile;
+        if (isOwnProfile && user?.id) {
+          const { data: newProfile, error: insertError } = await supabase
+            .from("profiles")
+            .insert({ user_id: user.id })
+            .select()
+            .single();
+          if (insertError) throw insertError;
+          return newProfile;
+        }
+        return null;
       }
       return data;
     },
-    enabled: !!user,
+    enabled: !!targetUserId,
   });
 
   const { data: myProjects = [] } = useQuery({
-    queryKey: ["my-projects", user?.id],
+    queryKey: ["my-projects", targetUserId],
     queryFn: async () => {
-      const { data, error } = await supabase.from("projects").select("*").eq("user_id", user!.id).order("created_at", { ascending: false });
+      if (!targetUserId) return [];
+      const { data, error } = await supabase.from("projects").select("*").eq("user_id", targetUserId).order("created_at", { ascending: false });
       if (error) throw error;
       return data;
     },
-    enabled: !!user,
+    enabled: !!targetUserId,
   });
 
   const { data: myResources = [] } = useQuery({
-    queryKey: ["my-resources", user?.id],
+    queryKey: ["my-resources", targetUserId],
     queryFn: async () => {
-      const { data, error } = await supabase.from("resources").select("*").eq("user_id", user!.id).order("created_at", { ascending: false });
+      if (!targetUserId) return [];
+      const { data, error } = await supabase.from("resources").select("*").eq("user_id", targetUserId).order("created_at", { ascending: false });
       if (error) throw error;
       return data;
     },
-    enabled: !!user,
+    enabled: !!targetUserId,
   });
 
   const { data: myOpportunities = [] } = useQuery({
-    queryKey: ["my-opportunities", user?.id],
+    queryKey: ["my-opportunities", targetUserId],
     queryFn: async () => {
-      const { data, error } = await supabase.from("opportunities").select("*").eq("user_id", user!.id).order("created_at", { ascending: false });
+      if (!targetUserId) return [];
+      const { data, error } = await supabase.from("opportunities").select("*").eq("user_id", targetUserId).order("created_at", { ascending: false });
       if (error) throw error;
       return data;
     },
-    enabled: !!user,
+    enabled: !!targetUserId,
   });
 
   // Fetch point rules for total points
@@ -321,12 +343,12 @@ const Profile = () => {
     { key: "overview" as const, label: "Overview", icon: Target },
     { key: "achievements" as const, label: "Achievements", icon: Award },
     { key: "activity" as const, label: "Activity", icon: Clock },
-    { key: "settings" as const, label: "Settings", icon: Lock },
+    ...(isOwnProfile ? [{ key: "settings" as const, label: "Settings", icon: Lock }] : []),
   ];
 
   return (
     <AppLayout>
-      <SEO title="My Profile" description="Your StudentHub profile — manage your bio, skills, social links, and achievements." canonical="/profile" noindex />
+      <SEO title={isOwnProfile ? "My Profile" : `${displayName}'s Profile`} description="StudentHub profile page." canonical="/profile" noindex />
       <div className="max-w-5xl mx-auto animate-fade-in space-y-6">
         {/* Profile header card */}
         <div className="card-campus overflow-hidden">
@@ -354,18 +376,22 @@ const Profile = () => {
                     {initials}
                   </div>
                 )}
-                <button
-                  onClick={() => fileInputRef.current?.click()}
-                  className="absolute bottom-1 right-1 w-8 h-8 rounded-xl bg-primary text-primary-foreground flex items-center justify-center shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
-                  disabled={avatarUploading}
-                >
-                  {avatarUploading ? (
-                    <div className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
-                  ) : (
-                    <Camera className="w-4 h-4" />
-                  )}
-                </button>
-                <input ref={fileInputRef} type="file" accept="image/*" onChange={handleAvatarUpload} className="hidden" />
+                {isOwnProfile && (
+                  <>
+                    <button
+                      onClick={() => fileInputRef.current?.click()}
+                      className="absolute bottom-1 right-1 w-8 h-8 rounded-xl bg-primary text-primary-foreground flex items-center justify-center shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
+                      disabled={avatarUploading}
+                    >
+                      {avatarUploading ? (
+                        <div className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
+                      ) : (
+                        <Camera className="w-4 h-4" />
+                      )}
+                    </button>
+                    <input ref={fileInputRef} type="file" accept="image/*" onChange={handleAvatarUpload} className="hidden" />
+                  </>
+                )}
                 {/* Achievement count badge */}
                 {unlockedAchievements.length > 0 && (
                   <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-warning text-warning-foreground flex items-center justify-center text-[10px] font-bold shadow-md animate-bounce-in">
@@ -384,12 +410,16 @@ const Profile = () => {
                   </p>
                 )}
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1.5">
-                  <span className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground">
-                    <Mail className="w-3.5 h-3.5" /> {user?.email}
-                  </span>
-                  <span className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground">
-                    <Calendar className="w-3.5 h-3.5" /> Joined {new Date(user?.created_at || "").toLocaleDateString()}
-                  </span>
+                  {displayEmail && (
+                    <span className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground animate-fade-in">
+                      <Mail className="w-3.5 h-3.5" /> {displayEmail}
+                    </span>
+                  )}
+                  {isOwnProfile && user?.created_at && (
+                    <span className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground animate-fade-in">
+                      <Calendar className="w-3.5 h-3.5" /> Joined {new Date(user.created_at).toLocaleDateString()}
+                    </span>
+                  )}
                 </div>
 
                 {/* Unlocked achievement badges inline */}
@@ -424,18 +454,20 @@ const Profile = () => {
                 )}
               </div>
 
-              <div className="flex gap-2 shrink-0 self-start sm:self-end">
-                <Button variant="outline" className="gap-1.5 font-semibold text-xs sm:text-sm" onClick={openEdit}>
-                  <Pencil className="w-3.5 h-3.5" /> Edit Profile
-                </Button>
-                <Button
-                  variant="outline"
-                  className="gap-1.5 text-destructive border-destructive/20 hover:bg-destructive/5 font-semibold text-xs sm:text-sm"
-                  onClick={handleSignOut}
-                >
-                  <LogOut className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Sign Out</span>
-                </Button>
-              </div>
+              {isOwnProfile && (
+                <div className="flex gap-2 shrink-0 self-start sm:self-end">
+                  <Button variant="outline" className="gap-1.5 font-semibold text-xs sm:text-sm" onClick={openEdit}>
+                    <Pencil className="w-3.5 h-3.5" /> Edit Profile
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="gap-1.5 text-destructive border-destructive/20 hover:bg-destructive/5 font-semibold text-xs sm:text-sm"
+                    onClick={handleSignOut}
+                  >
+                    <LogOut className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Sign Out</span>
+                  </Button>
+                </div>
+              )}
             </div>
 
             {profile?.bio && (
