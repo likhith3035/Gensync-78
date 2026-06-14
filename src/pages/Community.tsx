@@ -2,7 +2,7 @@ import SEO from "@/components/SEO";
 import AppLayout from "@/components/AppLayout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { useAuth } from "@/hooks/useAuth";
 import { rtdb } from "@/lib/firebase";
 import { supabase } from "@/integrations/supabase/client";
@@ -548,6 +548,9 @@ const Community = () => {
               <DialogContent className="sm:max-w-lg">
                 <DialogHeader>
                   <DialogTitle className="text-xl font-bold">Start a New Discussion</DialogTitle>
+                  <DialogDescription className="text-xs text-muted-foreground">
+                    Create a new forum topic or Q&A thread for your campus peers.
+                  </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleCreatePost} className="space-y-4 mt-2">
                   <div>
@@ -902,11 +905,11 @@ const Community = () => {
                       <DialogContent className="sm:max-w-md">
                         <DialogHeader>
                           <DialogTitle className="text-base font-bold">Add Students to Discussion</DialogTitle>
+                          <DialogDescription className="text-xs text-muted-foreground leading-relaxed mt-1">
+                            This discussion is private. Enter comma-separated emails of student peers to grant them access to read and reply in this chat.
+                          </DialogDescription>
                         </DialogHeader>
                         <form onSubmit={handleAddInvitedEmails} className="space-y-4 mt-2">
-                          <p className="text-xs text-muted-foreground leading-relaxed">
-                            This discussion is private. Enter comma-separated emails of student peers to grant them access to read and reply in this chat.
-                          </p>
                           <div>
                             <label className="text-xs font-semibold text-muted-foreground mb-1 block">Student Emails *</label>
                             <input 
@@ -1119,6 +1122,9 @@ const Community = () => {
                 </div>
                 {selectedPost.title}
               </DialogTitle>
+              <DialogDescription className="sr-only">
+                Discussion thread detail and reply board
+              </DialogDescription>
             </DialogHeader>
 
             {!accessAllowed ? (
