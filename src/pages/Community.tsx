@@ -865,7 +865,7 @@ const Community = () => {
 
         {/* Side Panel: Selected Post Q&A Detail */}
         {selectedPost && (
-          <div className="w-[22rem] shrink-0 hidden lg:flex flex-col bg-card border border-border/40 rounded-2xl h-[calc(100vh-6.5rem)] sticky top-20 overflow-hidden shadow-sm animate-fade-in">
+          <div className="w-[22rem] shrink-0 hidden lg:flex flex-col bg-card border border-border/40 rounded-2xl h-[calc(100vh-8.5rem)] sticky top-20 overflow-hidden shadow-sm animate-fade-in">
             {/* Post details header */}
             <div className="p-4 border-b border-border/40 flex items-start gap-3 bg-muted/30">
               <div className="flex-1 min-w-0">
