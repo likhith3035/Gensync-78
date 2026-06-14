@@ -103,6 +103,17 @@ const Community = () => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
   const [submittingComment, setSubmittingComment] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(max-w: 1023px)");
+    setIsMobile(media.matches);
+    const listener = (e: MediaQueryListEvent) => {
+      setIsMobile(e.matches);
+    };
+    media.addEventListener("change", listener);
+    return () => media.removeEventListener("change", listener);
+  }, []);
 
   // Fetch campus events and user RSVPs from Supabase
   useEffect(() => {
@@ -1103,9 +1114,9 @@ const Community = () => {
       </div>
 
       {/* Mobile Drawer view for comments when screen is small */}
-      {selectedPost && (
-        <Dialog open={!!selectedPost} onOpenChange={(open) => !open && setSelectedPost(null)}>
-          <DialogContent className="lg:hidden sm:max-w-md max-h-[85vh] overflow-y-auto">
+      {selectedPost && isMobile && (
+        <Dialog open={!!selectedPost && isMobile} onOpenChange={(open) => !open && setSelectedPost(null)}>
+          <DialogContent className="sm:max-w-md max-h-[85vh] overflow-y-auto">
             <DialogHeader className="border-b border-border/40 pb-3">
               <DialogTitle className="text-base font-bold flex flex-col gap-1 text-left">
                 <div className="flex items-center gap-1.5">
