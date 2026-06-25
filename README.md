@@ -65,7 +65,7 @@
 
 <div align="center">
 
-[![Live Demo](https://img.shields.io/badge/🌐_Visit_StudentHub-Live_App-6366f1?style=for-the-badge)](https://gensync-78.vercel.app/)
+[![Live Demo](https://img.shields.io/badge/🌐_Visit_StudentHub-Live_App-6366f1?style=for-the-badge)](https://gensync-78.vercel.app)
 
 </div>
 
@@ -521,7 +521,7 @@ VITE_SUPABASE_ANON_KEY
 ### **GenSync**
 *Founder & Developer*
 
-[![Portfolio](https://img.shields.io/badge/🌐_Website-studenthub.lovable.app-6366f1?style=for-the-badge)]((https://gensync-78.vercel.app/))
+[![Portfolio](https://img.shields.io/badge/🌐_Website-gensync--78.vercel.app-6366f1?style=for-the-badge)](https://gensync-78.vercel.app)
 
 </div>
 
