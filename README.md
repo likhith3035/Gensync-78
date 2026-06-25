@@ -521,7 +521,7 @@ VITE_SUPABASE_ANON_KEY
 ### **GenSync**
 *Founder & Developer*
 
-[![Portfolio](https://img.shields.io/badge/🌐_Website-studenthub.lovable.app-6366f1?style=for-the-badge)](https://studenthub.lovable.app)
+[![Portfolio](https://img.shields.io/badge/🌐_Website-studenthub.lovable.app-6366f1?style=for-the-badge)]((https://gensync-78.vercel.app/))
 
 </div>
 
