@@ -27,6 +27,8 @@ const Info = lazy(() => import("./pages/Info"));
 const Bookmarks = lazy(() => import("./pages/Bookmarks"));
 const ActivityFeed = lazy(() => import("./pages/ActivityFeed"));
 const Community = lazy(() => import("./pages/Community"));
+const SocialFeed = lazy(() => import("./pages/SocialFeed"));
+const Messages = lazy(() => import("./pages/Messages"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 // Premium glassmorphic page loading skeleton
@@ -71,6 +73,8 @@ const App = () => (
                 <Route path="/bookmarks" element={<ProtectedRoute><Bookmarks /></ProtectedRoute>} />
                 <Route path="/activity" element={<ProtectedRoute><ActivityFeed /></ProtectedRoute>} />
                 <Route path="/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
+                <Route path="/feed" element={<ProtectedRoute><SocialFeed /></ProtectedRoute>} />
+                <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
                 <Route path="/shared/:token" element={<SharedView />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>

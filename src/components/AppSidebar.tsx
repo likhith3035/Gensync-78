@@ -1,10 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, Briefcase, FolderKanban, BookOpen, User, Settings, GraduationCap, Shield, Share2, LogOut, Calendar, Bookmark, TrendingUp, Users } from "lucide-react";
+import { LayoutDashboard, Briefcase, FolderKanban, BookOpen, User, Settings, GraduationCap, Shield, Share2, LogOut, Calendar, Bookmark, TrendingUp, Users, Heart } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
 
 const navItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
+  { icon: Heart, label: "Social Feed", path: "/feed" },
   { icon: Briefcase, label: "Opportunities", path: "/opportunities" },
   { icon: FolderKanban, label: "Projects", path: "/projects" },
   { icon: BookOpen, label: "Resources", path: "/resources" },

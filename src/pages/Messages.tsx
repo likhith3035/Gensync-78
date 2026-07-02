@@ -7,6 +7,7 @@ import AppLayout from "@/components/AppLayout";
 import { MessageCircle, Send, Plus, ArrowLeft, Users, Search } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { useSearchParams } from "react-router-dom";
 
 interface Conversation {
   id: string;
@@ -35,9 +36,13 @@ interface ConversationMember {
 const Messages = () => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const [searchParams] = useSearchParams();
+  const targetUserParam = searchParams.get("user");
+
   const [activeConvo, setActiveConvo] = useState<string | null>(null);
   const [messageText, setMessageText] = useState("");
-  const [searchEmail, setSearchEmail] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<any[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [showConvoList, setShowConvoList] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -80,13 +85,62 @@ const Messages = () => {
       if (memberUserIds.length === 0) return [];
       const { data, error } = await supabase
         .from("profiles")
-        .select("user_id, avatar_url, bio, department")
+        .select("user_id, avatar_url, bio, department, username, full_name")
         .in("user_id", memberUserIds);
       if (error) throw error;
       return data;
     },
     enabled: memberUserIds.length > 0,
   });
+
+  // Search profiles in real-time
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(async () => {
+      if (searchQuery.trim().length >= 2) {
+        try {
+          const { data, error } = await supabase
+            .from("profiles")
+            .select("user_id, username, full_name, avatar_url")
+            .neq("user_id", user?.id)
+            .or(`username.ilike.%${searchQuery}%,full_name.ilike.%${searchQuery}%`)
+            .limit(5);
+          
+          if (!error && data) {
+            setSearchResults(data);
+          } else {
+            // Fallback if username column doesn't exist yet
+            const { data: fallbackData } = await supabase
+              .from("profiles")
+              .select("user_id, full_name, avatar_url")
+              .neq("user_id", user?.id)
+              .ilike("full_name", `%${searchQuery}%`)
+              .limit(5);
+            if (fallbackData) setSearchResults(fallbackData);
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      } else {
+        setSearchResults([]);
+      }
+    }, 300);
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchQuery, user]);
+
+  // Handle routing param user redirect
+  useEffect(() => {
+    if (targetUserParam && conversations.length > 0 && allMembers.length > 0) {
+      const existing = allMembers.filter((m) => m.user_id === targetUserParam);
+      const myConvos = conversations.map((c) => c.id);
+      const match = existing.find((m) => myConvos.includes(m.conversation_id));
+      if (match) {
+        setActiveConvo(match.conversation_id);
+        setShowConvoList(false);
+      } else {
+        startConversation.mutate(targetUserParam);
+      }
+    }
+  }, [targetUserParam, conversations, allMembers]);
 
   // Fetch messages for active convo
   const { data: messages = [] } = useQuery({
@@ -167,27 +221,30 @@ const Messages = () => {
 
   // Start new conversation
   const startConversation = useMutation({
-    mutationFn: async (targetEmail: string) => {
-      // Find user by email in profiles (we'll search auth metadata via a workaround)
-      // We need to find the user_id. Let's check profiles table
-      const { data: profiles, error: profileError } = await supabase
-        .from("profiles")
-        .select("user_id")
-        .neq("user_id", user!.id);
-      if (profileError) throw profileError;
-
-      // For simplicity, we'll use the email search approach - check if any existing user
-      // Since we can't query auth.users, we'll create conversation with the first matching profile
-      // In a real app, you'd have a username/email field in profiles
-      
-      if (!profiles || profiles.length === 0) {
-        throw new Error("No other users found");
+    mutationFn: async (targetUserId: string) => {
+      // Find if we already have a 1-to-1 conversation with this user
+      const existingMembers = allMembers.filter((m) => m.user_id === targetUserId);
+      if (existingMembers.length > 0) {
+        const myConversations = conversations.map((c) => c.id);
+        const match = existingMembers.find((m) => myConversations.includes(m.conversation_id));
+        if (match) {
+          return conversations.find((c) => c.id === match.conversation_id);
+        }
       }
+
+      // Fetch user profile info
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("full_name, username")
+        .eq("user_id", targetUserId)
+        .single();
+      
+      const chatName = profile ? (profile.username ? `@${profile.username}` : profile.full_name) : "Direct Chat";
 
       // Create conversation
       const { data: convo, error: convoError } = await supabase
         .from("conversations")
-        .insert({ created_by: user!.id, name: targetEmail || "New Chat" })
+        .insert({ created_by: user!.id, name: chatName })
         .select()
         .single();
       if (convoError) throw convoError;
@@ -198,8 +255,7 @@ const Messages = () => {
         user_id: user!.id,
       });
 
-      // For demo: add first other user found
-      const targetUserId = profiles[0].user_id;
+      // Add target user as member
       await supabase.from("conversation_members").insert({
         conversation_id: convo.id,
         user_id: targetUserId,
@@ -209,7 +265,8 @@ const Messages = () => {
     },
     onSuccess: (convo) => {
       setDialogOpen(false);
-      setSearchEmail("");
+      setSearchQuery("");
+      setSearchResults([]);
       queryClient.invalidateQueries({ queryKey: ["conversations"] });
       queryClient.invalidateQueries({ queryKey: ["conversation-members"] });
       if (convo) {
@@ -221,13 +278,14 @@ const Messages = () => {
   });
 
   const getConvoDisplayName = (convo: Conversation) => {
-    if (convo.name) return convo.name;
     const members = allMembers.filter((m) => m.conversation_id === convo.id && m.user_id !== user?.id);
     if (members.length > 0) {
       const profile = memberProfiles.find((p) => p.user_id === members[0].user_id);
-      return profile?.department || `User`;
+      if (profile) {
+        return (profile as any).username ? `@${(profile as any).username}` : ((profile as any).full_name || profile.department || `User`);
+      }
     }
-    return "Chat";
+    return convo.name || "Chat";
   };
 
   const getLastMessage = (convoId: string) => {
@@ -237,7 +295,11 @@ const Messages = () => {
   const getInitials = (senderId: string) => {
     if (senderId === user?.id) return "You";
     const profile = memberProfiles.find((p) => p.user_id === senderId);
-    return profile?.department?.slice(0, 2)?.toUpperCase() || "??";
+    if (profile) {
+      const name = (profile as any).full_name || (profile as any).username || profile.department || "??";
+      return name.slice(0, 2).toUpperCase();
+    }
+    return "??";
   };
 
   const formatTime = (dateStr: string) => {
@@ -269,20 +331,47 @@ const Messages = () => {
                     <DialogTitle>New Conversation</DialogTitle>
                   </DialogHeader>
                   <div className="space-y-4 pt-2">
-                    <input
-                      type="text"
-                      placeholder="Chat name or description..."
-                      className="oneui-input"
-                      value={searchEmail}
-                      onChange={(e) => setSearchEmail(e.target.value)}
-                    />
-                    <button
-                      onClick={() => startConversation.mutate(searchEmail)}
-                      disabled={startConversation.isPending}
-                      className="w-full py-3 rounded-2xl bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition-opacity disabled:opacity-50"
-                    >
-                      {startConversation.isPending ? "Creating..." : "Start Chat"}
-                    </button>
+                    <div className="relative">
+                      <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/60" />
+                      <input
+                        type="text"
+                        placeholder="Search by username or name..."
+                        className="oneui-input pl-10"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                      />
+                    </div>
+                    
+                    <div className="space-y-2 max-h-60 overflow-y-auto">
+                      {searchResults.map((p) => (
+                        <button
+                          key={p.user_id}
+                          onClick={() => startConversation.mutate(p.user_id)}
+                          className="w-full flex items-center gap-3 p-2.5 rounded-2xl hover:bg-muted/40 transition-colors text-left"
+                        >
+                          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary shrink-0">
+                            {p.avatar_url ? (
+                              <img src={p.avatar_url} alt="" className="w-full h-full rounded-full object-cover" />
+                            ) : (
+                              (p.username ? p.username[0] : p.full_name ? p.full_name[0] : "S").toUpperCase()
+                            )}
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-sm font-semibold text-foreground truncate">
+                              {p.full_name || "Student"}
+                            </p>
+                            {p.username && (
+                              <p className="text-xs text-muted-foreground truncate">
+                                @{p.username}
+                              </p>
+                            )}
+                          </div>
+                        </button>
+                      ))}
+                      {searchQuery.length >= 2 && searchResults.length === 0 && (
+                        <p className="text-xs text-muted-foreground text-center py-4">No users found</p>
+                      )}
+                    </div>
                   </div>
                 </DialogContent>
               </Dialog>

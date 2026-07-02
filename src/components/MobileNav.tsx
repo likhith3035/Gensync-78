@@ -1,9 +1,10 @@
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, Briefcase, FolderKanban, BookOpen, User, Shield, Share2, Users } from "lucide-react";
+import { LayoutDashboard, Briefcase, FolderKanban, BookOpen, User, Shield, Share2, Users, Heart } from "lucide-react";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
 
 const baseItems = [
   { icon: LayoutDashboard, label: "Home", path: "/dashboard" },
+  { icon: Heart, label: "Feed", path: "/feed" },
   { icon: Users, label: "Community", path: "/community" },
   { icon: BookOpen, label: "Resources", path: "/resources" },
   { icon: User, label: "Profile", path: "/profile" },
