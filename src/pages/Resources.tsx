@@ -24,9 +24,13 @@ const categoryConfig: Record<string, { color: string; gradient: string; icon: ty
   tutorial: { color: "bg-warning/10 text-warning", gradient: "from-warning/5 to-warning/10", icon: PlayCircle },
 };
 
+import { useSearchParams } from "react-router-dom";
+
 const Resources = () => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchQuery = searchParams.get("search") || "";
   const [activeFilter, setActiveFilter] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [form, setForm] = useState({ title: "", subject: "", courseCode: "", category: "notes" });
@@ -46,7 +50,7 @@ const Resources = () => {
   };
 
   const { data: resources = [], isLoading } = useQuery({
-    queryKey: ["resources", activeFilter, user?.id],
+    queryKey: ["resources", activeFilter, user?.id, searchQuery],
     queryFn: async () => {
       let query = supabase.from("resources").select("*").order("created_at", { ascending: false });
       if (activeFilter) {
@@ -56,7 +60,7 @@ const Resources = () => {
       if (error) throw error;
       
       // Filter based on privacy settings
-      return data.filter((res: any) => {
+      const filtered = data.filter((res: any) => {
         // Owner can always see it
         if (res.user_id === user?.id) return true;
         
@@ -80,6 +84,16 @@ const Resources = () => {
         }
         return false;
       });
+
+      if (searchQuery) {
+        const lowerSearch = searchQuery.toLowerCase().trim();
+        return filtered.filter((res: any) => 
+          res.title.toLowerCase().includes(lowerSearch) || 
+          res.subject.toLowerCase().includes(lowerSearch) || 
+          res.course_code?.toLowerCase().includes(lowerSearch)
+        );
+      }
+      return filtered;
     },
   });
 
@@ -276,6 +290,22 @@ const Resources = () => {
             </DialogContent>
           </Dialog>
         </div>
+
+        {searchQuery && (
+          <div className="mb-6 p-4 bg-primary/5 border border-primary/20 rounded-2xl flex items-center justify-between animate-fade-in">
+            <p className="text-xs sm:text-sm font-semibold text-slate-700">
+              Showing resources matching <span className="font-extrabold text-primary">"{searchQuery}"</span>
+            </p>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => setSearchParams({})}
+              className="text-xs hover:bg-primary/10 text-primary font-bold h-8 rounded-full"
+            >
+              Clear Search
+            </Button>
+          </div>
+        )}
 
         {/* Filter pills */}
         <div className="flex flex-wrap gap-2 mb-8 animate-fade-in" style={{ animationDelay: "0.1s" }}>

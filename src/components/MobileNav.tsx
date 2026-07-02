@@ -14,7 +14,7 @@ const MobileNav = () => {
   const { isAdmin } = useIsAdmin();
 
   const items = isAdmin
-    ? [...baseItems.slice(0, 4), { icon: Shield, label: "Admin", path: "/admin" }, baseItems[4]]
+    ? [...baseItems.slice(0, 3), { icon: Shield, label: "Admin", path: "/admin" }, baseItems[3]]
     : baseItems;
 
   return (

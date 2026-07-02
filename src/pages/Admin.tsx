@@ -155,9 +155,19 @@ const Admin = () => {
   const { data: users = [], isLoading: usersLoading } = useQuery({
     queryKey: ["admin-users"],
     queryFn: async () => {
-      const { data, error } = await supabase.functions.invoke("list-users");
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .order("created_at", { ascending: false });
       if (error) throw error;
-      return data.users || [];
+      return (data || []).map((p: any) => ({
+        id: p.user_id,
+        email: p.email || "student@college.edu",
+        full_name: p.full_name || p.email?.split('@')[0] || "Student",
+        created_at: p.created_at,
+        last_sign_in_at: p.updated_at,
+        email_confirmed_at: p.created_at,
+      }));
     },
     enabled: isAdmin,
   });

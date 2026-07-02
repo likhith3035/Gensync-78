@@ -12,6 +12,7 @@ export interface RagResultItem {
   description?: string;
   date?: string;
   tags?: string[];
+  applyLink?: string;
   relevanceScore: number;
 }
 
@@ -76,11 +77,17 @@ export const retrieveCampusContext = async (
   const results: RagResultItem[] = [];
 
   try {
-    // 1. Fetch Resources
-    const { data: resources } = await supabase
-      .from("resources")
-      .select("*")
-      .limit(50);
+    // 1. Fetch Resources (Database-filtered)
+    let resourcesQuery = supabase.from("resources").select("*");
+    if (keywords.length > 0) {
+      const orFilter = keywords.flatMap(k => [
+        `title.ilike.%${k}%`,
+        `subject.ilike.%${k}%`,
+        `course_code.ilike.%${k}%`
+      ]).join(",");
+      resourcesQuery = resourcesQuery.or(orFilter);
+    }
+    const { data: resources } = await resourcesQuery.limit(50);
     
     if (resources) {
       resources.forEach((res: any) => {
@@ -91,7 +98,6 @@ export const retrieveCampusContext = async (
             score += calculateScore(res.course_code, keywords) * 1.5;
           }
           
-          // Fallback if no matching keywords: give a very tiny score based on recency
           if (score === 0 && keywords.length === 0) {
             score = 0.01;
           }
@@ -112,11 +118,17 @@ export const retrieveCampusContext = async (
       });
     }
 
-    // 2. Fetch Opportunities
-    const { data: opportunities } = await supabase
-      .from("opportunities")
-      .select("*")
-      .limit(50);
+    // 2. Fetch Opportunities (Database-filtered)
+    let opportunitiesQuery = supabase.from("opportunities").select("*");
+    if (keywords.length > 0) {
+      const orFilter = keywords.flatMap(k => [
+        `title.ilike.%${k}%`,
+        `organization.ilike.%${k}%`,
+        `description.ilike.%${k}%`
+      ]).join(",");
+      opportunitiesQuery = opportunitiesQuery.or(orFilter);
+    }
+    const { data: opportunities } = await opportunitiesQuery.limit(50);
 
     if (opportunities) {
       opportunities.forEach((opp: any) => {
@@ -140,6 +152,7 @@ export const retrieveCampusContext = async (
               location: opp.location || undefined,
               description: opp.description || undefined,
               date: opp.deadline || undefined,
+              applyLink: opp.apply_link || undefined,
               relevanceScore: score,
             });
           }
@@ -147,11 +160,16 @@ export const retrieveCampusContext = async (
       });
     }
 
-    // 3. Fetch Projects
-    const { data: projects } = await supabase
-      .from("projects")
-      .select("*")
-      .limit(50);
+    // 3. Fetch Projects (Database-filtered)
+    let projectsQuery = supabase.from("projects").select("*");
+    if (keywords.length > 0) {
+      const orFilter = keywords.flatMap(k => [
+        `title.ilike.%${k}%`,
+        `description.ilike.%${k}%`
+      ]).join(",");
+      projectsQuery = projectsQuery.or(orFilter);
+    }
+    const { data: projects } = await projectsQuery.limit(50);
 
     if (projects) {
       projects.forEach((proj: any) => {
@@ -181,11 +199,17 @@ export const retrieveCampusContext = async (
       });
     }
 
-    // 4. Fetch Events
-    const { data: events } = await supabase
-      .from("events")
-      .select("*")
-      .limit(50);
+    // 4. Fetch Events (Database-filtered)
+    let eventsQuery = supabase.from("events").select("*");
+    if (keywords.length > 0) {
+      const orFilter = keywords.flatMap(k => [
+        `title.ilike.%${k}%`,
+        `description.ilike.%${k}%`,
+        `location.ilike.%${k}%`
+      ]).join(",");
+      eventsQuery = eventsQuery.or(orFilter);
+    }
+    const { data: events } = await eventsQuery.limit(50);
 
     if (events) {
       events.forEach((evt: any) => {
@@ -247,6 +271,7 @@ export const retrieveCampusContext = async (
       contextText += `   - Category: ${item.category || "N/A"}\n`;
       if (item.location) contextText += `   - Location: ${item.location}\n`;
       if (item.deadline) contextText += `   - Deadline: ${new Date(item.deadline).toLocaleDateString()}\n`;
+      if (item.applyLink) contextText += `   - Application Link: ${item.applyLink}\n`;
       if (item.description) contextText += `   - Description: ${item.description}\n`;
     } else if (item.type === "project") {
       contextText += `   - Status: ${item.category || "recruiting"}\n`;

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import { 
   Sparkles, X, Send, Settings, Volume2, VolumeX, 
   Eye, EyeOff, BookOpen, Briefcase, Calendar, FolderKanban, 
@@ -147,6 +148,8 @@ export default function AIChatbot() {
 
       // 2. Format history for Sarvam AI Chat completion
       const systemPrompt = `You are StudentHub AI, a helpful virtual assistant for StudentHub (a campus collaboration, notes, and events sharing portal). Use the following verified database records to answer the student's query accurately. 
+
+If recommending resources, projects, events, or internships, guide the user to click the database source links rendered below the chat bubble or use the routes: /resources, /opportunities, /projects, /events. If a database record has an 'Application Link', please format it as a markdown link so the student can apply directly.
 
 If you cannot find the answer in the context, be honest and state that no matching records were found, but attempt to answer the user's question using general campus advice. Do not make up fake resources or events.
 
@@ -676,18 +679,30 @@ Please respond in a friendly, conversational, and direct manner. Avoid long para
                         {msg.sources && msg.sources.length > 0 && (
                           <div className="mt-3.5 pt-2 border-t border-border/30">
                             <p className="text-[10px] font-bold text-muted-foreground/80 flex items-center gap-1">
-                              <MessageSquareCode className="w-3 h-3 text-primary" /> SEARCHED DATABASES:
+                              <MessageSquareCode className="w-3.5 h-3.5 text-primary" /> CLICK TO VIEW DETAILS:
                             </p>
-                            <div className="flex flex-wrap gap-1 mt-1.5">
-                              {msg.sources.map((src, i) => (
-                                <span 
-                                  key={i} 
-                                  className="text-[9px] font-semibold px-2 py-0.5 rounded bg-card text-foreground/80 border border-border/40"
-                                  title={`${src.type.toUpperCase()}: ${src.title}`}
-                                >
-                                  {src.type.toUpperCase()} · {src.title.length > 15 ? src.title.slice(0, 15) + "..." : src.title}
-                                </span>
-                              ))}
+                            <div className="flex flex-wrap gap-1.5 mt-1.5">
+                              {msg.sources.map((src, i) => {
+                                const pathMap: Record<string, string> = {
+                                  resource: "/resources",
+                                  opportunity: "/opportunities",
+                                  project: "/projects",
+                                  event: "/events"
+                                };
+                                const basePath = pathMap[src.type] || "/";
+                                const path = `${basePath}?search=${encodeURIComponent(src.title)}`;
+                                return (
+                                  <Link 
+                                    key={i}
+                                    to={path}
+                                    className="text-[9px] font-bold px-2 py-1 rounded-xl bg-card hover:bg-primary/5 text-foreground/80 hover:text-primary border border-border/40 hover:border-primary/30 transition-all flex items-center gap-1 cursor-pointer shadow-sm shrink-0"
+                                    title={`Click to open ${src.type} page: ${src.title}`}
+                                  >
+                                    <span className="uppercase text-[8px] bg-muted px-1.5 py-0.5 rounded-lg font-extrabold text-[9px]">{src.type}</span>
+                                    <span>{src.title.length > 20 ? src.title.slice(0, 20) + "..." : src.title}</span>
+                                  </Link>
+                                );
+                              })}
                             </div>
                           </div>
                         )}

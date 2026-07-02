@@ -36,9 +36,13 @@ const ROLES = [
   "Other"
 ];
 
+import { useSearchParams } from "react-router-dom";
+
 const Projects = () => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchQuery = searchParams.get("search") || "";
   const [activeTab, setActiveTab] = useState(0);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [form, setForm] = useState({ title: "", description: "", tags: "", status: "recruiting" });
@@ -77,7 +81,7 @@ const Projects = () => {
 
   // Queries
   const { data: projects = [], isLoading } = useQuery({
-    queryKey: ["projects", user?.id],
+    queryKey: ["projects", user?.id, searchQuery],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("projects")
@@ -85,7 +89,7 @@ const Projects = () => {
         .order("created_at", { ascending: false });
       if (error) throw error;
       
-      return data.filter((res: any) => {
+      const filtered = data.filter((res: any) => {
         if (res.user_id === user?.id) return true;
         const privacy = res.privacy_type || "all";
         const allowed = res.allowed_emails || [];
@@ -107,6 +111,16 @@ const Projects = () => {
         }
         return false;
       });
+
+      if (searchQuery) {
+        const lowerSearch = searchQuery.toLowerCase().trim();
+        return filtered.filter((proj: any) => 
+          proj.title.toLowerCase().includes(lowerSearch) || 
+          proj.description.toLowerCase().includes(lowerSearch) || 
+          proj.tags?.some((t: string) => t.toLowerCase().includes(lowerSearch))
+        );
+      }
+      return filtered;
     },
   });
 
@@ -607,6 +621,22 @@ const Projects = () => {
             </DialogContent>
           </Dialog>
         </div>
+
+        {searchQuery && (
+          <div className="mb-6 p-4 bg-primary/5 border border-primary/20 rounded-2xl flex items-center justify-between animate-fade-in">
+            <p className="text-xs sm:text-sm font-semibold text-slate-700">
+              Showing projects matching <span className="font-extrabold text-primary">"{searchQuery}"</span>
+            </p>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => setSearchParams({})}
+              className="text-xs hover:bg-primary/10 text-primary font-bold h-8 rounded-full"
+            >
+              Clear Search
+            </Button>
+          </div>
+        )}
 
         {/* Dynamic Navigation Tabs */}
         <div className="flex gap-1.5 p-1.5 bg-white/85 border border-slate-100/85 rounded-full w-full sm:w-fit overflow-x-auto no-scrollbar animate-fade-in shadow-[0_2px_8px_rgba(15,23,42,0.01)]">

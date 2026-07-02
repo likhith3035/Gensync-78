@@ -27,9 +27,13 @@ const categoryIcons: Record<string, typeof Code> = {
   scholarship: Award,
 };
 
+import { useSearchParams } from "react-router-dom";
+
 const Opportunities = () => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchQuery = searchParams.get("search") || "";
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [form, setForm] = useState({ title: "", organization: "", location: "", deadline: "", category: "internship" as string, description: "", applyLink: "" });
@@ -47,7 +51,7 @@ const Opportunities = () => {
   };
 
   const { data: opportunities = [], isLoading } = useQuery({
-    queryKey: ["opportunities", selectedCategories, user?.id],
+    queryKey: ["opportunities", selectedCategories, user?.id, searchQuery],
     queryFn: async () => {
       let query = supabase.from("opportunities").select("*").order("created_at", { ascending: false });
       if (selectedCategories.length > 0) {
@@ -57,7 +61,7 @@ const Opportunities = () => {
       if (error) throw error;
       
       // Filter based on privacy settings
-      return data.filter((res: any) => {
+      const filtered = data.filter((res: any) => {
         // Owner can always see it
         if (res.user_id === user?.id) return true;
         
@@ -81,6 +85,16 @@ const Opportunities = () => {
         }
         return false;
       });
+
+      if (searchQuery) {
+        const lowerSearch = searchQuery.toLowerCase().trim();
+        return filtered.filter((opp: any) => 
+          opp.title.toLowerCase().includes(lowerSearch) || 
+          opp.organization.toLowerCase().includes(lowerSearch) || 
+          opp.description?.toLowerCase().includes(lowerSearch)
+        );
+      }
+      return filtered;
     },
   });
 
@@ -260,6 +274,22 @@ const Opportunities = () => {
             </DialogContent>
           </Dialog>
         </div>
+
+        {searchQuery && (
+          <div className="mb-6 p-4 bg-primary/5 border border-primary/20 rounded-2xl flex items-center justify-between animate-fade-in">
+            <p className="text-xs sm:text-sm font-semibold text-slate-700">
+              Showing opportunities matching <span className="font-extrabold text-primary">"{searchQuery}"</span>
+            </p>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => setSearchParams({})}
+              className="text-xs hover:bg-primary/10 text-primary font-bold h-8 rounded-full"
+            >
+              Clear Search
+            </Button>
+          </div>
+        )}
 
         {/* Filter pills */}
         <div className="flex flex-wrap gap-2 mb-8 animate-fade-in" style={{ animationDelay: "0.1s" }}>

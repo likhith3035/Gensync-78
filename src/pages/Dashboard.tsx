@@ -109,7 +109,7 @@ const Dashboard = () => {
   const { data: allProfiles = [] } = useQuery({
     queryKey: ["dashboard-all-profiles"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("profiles").select("user_id, bio, department, avatar_url, skills");
+      const { data, error } = await supabase.from("profiles").select("user_id, bio, department, avatar_url, skills, full_name, email");
       if (error) throw error;
       return data;
     },
@@ -617,7 +617,7 @@ const Dashboard = () => {
             {/* Student Leaderboard */}
             <div className="card-premium-light p-4 sm:p-5 text-left">
               <h3 className="font-bold text-slate-800 flex items-center gap-2 mb-3 sm:mb-4 text-xs sm:text-sm">
-                <Flame className="w-4 h-4 text-orange-500" /> Top Contributors
+                <Flame className="w-4 h-4 text-orange-500 animate-pulse" /> Campus Leaderboard
               </h3>
               {leaderboard.length === 0 ? (
                 <div className="text-center py-6">
@@ -629,27 +629,76 @@ const Dashboard = () => {
                   {leaderboard.map((entry, i) => {
                     const badge = rankBadge(i);
                     const isMe = entry.userId === user?.id;
+                    
+                    // Gamified Tiering calculation
+                    const getRankTier = (points: number) => {
+                      if (points >= 150) return { name: "Campus Legend", emoji: "👑", next: 300, color: "text-amber-500 font-extrabold" };
+                      if (points >= 80) return { name: "Knowledge Master", emoji: "🏆", next: 150, color: "text-indigo-500 font-extrabold" };
+                      if (points >= 30) return { name: "Rising Star", emoji: "⭐", next: 80, color: "text-emerald-500 font-extrabold" };
+                      return { name: "Campus Apprentice", emoji: "🌱", next: 30, color: "text-slate-500 font-semibold" };
+                    };
+                    const tier = getRankTier(entry.total);
+                    const contributorName = isMe 
+                      ? "You" 
+                      : (entry.profile?.full_name || entry.profile?.email?.split("@")[0] || entry.profile?.department || "Student");
+
                     return (
                       <div
                         key={entry.userId}
-                        className={`flex items-center gap-2.5 p-2 sm:p-2.5 rounded-2xl transition-colors ${
-                          isMe ? "bg-orange-50/60 border border-orange-100/60" : "hover:bg-slate-50/40"
+                        className={`flex flex-col gap-1 p-2.5 rounded-2xl transition-all duration-300 border border-transparent ${
+                          isMe 
+                            ? "bg-gradient-to-br from-orange-50/80 to-amber-50/50 border-orange-100/60 shadow-sm" 
+                            : "hover:bg-slate-50/60 hover:border-slate-100/80"
                         }`}
                       >
-                        <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full border flex items-center justify-center shrink-0 text-xs font-bold ${badge.bg}`}>
-                          {i < 3 ? badge.icon : <span className="text-slate-500">{badge.icon}</span>}
+                        <div className="flex items-center gap-2.5">
+                          <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full border flex items-center justify-center shrink-0 text-xs font-bold ${badge.bg}`}>
+                            {i < 3 ? badge.icon : <span className="text-slate-500">{badge.icon}</span>}
+                          </div>
+
+                          {/* Avatar representation */}
+                          {entry.profile?.avatar_url ? (
+                            <img src={entry.profile.avatar_url} alt={contributorName} className="w-8 h-8 rounded-full object-cover border border-slate-100 shrink-0" />
+                          ) : (
+                            <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[10px] font-bold text-slate-500 uppercase shrink-0">
+                              {contributorName.slice(0, 2)}
+                            </div>
+                          )}
+
+                          <div className="flex-1 min-w-0 text-left">
+                            <p className="text-xs font-bold text-slate-800 flex items-center gap-1">
+                              <span className="truncate">{contributorName}</span>
+                              <span title={tier.name} className="cursor-help shrink-0">{tier.emoji}</span>
+                              {isMe && <span className="text-[8px] bg-orange-500 text-white font-extrabold px-1.5 py-0.5 rounded uppercase leading-none">Me</span>}
+                            </p>
+                            <p className="text-[10px] text-slate-400 font-semibold flex items-center gap-1">
+                              <span>{tier.name}</span>
+                              <span>•</span>
+                              <span>{entry.resources}R • {entry.projects}P • {entry.opportunities}O</span>
+                            </p>
+                          </div>
+                          
+                          <div className="text-right shrink-0">
+                            <span className="text-xs sm:text-sm font-extrabold text-slate-800">{entry.total}</span>
+                            <span className="text-[9px] text-slate-400 font-bold ml-0.5">pts</span>
+                          </div>
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs sm:text-sm font-semibold text-slate-700 truncate">
-                            {isMe ? "You" : (entry.profile?.department || `Student`)}
-                            {isMe && <span className="text-[10px] text-orange-500 ml-1">⭐</span>}
-                          </p>
-                          <p className="text-[10px] text-slate-400 font-medium">
-                            {entry.resources}R • {entry.projects}P • {entry.opportunities}O
-                          </p>
-                        </div>
-                        <span className="text-xs sm:text-sm font-extrabold text-slate-800">{entry.total}</span>
-                        <span className="text-[9px] text-slate-400 font-medium">pts</span>
+
+                        {/* Contributor Tier Progress Bar (current user only) */}
+                        {isMe && (
+                          <div className="mt-1.5 px-1">
+                            <div className="flex justify-between text-[8px] text-slate-400 font-bold mb-0.5">
+                              <span>Tier Progress</span>
+                              <span>{entry.total} / {tier.next} pts</span>
+                            </div>
+                            <div className="w-full h-1 bg-slate-200/60 rounded-full overflow-hidden">
+                              <div 
+                                className="h-full bg-orange-500 rounded-full transition-all duration-500" 
+                                style={{ width: `${Math.min(100, (entry.total / tier.next) * 100)}%` }}
+                              />
+                            </div>
+                          </div>
+                        )}
                       </div>
                     );
                   })}

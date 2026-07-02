@@ -5,10 +5,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import AppLayout from "@/components/AppLayout";
 import EventReminders from "@/components/EventReminders";
-import { Calendar, MapPin, Clock, Plus, Users, ChevronLeft, ChevronRight, X, CheckCircle2, Trash2, Edit2, Filter, AlertCircle, Save } from "lucide-react";
+import { Calendar, MapPin, Clock, Plus, Users, ChevronLeft, ChevronRight, X, CheckCircle2, Trash2, Edit2, Filter, AlertCircle, Save, Grid } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, isSameMonth, addMonths, subMonths, isToday, isPast } from "date-fns";
+import CalendarView from "@/components/CalendarView";
 
 const EVENT_CATEGORIES = ["general", "workshop", "hackathon", "seminar", "social", "career"];
 const CATEGORY_COLORS: Record<string, string> = {
@@ -22,9 +23,13 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 type EventFilter = "all" | "upcoming" | "past" | "my-events" | "my-rsvps";
 
+import { useSearchParams } from "react-router-dom";
+
 const Events = () => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchQuery = searchParams.get("search") || "";
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [createOpen, setCreateOpen] = useState(false);
@@ -33,9 +38,10 @@ const Events = () => {
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [form, setForm] = useState({ title: "", description: "", location: "", event_date: "", end_date: "", category: "general" });
   const [editForm, setEditForm] = useState({ title: "", description: "", location: "", event_date: "", end_date: "", category: "general" });
+  const [layoutMode, setLayoutMode] = useState<"list" | "calendar" | "grid">("list");
 
   const { data: events = [] } = useQuery({
-    queryKey: ["events"],
+    queryKey: ["events", searchQuery],
     queryFn: async () => {
       const { data, error } = await supabase.from("events").select("*").order("event_date", { ascending: true });
       if (error) throw error;
@@ -143,18 +149,30 @@ const Events = () => {
       filtered = filtered.filter((e: any) => e.category === categoryFilter);
     }
 
-    switch (filter) {
-      case "upcoming":
-        return filtered.filter((e: any) => !isEventPast(e));
-      case "past":
-        return filtered.filter((e: any) => isEventPast(e));
-      case "my-events":
-        return filtered.filter((e: any) => e.created_by === user?.id);
-      case "my-rsvps":
-        return filtered.filter((e: any) => rsvps.some((r: any) => r.event_id === e.id && r.user_id === user?.id));
-      default:
-        return filtered;
+    let result = (() => {
+      switch (filter) {
+        case "upcoming":
+          return filtered.filter((e: any) => !isEventPast(e));
+        case "past":
+          return filtered.filter((e: any) => isEventPast(e));
+        case "my-events":
+          return filtered.filter((e: any) => e.created_by === user?.id);
+        case "my-rsvps":
+          return filtered.filter((e: any) => rsvps.some((r: any) => r.event_id === e.id && r.user_id === user?.id));
+        default:
+          return filtered;
+      }
+    })();
+
+    if (searchQuery) {
+      const lowerSearch = searchQuery.toLowerCase().trim();
+      result = result.filter((e: any) => 
+        e.title.toLowerCase().includes(lowerSearch) || 
+        e.description?.toLowerCase().includes(lowerSearch) || 
+        e.location?.toLowerCase().includes(lowerSearch)
+      );
     }
+    return result;
   })();
 
   const getRsvpCount = (eventId: string) => rsvps.filter((r: any) => r.event_id === eventId).length;
@@ -261,6 +279,20 @@ const Events = () => {
           ))}
         </div>
 
+        {searchQuery && (
+          <div className="mb-6 p-4 bg-primary/5 border border-primary/20 rounded-2xl flex items-center justify-between animate-fade-in text-left">
+            <p className="text-xs sm:text-sm font-semibold text-slate-700">
+              Showing events matching <span className="font-extrabold text-primary">"{searchQuery}"</span>
+            </p>
+            <button 
+              onClick={() => setSearchParams({})}
+              className="text-xs hover:bg-slate-100/10 text-primary font-bold h-8 px-4 border border-primary/20 rounded-full transition-colors bg-white hover:bg-slate-50"
+            >
+              Clear Search
+            </button>
+          </div>
+        )}
+
         <div className="flex flex-wrap gap-2 animate-fade-in" style={{ animationDelay: "0.05s" }}>
           <div className="flex gap-1.5 p-1 bg-white border border-slate-100 rounded-full shadow-[0_2px_8px_rgba(15,23,42,0.01)]">
             {filters.map(({ key, label }) => (
@@ -285,159 +317,207 @@ const Events = () => {
               <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>
             ))}
           </select>
+
+          {/* Layout Mode Toggle */}
+          <div className="flex items-center gap-1 p-1 bg-white border border-slate-100 rounded-full sm:ml-auto shadow-[0_2px_8px_rgba(15,23,42,0.01)]">
+            <button
+              onClick={() => setLayoutMode("list")}
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1 transition-all ${
+                layoutMode === "list" ? "bg-slate-900 text-white shadow-sm" : "text-slate-400 hover:text-slate-600"
+              }`}
+              title="List View"
+            >
+              <Grid className="w-3.5 h-3.5" />
+              List
+            </button>
+            <button
+              onClick={() => setLayoutMode("calendar")}
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1 transition-all ${
+                layoutMode === "calendar" ? "bg-slate-900 text-white shadow-sm" : "text-slate-400 hover:text-slate-600"
+              }`}
+              title="Calendar View"
+            >
+              <Calendar className="w-3.5 h-3.5" />
+              Calendar
+            </button>
+          </div>
         </div>
 
-        <div className="grid lg:grid-cols-[1fr_380px] gap-6">
-          {/* Calendar */}
-          <div className="card-premium-light bg-white p-5 animate-fade-in" style={{ animationDelay: "0.07s" }}>
-            <div className="flex items-center justify-between mb-5">
-              <h2 className="text-lg font-bold text-[#0F172A]">{format(currentMonth, "MMMM yyyy")}</h2>
-              <div className="flex gap-1">
-                <button onClick={() => setCurrentMonth(subMonths(currentMonth, 1))} className="w-9 h-9 rounded-xl hover:bg-muted/60 flex items-center justify-center transition-colors">
-                  <ChevronLeft className="w-4 h-4 text-muted-foreground" />
-                </button>
-                <button onClick={() => setCurrentMonth(new Date())} className="px-3 h-9 rounded-xl hover:bg-muted/60 text-xs font-semibold text-muted-foreground transition-colors">Today</button>
-                <button onClick={() => setCurrentMonth(addMonths(currentMonth, 1))} className="w-9 h-9 rounded-xl hover:bg-muted/60 flex items-center justify-center transition-colors">
-                  <ChevronRight className="w-4 h-4 text-muted-foreground" />
-                </button>
+        {layoutMode === "calendar" ? (
+          <CalendarView
+            events={events}
+            selectedDate={selectedDate}
+            onSelectDate={setSelectedDate}
+            categoryColors={CATEGORY_COLORS}
+            getRsvpCount={getRsvpCount}
+            hasRsvped={hasRsvped}
+            toggleRsvp={toggleRsvp}
+          />
+        ) : (
+          <div className="grid lg:grid-cols-[1fr_380px] gap-6">
+            {/* Calendar */}
+            <div className="card-premium-light bg-white p-5 animate-fade-in" style={{ animationDelay: "0.07s" }}>
+              <div className="flex items-center justify-between mb-5">
+                <h2 className="text-lg font-bold text-[#0F172A]">{format(currentMonth, "MMMM yyyy")}</h2>
+                <div className="flex gap-1">
+                  <button onClick={() => setCurrentMonth(subMonths(currentMonth, 1))} className="w-9 h-9 rounded-xl hover:bg-muted/60 flex items-center justify-center transition-colors">
+                    <ChevronLeft className="w-4 h-4 text-muted-foreground" />
+                  </button>
+                  <button onClick={() => setCurrentMonth(new Date())} className="px-3 h-9 rounded-xl hover:bg-muted/60 text-xs font-semibold text-muted-foreground transition-colors">Today</button>
+                  <button onClick={() => setCurrentMonth(addMonths(currentMonth, 1))} className="w-9 h-9 rounded-xl hover:bg-muted/60 flex items-center justify-center transition-colors">
+                    <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-7 gap-px">
+                {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
+                  <div key={d} className="text-center text-[10px] font-bold text-muted-foreground/60 uppercase tracking-wider pb-2">{d}</div>
+                ))}
+                {Array.from({ length: startPad }).map((_, i) => <div key={`pad-${i}`} />)}
+                {daysInMonth.map((day) => {
+                  const dayEvents = getEventsForDay(day);
+                  const isSelected = selectedDate && isSameDay(day, selectedDate);
+                  return (
+                    <button
+                      key={day.toISOString()}
+                      onClick={() => setSelectedDate(isSelected ? null : day)}
+                      className={`relative aspect-square flex flex-col items-center justify-center rounded-full text-sm font-medium transition-all duration-200 ${
+                        isSelected
+                          ? "bg-slate-900 text-white font-bold"
+                          : isToday(day)
+                          ? "bg-slate-100 text-slate-950 font-bold border border-slate-200"
+                          : "hover:bg-slate-50 text-slate-700"
+                      }`}
+                    >
+                      {day.getDate()}
+                      {dayEvents.length > 0 && (
+                        <div className="flex gap-0.5 mt-0.5">
+                          {dayEvents.slice(0, 3).map((e: any, i: number) => (
+                            <span key={i} className={`w-1.5 h-1.5 rounded-full ${isSelected ? "bg-primary-foreground/60" : "bg-primary"}`} />
+                          ))}
+                        </div>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
-            <div className="grid grid-cols-7 gap-px">
-              {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
-                <div key={d} className="text-center text-[10px] font-bold text-muted-foreground/60 uppercase tracking-wider pb-2">{d}</div>
-              ))}
-              {Array.from({ length: startPad }).map((_, i) => <div key={`pad-${i}`} />)}
-              {daysInMonth.map((day) => {
-                const dayEvents = getEventsForDay(day);
-                const isSelected = selectedDate && isSameDay(day, selectedDate);
-                return (
-                  <button
-                    key={day.toISOString()}
-                    onClick={() => setSelectedDate(isSelected ? null : day)}
-                    className={`relative aspect-square flex flex-col items-center justify-center rounded-full text-sm font-medium transition-all duration-200 ${
-                      isSelected
-                        ? "bg-slate-900 text-white font-bold"
-                        : isToday(day)
-                        ? "bg-slate-100 text-slate-950 font-bold border border-slate-200"
-                        : "hover:bg-slate-50 text-slate-700"
-                    }`}
-                  >
-                    {day.getDate()}
-                    {dayEvents.length > 0 && (
-                      <div className="flex gap-0.5 mt-0.5">
-                        {dayEvents.slice(0, 3).map((e: any, i: number) => (
-                          <span key={i} className={`w-1.5 h-1.5 rounded-full ${isSelected ? "bg-primary-foreground/60" : "bg-primary"}`} />
-                        ))}
-                      </div>
-                    )}
+            {/* Events List */}
+            <div className="space-y-3 animate-fade-in" style={{ animationDelay: "0.1s" }}>
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-bold text-foreground">
+                  {selectedDate ? format(selectedDate, "MMM d, yyyy") : "This Month"}
+                  <span className="text-muted-foreground font-normal ml-1.5">({filteredEvents.length})</span>
+                </h3>
+                {selectedDate && (
+                  <button onClick={() => setSelectedDate(null)} className="text-xs text-primary font-semibold hover:underline flex items-center gap-1">
+                    <X className="w-3 h-3" /> Clear
                   </button>
-                );
-              })}
-            </div>
-          </div>
+                )}
+              </div>
 
-          {/* Events List */}
-          <div className="space-y-3 animate-fade-in" style={{ animationDelay: "0.1s" }}>
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-foreground">
-                {selectedDate ? format(selectedDate, "MMM d, yyyy") : "This Month"}
-                <span className="text-muted-foreground font-normal ml-1.5">({filteredEvents.length})</span>
-              </h3>
-              {selectedDate && (
-                <button onClick={() => setSelectedDate(null)} className="text-xs text-primary font-semibold hover:underline flex items-center gap-1">
-                  <X className="w-3 h-3" /> Clear
-                </button>
+              {filteredEvents.length === 0 ? (
+                <div className="card-premium-light p-8 text-center bg-white">
+                  <Calendar className="w-10 h-10 text-slate-300 mx-auto mb-3" />
+                  <p className="text-sm font-semibold text-slate-500">No events {selectedDate ? "on this day" : "match your filters"}</p>
+                </div>
+              ) : (
+                filteredEvents.map((event: any) => {
+                  const past = isEventPast(event);
+                  const isMine = canManageEvent(event);
+                  return (
+                    <div key={event.id} className={`card-premium-light bg-white p-5 space-y-3 transition-opacity ${past ? "opacity-70" : ""}`}>
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${CATEGORY_COLORS[event.category] || CATEGORY_COLORS.general}`}>
+                              {event.category}
+                            </span>
+                            {past && (
+                              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
+                                Ended
+                              </span>
+                            )}
+                            {isMine && (
+                              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-primary/10 text-primary">
+                                Your Event
+                              </span>
+                            )}
+                          </div>
+                          <h4 className="text-sm font-bold text-foreground mt-2">{event.title}</h4>
+                          {event.description && <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{event.description}</p>}
+                        </div>
+
+                        {/* Edit/Delete buttons for event owner */}
+                        {isMine && (
+                          <div className="flex gap-1 shrink-0">
+                            <button
+                              onClick={() => openEditDialog(event)}
+                              className="w-8 h-8 rounded-xl hover:bg-muted/60 flex items-center justify-center transition-colors"
+                              title="Edit event"
+                            >
+                              <Edit2 className="w-3.5 h-3.5 text-muted-foreground" />
+                            </button>
+                            <button
+                              onClick={() => confirmDelete(event.id, event.title)}
+                              className="w-8 h-8 rounded-xl hover:bg-destructive/10 flex items-center justify-center transition-colors"
+                              title="Delete event"
+                              disabled={deleteEvent.isPending}
+                            >
+                              <Trash2 className="w-3.5 h-3.5 text-destructive" />
+                            </button>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="flex flex-wrap gap-3 text-[11px] text-muted-foreground">
+                        <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {format(new Date(event.event_date), "MMM d, h:mm a")}</span>
+                        {event.end_date && (
+                          <span className="flex items-center gap-1">→ {format(new Date(event.end_date), "h:mm a")}</span>
+                        )}
+                        {event.location && <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {event.location}</span>}
+                        <span className="flex items-center gap-1"><Users className="w-3 h-3" /> {getRsvpCount(event.id)} going</span>
+                      </div>
+
+                      {!past ? (
+                        <div className="flex flex-col gap-2">
+                          <button
+                            onClick={() => toggleRsvp.mutate(event.id)}
+                            className={`w-full py-2.5 rounded-full text-xs font-semibold transition-all ${
+                              hasRsvped(event.id)
+                                ? "bg-emerald-50 border border-emerald-100 text-emerald-600 font-bold"
+                                : "bg-slate-900 text-white hover:bg-slate-800"
+                            }`}
+                          >
+                            {hasRsvped(event.id) ? (
+                              <span className="flex items-center justify-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> Going</span>
+                            ) : "RSVP"}
+                          </button>
+                          {hasRsvped(event.id) && (
+                            <a
+                              href={`https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${format(new Date(event.event_date), "yyyyMMdd'T'HHmmss")}/${event.end_date ? format(new Date(event.end_date), "yyyyMMdd'T'HHmmss") : format(new Date(new Date(event.event_date).getTime() + 3600000), "yyyyMMdd'T'HHmmss")}&details=${encodeURIComponent(event.description || "")}&location=${encodeURIComponent(event.location || "")}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-[10px] text-slate-500 hover:text-primary font-bold text-center underline"
+                            >
+                              Export to Google Calendar
+                            </a>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="w-full py-2.5 rounded-full text-xs font-semibold text-center bg-slate-50 border border-slate-100 text-slate-400">
+                          Event Ended
+                        </div>
+                      )}
+                    </div>
+                  );
+                })
               )}
             </div>
-
-            {filteredEvents.length === 0 ? (
-              <div className="card-premium-light p-8 text-center bg-white">
-                <Calendar className="w-10 h-10 text-slate-300 mx-auto mb-3" />
-                <p className="text-sm font-semibold text-slate-500">No events {selectedDate ? "on this day" : "match your filters"}</p>
-              </div>
-            ) : (
-              filteredEvents.map((event: any) => {
-                const past = isEventPast(event);
-                const isMine = canManageEvent(event);
-                return (
-                  <div key={event.id} className={`card-premium-light bg-white p-5 space-y-3 transition-opacity ${past ? "opacity-70" : ""}`}>
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${CATEGORY_COLORS[event.category] || CATEGORY_COLORS.general}`}>
-                            {event.category}
-                          </span>
-                          {past && (
-                            <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
-                              Ended
-                            </span>
-                          )}
-                          {isMine && (
-                            <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-primary/10 text-primary">
-                              Your Event
-                            </span>
-                          )}
-                        </div>
-                        <h4 className="text-sm font-bold text-foreground mt-2">{event.title}</h4>
-                        {event.description && <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{event.description}</p>}
-                      </div>
-
-                      {/* Edit/Delete buttons for event owner */}
-                      {isMine && (
-                        <div className="flex gap-1 shrink-0">
-                          <button
-                            onClick={() => openEditDialog(event)}
-                            className="w-8 h-8 rounded-xl hover:bg-muted/60 flex items-center justify-center transition-colors"
-                            title="Edit event"
-                          >
-                            <Edit2 className="w-3.5 h-3.5 text-muted-foreground" />
-                          </button>
-                          <button
-                            onClick={() => confirmDelete(event.id, event.title)}
-                            className="w-8 h-8 rounded-xl hover:bg-destructive/10 flex items-center justify-center transition-colors"
-                            title="Delete event"
-                            disabled={deleteEvent.isPending}
-                          >
-                            <Trash2 className="w-3.5 h-3.5 text-destructive" />
-                          </button>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="flex flex-wrap gap-3 text-[11px] text-muted-foreground">
-                      <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {format(new Date(event.event_date), "MMM d, h:mm a")}</span>
-                      {event.end_date && (
-                        <span className="flex items-center gap-1">→ {format(new Date(event.end_date), "h:mm a")}</span>
-                      )}
-                      {event.location && <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {event.location}</span>}
-                      <span className="flex items-center gap-1"><Users className="w-3 h-3" /> {getRsvpCount(event.id)} going</span>
-                    </div>
-
-                    {!past ? (
-                      <button
-                        onClick={() => toggleRsvp.mutate(event.id)}
-                        className={`w-full py-2.5 rounded-full text-xs font-semibold transition-all ${
-                          hasRsvped(event.id)
-                            ? "bg-emerald-50 border border-emerald-100 text-emerald-600 font-bold"
-                            : "bg-slate-900 text-white hover:bg-slate-800"
-                        }`}
-                      >
-                        {hasRsvped(event.id) ? (
-                          <span className="flex items-center justify-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> Going</span>
-                        ) : "RSVP"}
-                      </button>
-                    ) : (
-                      <div className="w-full py-2.5 rounded-full text-xs font-semibold text-center bg-slate-50 border border-slate-100 text-slate-400">
-                        Event Ended
-                      </div>
-                    )}
-                  </div>
-                );
-              })
-            )}
           </div>
-        </div>
+        )}
       </div>
 
       {/* Edit Event Dialog */}
