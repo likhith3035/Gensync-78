@@ -1,12 +1,14 @@
 import { ReactNode, useState, useRef, useEffect, useMemo } from "react";
-import AppSidebar from "./AppSidebar";
+import AppSidebar, { navItems } from "./AppSidebar";
 import MobileNav from "./MobileNav";
 import Breadcrumbs from "./Breadcrumbs";
-import { Search, Bell, X, Briefcase, FolderKanban, BookOpen, Calendar, FileText, LayoutDashboard, User, Share2, Shield, Info, Code2 } from "lucide-react";
+import { Search, Bell, X, Briefcase, FolderKanban, BookOpen, Calendar, FileText, LayoutDashboard, User, Share2, Shield, Info, Code2, Menu, LogOut, GraduationCap } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 import AIChatbot from "./AIChatbot";
 
 const notifTypeIcons: Record<string, string> = {
@@ -17,13 +19,19 @@ const notifTypeIcons: Record<string, string> = {
 };
 
 const AppLayout = ({ children }: { children: ReactNode }) => {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { isAdmin } = useIsAdmin();
   const queryClient = useQueryClient();
   const [showNotifs, setShowNotifs] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [showResults, setShowResults] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
+
+  const displayName = user?.user_metadata?.full_name || user?.email?.split("@")[0] || "Student";
+  const initials = displayName.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2);
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -180,6 +188,15 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
       <div className="flex-1 flex flex-col min-h-screen min-w-0">
         {/* One UI Header */}
         <header className="sticky top-0 z-40 glass-panel h-16 flex items-center px-4 md:px-8 gap-3">
+          {/* Hamburger button on mobile */}
+          <button
+            onClick={() => setIsMobileMenuOpen(true)}
+            className="md:hidden w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-50 border border-slate-100/60 transition-all duration-200"
+            aria-label="Open menu"
+          >
+            <Menu className="w-5 h-5 text-slate-600" />
+          </button>
+
           <div className="flex-1 max-w-xl" ref={searchRef}>
             <div className="relative">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
@@ -317,6 +334,119 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
       </div>
       <MobileNav />
       <AIChatbot />
+
+      {/* Mobile Drawer Navigation (Hamburger Menu) */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <>
+            {/* Backdrop Overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="fixed inset-0 bg-slate-900/30 backdrop-blur-sm z-50 md:hidden"
+            />
+
+            {/* Sidebar Drawer */}
+            <motion.div
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed top-0 bottom-0 left-0 w-[18rem] bg-white/95 backdrop-blur-xl border-r border-slate-100 z-50 md:hidden flex flex-col p-6 shadow-2xl overflow-y-auto"
+            >
+              {/* Header with Close */}
+              <div className="flex items-center justify-between mb-8 pb-4 border-b border-slate-100">
+                <Link to="/" className="flex items-center gap-3" onClick={() => setIsMobileMenuOpen(false)}>
+                  <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center shadow-md animate-pulse">
+                    <GraduationCap className="w-4 h-4 text-white" />
+                  </div>
+                  <div>
+                    <span className="text-base font-extrabold text-[#0F172A] tracking-tight">StudentHub</span>
+                    <p className="text-[9px] text-slate-400 font-medium">by GenSync</p>
+                  </div>
+                </Link>
+                <button
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="w-8 h-8 rounded-full flex items-center justify-center bg-slate-50 border border-slate-100 hover:bg-slate-100 transition-colors"
+                >
+                  <X className="w-4 h-4 text-slate-500" />
+                </button>
+              </div>
+
+              {/* Navigation Items */}
+              <nav className="flex-1 space-y-1">
+                {navItems.map(({ icon: Icon, label, path }) => {
+                  const isActive = location.pathname === path;
+                  return (
+                    <Link
+                      key={path}
+                      to={path}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={`flex items-center gap-3 px-4 py-3 rounded-full text-[0.825rem] font-semibold transition-all duration-300 ${
+                        isActive
+                          ? "bg-slate-900 text-white shadow-sm"
+                          : "text-slate-600 hover:bg-slate-100/60 hover:text-slate-900"
+                      }`}
+                    >
+                      <Icon className="w-[19px] h-[19px] shrink-0" />
+                      {label}
+                    </Link>
+                  );
+                })}
+
+                {isAdmin && (
+                  <>
+                    <div className="pt-5 pb-1.5 px-4">
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.15em]">Admin</p>
+                    </div>
+                    <Link
+                      to="/admin"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={`flex items-center gap-3 px-4 py-3 rounded-full text-[0.825rem] font-semibold transition-all duration-300 ${
+                        location.pathname === "/admin"
+                          ? "bg-destructive text-destructive-foreground shadow-sm"
+                          : "text-slate-600 hover:bg-destructive/10 hover:text-destructive"
+                      }`}
+                    >
+                      <Shield className="w-[19px] h-[19px] shrink-0" />
+                      Admin Panel
+                    </Link>
+                  </>
+                )}
+              </nav>
+
+              {/* User Section */}
+              <div className="border-t border-slate-100 pt-4 mt-6 space-y-2">
+                <Link
+                  to="/profile"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center gap-3 p-3 rounded-2xl hover:bg-slate-50 transition-all duration-300"
+                >
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-sm font-bold text-white shadow-sm">
+                    {initials}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-[#0F172A] truncate">{displayName}</p>
+                    <p className="text-[11px] text-slate-400 truncate">{user?.email}</p>
+                  </div>
+                </Link>
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    signOut();
+                  }}
+                  className="flex items-center gap-3 w-full px-4 py-2.5 rounded-full text-[0.825rem] font-semibold text-slate-500 hover:bg-destructive/10 hover:text-destructive transition-all duration-300"
+                >
+                  <LogOut className="w-[17px] h-[17px]" />
+                  Sign Out
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

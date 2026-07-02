@@ -3,7 +3,7 @@ import { LayoutDashboard, Briefcase, FolderKanban, BookOpen, User, Settings, Gra
 import { useAuth } from "@/hooks/useAuth";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
 
-const navItems = [
+export const navItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
   { icon: Heart, label: "Social Feed", path: "/feed" },
   { icon: Briefcase, label: "Opportunities", path: "/opportunities" },
