@@ -1,6 +1,5 @@
 import { ReactNode, useState, useRef, useEffect, useMemo } from "react";
 import AppSidebar, { navItems } from "./AppSidebar";
-import MobileNav from "./MobileNav";
 import Breadcrumbs from "./Breadcrumbs";
 import { Search, Bell, X, Briefcase, FolderKanban, BookOpen, Calendar, FileText, LayoutDashboard, User, Share2, Shield, Info, Code2, Menu, LogOut, GraduationCap } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -327,12 +326,11 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
           </div>
         </header>
 
-        <main className="flex-1 p-4 md:p-8 pb-24 md:pb-8">
+        <main className="flex-1 p-4 md:p-8 pb-8">
           <Breadcrumbs />
           {children}
         </main>
       </div>
-      <MobileNav />
       <AIChatbot />
 
       {/* Mobile Drawer Navigation (Hamburger Menu) */}
